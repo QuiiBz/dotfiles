@@ -1,0 +1,39 @@
+vim.g.mapleader = " "
+
+vim.cmd('nnoremap <C-N> :NvimTreeToggle<CR>')
+vim.cmd('nnoremap <leader>r :NvimTreeRefresh<CR>')
+
+vim.cmd('nnoremap <silent> <C-P> <cmd>lua require("telescope.builtin").find_files()<CR>')
+vim.cmd('nnoremap <silent> <C-F> <cmd>lua require("telescope.builtin").live_grep()<CR>')
+
+vim.cmd('inoremap <silent><expr> <C-Space> compe#complete()')
+vim.cmd('inoremap <silent><expr> <CR>      compe#confirm("<CR>")')
+vim.cmd('nnoremap <leader>gp :Gitsigns preview_hunk<CR>')
+vim.cmd('nnoremap <leader>gr :Gitsigns reset_hunk<CR>')
+vim.cmd('nnoremap <leader>gg :LazyGit<CR>')
+vim.cmd('nnoremap <leader>t :term<CR>')
+vim.cmd('nnoremap <leader>z :ZenMode<CR>')
+vim.cmd('tnoremap <Esc> <C-\\><C-n>')
+vim.cmd('nnoremap <leader><Enter> :noh<CR>')
+vim.cmd('noremap <leader>s <Nop>')
+vim.cmd('nmap <leader>ss :<C-u>SessionSave<CR>')
+vim.cmd('nmap <leader>sl :<C-u>SessionLoad<CR>')
+vim.cmd('nnoremap gpd <cmd>lua require("goto-preview").goto_preview_definition()<CR>')
+vim.cmd('nnoremap gpi <cmd>lua require("goto-preview").goto_preview_implementation()<CR>')
+vim.cmd('nnoremap gP <cmd>lua require("goto-preview").close_all_win()<CR>')
+vim.cmd('nnoremap <C-Up> :resize -2<CR>')
+vim.cmd('nnoremap <C-Down> :resize +2<CR>')
+vim.cmd('nnoremap <C-Left> :vertical resize -2<CR>')
+vim.cmd('nnoremap <C-Right> :vertical resize +2<CR>')
+vim.cmd('nnoremap <C-Space> <C-W>=')
+
+vim.cmd('nnoremap <silent> <M-b> :BufferLineCyclePrev<CR>')
+vim.cmd('nnoremap <silent> <M-f> :BufferLineCycleNext<CR>')
+vim.cmd('nnoremap <silent> <leader>< :BufferLineMovePrev<CR>')
+vim.cmd('nnoremap <silent> <leader>> :BufferLineMoveNext<CR>')
+vim.cmd('nnoremap <silent> <leader>p :BufferPin<CR>')
+vim.cmd('nnoremap <silent> <leader>c :bdelete<CR>')
+vim.cmd('nnoremap <silent> <C-s>    :BufferLinePick<CR>')
+
+-- xnoremap < <gv
+-- xnoremap > >gv

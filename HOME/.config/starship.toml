@@ -1,0 +1,8 @@
+[aws]
+disabled = true
+
+[python]
+disabled = true
+
+[gcloud]
+disabled = true

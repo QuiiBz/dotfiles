@@ -1,0 +1,10 @@
+require("settings")
+require("keybinds")
+
+require("plugins")
+require("configs/compe")
+require("configs/bufferline")
+require("configs/lsp")
+require("configs/treesitter")
+require("configs/lualine")
+require("configs/telescope")
