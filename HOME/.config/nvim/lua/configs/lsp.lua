@@ -17,8 +17,8 @@ local on_attach = function(client, bufnr)
   client.resolved_capabilities.document_range_formatting = false
 
   -- define an alias
-  vim.cmd("command -buffer Formatting lua vim.lsp.buf.formatting()")
-  vim.cmd("command -buffer FormattingSync lua vim.lsp.buf.formatting_sync()")
+  -- vim.cmd("command -buffer Formatting lua vim.lsp.buf.formatting()")
+  -- vim.cmd("command -buffer FormattingSync lua vim.lsp.buf.formatting_sync()")
 
   -- format on save
   vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
