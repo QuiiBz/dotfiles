@@ -88,7 +88,8 @@ local function setup_lsp()
     'sumneko_lua',
     'tsserver',
     'rust_analyzer',
-    'java_language_server'
+    'java_language_server',
+    'cssls',
   }
 
   local config_path = vim.fn.stdpath('config')
@@ -143,6 +144,13 @@ local function setup_lsp()
           },
         }
       }
+    end
+
+    if server == 'cssls' then
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+      config.capabilities = capabilities
     end
 
     require'lspconfig'[server].setup(config)
