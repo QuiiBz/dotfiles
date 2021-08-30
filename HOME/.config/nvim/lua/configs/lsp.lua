@@ -90,6 +90,8 @@ local function setup_lsp()
     'rust_analyzer',
     'java_language_server',
     'cssls',
+    'jsonls',
+    'html'
   }
 
   local config_path = vim.fn.stdpath('config')
@@ -146,7 +148,7 @@ local function setup_lsp()
       }
     end
 
-    if server == 'cssls' then
+    if server == 'cssls' or server == 'jsonls' or server == 'html' then
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
 
