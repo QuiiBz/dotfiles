@@ -23,7 +23,6 @@ local plugins = require'packer'.startup(function()
   use 'hoob3rt/lualine.nvim'
   use 'akinsho/nvim-bufferline.lua'
   use 'tpope/vim-commentary'
-  use 'jiangmiao/auto-pairs'
   use 'rmagatti/goto-preview'
   use 'kdheepak/lazygit.nvim'
   use 'tversteeg/registers.nvim'
@@ -33,6 +32,7 @@ local plugins = require'packer'.startup(function()
   use 'projekt0n/circles.nvim'
   use 'ray-x/lsp_signature.nvim'
   use 'windwp/nvim-ts-autotag'
+  use 'windwp/nvim-autopairs'
 
   -- Themes
   use 'folke/tokyonight.nvim'
@@ -50,5 +50,8 @@ require'colorizer'.setup {}
 -- require'circles'.setup {
 --   lsp = true
 -- }
+require'nvim-autopairs'.setup {
+  disable_filetype = { "TelescopePrompt" , "vim" },
+}
 
 return plugins
