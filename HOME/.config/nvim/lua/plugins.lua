@@ -40,6 +40,7 @@ local plugins = require'packer'.startup(function()
 end)
 
 require'lspinstall'.setup {}
+require'nvim-tree'.setup {}
 require'gitsigns'.setup {}
 require'zen-mode'.setup {}
 require'todo-comments'.setup {}
