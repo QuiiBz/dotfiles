@@ -3,6 +3,7 @@ vim.cmd("colorscheme tokyonight")
 
 -- require'github-theme'.setup {
 --   themeStyle = "dark"
+--   -- themeStyle = "light"
 -- }
 
 vim.opt.termguicolors = true

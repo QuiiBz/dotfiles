@@ -1,7 +1,7 @@
 require'lualine'.setup {
   options = {
-    -- theme = 'github',
     theme = 'tokyonight',
+    -- theme = 'github',
     section_separators = {'', ''},
     component_separators = {'', ''},
     disabled_filetypes = { 'NvimTree' }
