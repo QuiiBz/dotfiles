@@ -8,7 +8,6 @@ local plugins = require'packer'.startup(function()
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use 'kabouzeid/nvim-lspinstall'
   use 'jose-elias-alvarez/null-ls.nvim'
-  use 'jose-elias-alvarez/nvim-lsp-ts-utils'
 
   -- Plugins
   use 'folke/zen-mode.nvim'
