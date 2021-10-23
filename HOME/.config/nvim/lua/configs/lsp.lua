@@ -17,7 +17,9 @@ local on_attach = function(client, bufnr)
   client.resolved_capabilities.document_range_formatting = false
 
   -- eslint on save
-  vim.api.nvim_command [[autocmd BufWritePre <buffer> EslintFixAll]]
+  if (client.name == "tsserver") then
+    vim.api.nvim_command [[autocmd BufWritePre <buffer> EslintFixAll]]
+  end
 
   require "lsp_signature".on_attach({
     bind = true, -- This is mandatory, otherwise border config won't get registered.
