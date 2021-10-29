@@ -9,16 +9,16 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', '<C-g>', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 
-  if client.name == "java_language_server" then
-    client.resolved_capabilities.document_formatting = false
-  end
-
   client.resolved_capabilities.document_formatting = false
   client.resolved_capabilities.document_range_formatting = false
 
+  if client.name == "eslint" then
+    client.resolved_capabilities.document_formatting = true
+  end
+
   -- eslint on save
   if (client.name == "tsserver") then
-    vim.api.nvim_command [[autocmd BufWritePre <buffer> EslintFixAll]]
+    vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
   end
 
   require "lsp_signature".on_attach({
