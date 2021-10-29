@@ -4,14 +4,7 @@ local plugins = require'packer'.startup(function()
 
   -- Lsp & TreeSitter
   use 'neovim/nvim-lspconfig'
-  -- use 'hrsh7th/nvim-compe'
-  use { 'hrsh7th/nvim-cmp', requires = {
-    'hrsh7th/cmp-nvim-lsp',
-    'hrsh7th/cmp-buffer',
-    'hrsh7th/cmp-path',
-    'hrsh7th/cmp-nvim-lua',
-  }}
-  use { 'L3MON4D3/LuaSnip', requires = 'saadparwaiz1/cmp_luasnip' }
+  use 'hrsh7th/nvim-compe'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use 'kabouzeid/nvim-lspinstall'
   use 'jose-elias-alvarez/null-ls.nvim'
@@ -50,6 +43,7 @@ require'nvim-tree'.setup {}
 require'gitsigns'.setup {}
 require'zen-mode'.setup {}
 require'todo-comments'.setup {}
+require'lspkind'.init {}
 require'trouble'.setup {}
 require'goto-preview'.setup {}
 require'colorizer'.setup {}
