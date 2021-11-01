@@ -19,11 +19,9 @@ vim.opt.scrolloff = 10
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.signcolumn = "yes"
--- vim.opt.noswapfile = true
+vim.opt.noswapfile = true
 vim.opt.completeopt = "menuone,noselect"
 vim.opt.laststatus = 2
--- vim.opt.noshowmode = true
--- vim.opt.noshowcmd = true
 vim.opt.bs = { 2 }
 
 vim.g.nvim_tree_ignore = { ".git", "node_modules", ".DS_Store" }
