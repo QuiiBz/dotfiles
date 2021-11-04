@@ -32,6 +32,7 @@ local plugins = require'packer'.startup(function()
   use 'projekt0n/circles.nvim'
   use 'ray-x/lsp_signature.nvim'
   use 'windwp/nvim-ts-autotag'
+  use 'github/copilot.vim'
 
   -- Themes
   use 'folke/tokyonight.nvim'
