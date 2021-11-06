@@ -24,7 +24,7 @@ vim.opt.completeopt = "menuone,noselect"
 vim.opt.laststatus = 2
 vim.opt.bs = { 2 }
 
-vim.g.nvim_tree_ignore = { ".git", "node_modules", ".DS_Store" }
+vim.g.nvim_tree_gitignore = { ".git", "node_modules", ".DS_Store" }
 vim.g.nvim_tree_git_hl = 1
 vim.g.nvim_tree_indent_markers = 1
 vim.g.nvim_tree_show_icons = {
