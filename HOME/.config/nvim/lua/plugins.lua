@@ -33,11 +33,14 @@ local plugins = require'packer'.startup(function()
   use 'ray-x/lsp_signature.nvim'
   use 'windwp/nvim-ts-autotag'
   use 'github/copilot.vim'
+  use 'lewis6991/impatient.nvim'
 
   -- Themes
   use 'folke/tokyonight.nvim'
   use 'projekt0n/github-nvim-theme'
 end)
+
+require'impatient'
 
 require'lspinstall'.setup {}
 require'nvim-tree'.setup {}
