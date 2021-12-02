@@ -30,7 +30,6 @@ local on_attach = function(client, bufnr)
   })
 end
 
-require'lspinstall'.setup()
 require("null-ls").config {}
 require("lspconfig")["null-ls"].setup {}
 

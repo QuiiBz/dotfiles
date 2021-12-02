@@ -6,7 +6,6 @@ local plugins = require'packer'.startup(function()
   use 'neovim/nvim-lspconfig'
   use 'hrsh7th/nvim-compe'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  use 'kabouzeid/nvim-lspinstall'
   use 'jose-elias-alvarez/null-ls.nvim'
 
   -- Plugins
@@ -42,8 +41,11 @@ end)
 
 require'impatient'
 
-require'lspinstall'.setup {}
-require'nvim-tree'.setup {}
+require'nvim-tree'.setup {
+  git = {
+    ignore = { ".git", "node_modules", ".DS_Store" }
+  }
+}
 require'gitsigns'.setup {}
 require'zen-mode'.setup {}
 require'todo-comments'.setup {}
