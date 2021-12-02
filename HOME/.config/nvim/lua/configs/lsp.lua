@@ -117,7 +117,7 @@ end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
-    underline = false,
+    underline = true;
     virtual_text = {
       spacing = 4,
       prefix = ''
@@ -149,10 +149,10 @@ vim.lsp.handlers["textDocument/formatting"] = function(err, _, result, _, bufnr)
   end
 end
 
-local signs = { Error = " ", Warning = " ", Hint = " ", Information = " " }
+local signs = { Error = " ", Warn = " ", Hint = " ", Information = " " }
 
 for type, icon in pairs(signs) do
-  local hl = "LspDiagnosticsSign" .. type
+  local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
 

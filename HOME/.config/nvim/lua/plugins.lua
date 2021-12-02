@@ -28,11 +28,11 @@ local plugins = require'packer'.startup(function()
   use 'glepnir/dashboard-nvim'
   use 'onsails/lspkind-nvim'
   use 'norcalli/nvim-colorizer.lua'
-  use 'projekt0n/circles.nvim'
   use 'ray-x/lsp_signature.nvim'
   use 'windwp/nvim-ts-autotag'
   use 'github/copilot.vim'
   use 'lewis6991/impatient.nvim'
+  use 'akinsho/toggleterm.nvim'
 
   -- Themes
   use 'folke/tokyonight.nvim'
@@ -41,11 +41,7 @@ end)
 
 require'impatient'
 
-require'nvim-tree'.setup {
-  git = {
-    ignore = { ".git", "node_modules", ".DS_Store" }
-  }
-}
+require'nvim-tree'.setup {}
 require'gitsigns'.setup {}
 require'zen-mode'.setup {}
 require'todo-comments'.setup {}
@@ -53,8 +49,6 @@ require'lspkind'.init {}
 require'trouble'.setup {}
 require'goto-preview'.setup {}
 require'colorizer'.setup {}
--- require'circles'.setup {
---   lsp = true
--- }
+require'toggleterm'.setup {}
 
 return plugins

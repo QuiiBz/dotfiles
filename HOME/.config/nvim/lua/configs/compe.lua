@@ -21,9 +21,9 @@ require'compe'.setup {
   };
 
   source = {
-    path = true;
-    buffer = true;
-    nvim_lsp = true;
+    nvim_lsp = { priority = 3 },
+    path = { priority = 2 },
+    buffer = { priority = 1 },
   };
 }
 

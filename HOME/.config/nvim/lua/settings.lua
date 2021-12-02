@@ -24,6 +24,7 @@ vim.opt.completeopt = "menuone,noselect"
 vim.opt.laststatus = 2
 vim.opt.bs = { 2 }
 vim.opt.updatetime = 300
+vim.cmd("set formatoptions-=cro")
 
 vim.g.nvim_tree_git_hl = 1
 vim.g.nvim_tree_indent_markers = 1
