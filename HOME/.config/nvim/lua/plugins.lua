@@ -36,7 +36,6 @@ local plugins = require'packer'.startup(function()
 
   -- Themes
   use 'folke/tokyonight.nvim'
-  use 'projekt0n/github-nvim-theme'
 end)
 
 require'impatient'

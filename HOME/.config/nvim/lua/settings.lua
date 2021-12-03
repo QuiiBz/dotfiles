@@ -1,11 +1,6 @@
 vim.g.tokyonight_style = "night"
 vim.cmd("colorscheme tokyonight")
 
--- require'github-theme'.setup {
---   theme_style = "dark"
---   -- theme_style = "light"
--- }
-
 vim.opt.termguicolors = true
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
@@ -34,20 +29,6 @@ vim.g.nvim_tree_show_icons = {
   files = 1,
   folder_arrows = 0
 }
-
--- vim.cmd("au BufEnter,BufWinEnter,WinEnter,CmdwinEnter * call s:disable_statusline("NvimTree")")
-
--- vim.cmd[[
--- fun! s:disable_statusline(bn)
---   if a:bn == bufname("%")
---     set laststatus=0
---   else
---     set laststatus=2
---   endif
--- endfunction
--- ]]
-
-vim.g["test#strategy"] = "neovim"
 
 -- Dashboard
 vim.g.dashboard_default_executive = "telescope"

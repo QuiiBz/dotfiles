@@ -74,11 +74,6 @@ _G.packer_plugins = {
     path = "/Users/tom/.local/share/nvim/site/pack/packer/start/auto-pairs",
     url = "https://github.com/jiangmiao/auto-pairs"
   },
-  ["circles.nvim"] = {
-    loaded = true,
-    path = "/Users/tom/.local/share/nvim/site/pack/packer/start/circles.nvim",
-    url = "https://github.com/projekt0n/circles.nvim"
-  },
   ["copilot.vim"] = {
     loaded = true,
     path = "/Users/tom/.local/share/nvim/site/pack/packer/start/copilot.vim",
@@ -88,11 +83,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/tom/.local/share/nvim/site/pack/packer/start/dashboard-nvim",
     url = "https://github.com/glepnir/dashboard-nvim"
-  },
-  ["github-nvim-theme"] = {
-    loaded = true,
-    path = "/Users/tom/.local/share/nvim/site/pack/packer/start/github-nvim-theme",
-    url = "https://github.com/projekt0n/github-nvim-theme"
   },
   ["gitsigns.nvim"] = {
     loaded = true,
