@@ -24,10 +24,8 @@ local on_attach = function(client, bufnr)
   require "lsp_signature".on_attach({
     bind = true, -- This is mandatory, otherwise border config won't get registered.
     floating_window = false,
-    handler_opts = {
-      border = "single"
-    }
-  })
+    hint_prefix = ' '
+  }, bufnr)
 end
 
 require("null-ls").config {}
