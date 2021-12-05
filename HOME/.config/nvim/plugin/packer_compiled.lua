@@ -89,6 +89,11 @@ _G.packer_plugins = {
     path = "/Users/tom/.local/share/nvim/site/pack/packer/start/dashboard-nvim",
     url = "https://github.com/glepnir/dashboard-nvim"
   },
+  ["dressing.nvim"] = {
+    loaded = true,
+    path = "/Users/tom/.local/share/nvim/site/pack/packer/start/dressing.nvim",
+    url = "https://github.com/stevearc/dressing.nvim"
+  },
   ["gitsigns.nvim"] = {
     loaded = true,
     path = "/Users/tom/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",

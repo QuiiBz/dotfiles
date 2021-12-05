@@ -34,6 +34,7 @@ local plugins = require'packer'.startup(function()
   use 'github/copilot.vim'
   use 'lewis6991/impatient.nvim'
   use 'akinsho/toggleterm.nvim'
+  use 'stevearc/dressing.nvim'
 
   -- Themes
   use 'folke/tokyonight.nvim'
@@ -76,5 +77,28 @@ require'comment'.setup {
         end
     end,
 }
+require('dressing').setup({
+  input = {
+    default_prompt = "➤ ",
+    anchor = "SW",
+    relative = "cursor",
+    row = 0,
+    col = 0,
+    border = "single",
+    prefer_width = 40,
+    max_width = nil,
+    min_width = 20,
+    get_config = nil,
+  },
+  select = {
+    backend = { "telescope" },
+    telescope = {
+      -- can be 'dropdown', 'cursor', or 'ivy'
+      theme = "cursor",
+    },
+    get_config = nil,
+  },
+})
+
 
 return plugins
