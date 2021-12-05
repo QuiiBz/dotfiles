@@ -129,6 +129,11 @@ _G.packer_plugins = {
     path = "/Users/tom/.local/share/nvim/site/pack/packer/start/null-ls.nvim",
     url = "https://github.com/jose-elias-alvarez/null-ls.nvim"
   },
+  nvim = {
+    loaded = true,
+    path = "/Users/tom/.local/share/nvim/site/pack/packer/start/nvim",
+    url = "https://github.com/catppuccin/nvim"
+  },
   ["nvim-bufferline.lua"] = {
     loaded = true,
     path = "/Users/tom/.local/share/nvim/site/pack/packer/start/nvim-bufferline.lua",
