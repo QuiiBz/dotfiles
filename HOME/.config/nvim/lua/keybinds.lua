@@ -14,7 +14,6 @@ vim.cmd('nnoremap <leader>gg :LazyGit<CR>')
 vim.cmd('nnoremap <leader>t :ToggleTerm<CR>')
 vim.cmd('nnoremap <leader>z :ZenMode<CR>')
 vim.cmd('tnoremap <Esc> <C-\\><C-n>')
-vim.cmd('nnoremap <leader><Enter> :noh<CR>')
 vim.cmd('noremap <leader>s <Nop>')
 vim.cmd('nmap <leader>ss :<C-u>SessionSave<CR>')
 vim.cmd('nmap <leader>sl :<C-u>SessionLoad<CR>')
@@ -33,6 +32,3 @@ vim.cmd('nnoremap <silent> <leader>< :BufferLineMovePrev<CR>')
 vim.cmd('nnoremap <silent> <leader>> :BufferLineMoveNext<CR>')
 vim.cmd('nnoremap <silent> <leader>c :bp\\|bd #<CR>')
 vim.cmd('nnoremap <silent> <C-s>    :BufferLinePick<CR>')
-
--- xnoremap < <gv
--- xnoremap > >gv
