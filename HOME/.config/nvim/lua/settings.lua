@@ -65,10 +65,3 @@ vim.g.dashboard_custom_section = {
   },
  }
 
--- Colors
-vim.cmd("hi Visual  guifg=#0d1118 guibg=#89929b gui=none")
-vim.cmd("hi LspDiagnosticsVirtualTextError guifg=red gui=none")
-vim.cmd("hi LspDiagnosticsVirtualTextWarning guifg=orange gui=none")
-vim.cmd("hi LspDiagnosticsVirtualTextInformation guifg=yellow gui=none")
-vim.cmd("hi LspDiagnosticsVirtualTextHint guifg=lightblue gui=none")
-
