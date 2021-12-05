@@ -52,53 +52,5 @@ require'trouble'.setup {}
 require'goto-preview'.setup {}
 require'colorizer'.setup {}
 require'toggleterm'.setup {}
-require'comment'.setup {
-    ---@param ctx Ctx
-    pre_hook = function(ctx)
-        -- Only calculate commentstring for tsx filetypes
-        if vim.bo.filetype == 'typescriptreact' then
-            local U = require('Comment.utils')
-
-            -- Detemine whether to use linewise or blockwise commentstring
-            local type = ctx.ctype == U.ctype.line and '__default' or '__multiline'
-
-            -- Determine the location where to calculate commentstring from
-            local location = nil
-            if ctx.ctype == U.ctype.block then
-                location = require('ts_context_commentstring.utils').get_cursor_location()
-            elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
-                location = require('ts_context_commentstring.utils').get_visual_start_location()
-            end
-
-            return require('ts_context_commentstring.internal').calculate_commentstring({
-                key = type,
-                location = location,
-            })
-        end
-    end,
-}
-require('dressing').setup({
-  input = {
-    default_prompt = "➤ ",
-    anchor = "SW",
-    relative = "cursor",
-    row = 0,
-    col = 0,
-    border = "single",
-    prefer_width = 40,
-    max_width = nil,
-    min_width = 20,
-    get_config = nil,
-  },
-  select = {
-    backend = { "telescope" },
-    telescope = {
-      -- can be 'dropdown', 'cursor', or 'ivy'
-      theme = "cursor",
-    },
-    get_config = nil,
-  },
-})
-
 
 return plugins
