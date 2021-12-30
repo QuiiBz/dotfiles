@@ -28,9 +28,6 @@ local on_attach = function(client, bufnr)
   }, bufnr)
 end
 
-require("null-ls").config {}
-require("lspconfig")["null-ls"].setup {}
-
 local servers = {
   'vimls',
   'sumneko_lua',

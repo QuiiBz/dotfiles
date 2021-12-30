@@ -6,7 +6,6 @@ local plugins = require'packer'.startup(function()
   use 'neovim/nvim-lspconfig'
   use 'hrsh7th/nvim-compe'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  use 'jose-elias-alvarez/null-ls.nvim'
 
   -- Plugins
   use 'folke/zen-mode.nvim'
