@@ -51,7 +51,9 @@ require'todo-comments'.setup {}
 require'lspkind'.init {}
 require'trouble'.setup {}
 require'goto-preview'.setup {}
-require'colorizer'.setup {}
+require'colorizer'.setup {
+  '*';
+}
 require'toggleterm'.setup {}
 
 return plugins
