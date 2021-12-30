@@ -5,6 +5,10 @@ local plugins = require'packer'.startup(function()
   -- Lsp & TreeSitter
   use 'neovim/nvim-lspconfig'
   use 'hrsh7th/nvim-compe'
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/nvim-cmp'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
 
   -- Plugins
@@ -47,7 +51,6 @@ require'nvim-tree'.setup {}
 require'gitsigns'.setup {}
 require'zen-mode'.setup {}
 require'todo-comments'.setup {}
-require'lspkind'.init {}
 require'trouble'.setup {}
 require'goto-preview'.setup {}
 require'colorizer'.setup {
