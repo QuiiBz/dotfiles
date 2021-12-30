@@ -16,7 +16,8 @@ local plugins = require'packer'.startup(function()
   use { 'lewis6991/gitsigns.nvim', requires = 'nvim-lua/plenary.nvim' }
   use { 'nvim-telescope/telescope.nvim', requires = {
     'nvim-lua/popup.nvim',
-    'nvim-lua/plenary.nvim'
+    'nvim-lua/plenary.nvim',
+    {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   }}
   use 'hoob3rt/lualine.nvim'
   use 'akinsho/nvim-bufferline.lua'
