@@ -16,7 +16,10 @@ require'nvim-treesitter.configs'.setup {
     "yaml",
     "html",
     "scss",
-    "java"
+    "java",
+    "norg",
+    "norg_meta",
+    "norg_table",
   },
 }
 
