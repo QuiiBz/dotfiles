@@ -40,6 +40,7 @@ local plugins = require'packer'.startup(function()
   use 'akinsho/toggleterm.nvim'
   use 'stevearc/dressing.nvim'
   use { 'nvim-neorg/neorg', requires = 'nvim-lua/plenary.nvim' }
+  use 'famiu/nvim-reload'
 
   -- Themes
   use 'folke/tokyonight.nvim'
