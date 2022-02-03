@@ -127,4 +127,4 @@ eval "$(starship init zsh)"
 # if [ -f '/Users/tom/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tom/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
 alias luamake=/Users/tom/dev/lua-language-server/3rd/luamake/luamake
-
+alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
