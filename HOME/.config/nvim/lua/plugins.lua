@@ -35,12 +35,17 @@ local plugins = require'packer'.startup(function()
   use 'norcalli/nvim-colorizer.lua'
   use 'ray-x/lsp_signature.nvim'
   use 'windwp/nvim-ts-autotag'
-  use 'github/copilot.vim'
-  use 'lewis6991/impatient.nvim'
   use 'akinsho/toggleterm.nvim'
   use 'stevearc/dressing.nvim'
-  use { 'nvim-neorg/neorg', requires = 'nvim-lua/plenary.nvim' }
   use 'famiu/nvim-reload'
+
+  -- Performances
+  use 'lewis6991/impatient.nvim'
+  use 'nathom/filetype.nvim'
+
+  -- Not always needed
+  -- use 'github/copilot.vim'
+  -- use 'tweekmonster/startuptime.vim'
 
   -- Themes
   use 'folke/tokyonight.nvim'
@@ -59,5 +64,6 @@ require'colorizer'.setup {
   '*';
 }
 require'toggleterm'.setup {}
+require'filetype'.setup {}
 
 return plugins

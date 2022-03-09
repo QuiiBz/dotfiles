@@ -3,8 +3,6 @@ require('dressing').setup({
     default_prompt = "➤ ",
     anchor = "SW",
     relative = "cursor",
-    row = 0,
-    col = 0,
     border = "single",
     prefer_width = 40,
     max_width = nil,
