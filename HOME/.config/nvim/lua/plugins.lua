@@ -35,9 +35,10 @@ local plugins = require'packer'.startup(function()
   use 'norcalli/nvim-colorizer.lua'
   use 'ray-x/lsp_signature.nvim'
   use 'windwp/nvim-ts-autotag'
-  use 'akinsho/toggleterm.nvim'
+  -- use 'akinsho/toggleterm.nvim'
   use 'stevearc/dressing.nvim'
   use 'famiu/nvim-reload'
+  use 's1n7ax/nvim-terminal'
 
   -- Performances
   use 'lewis6991/impatient.nvim'
@@ -64,9 +65,6 @@ require'trouble'.setup {}
 require'goto-preview'.setup {}
 require'colorizer'.setup {
   '*';
-}
-require'toggleterm'.setup {
-  shading_factor = 0.08,
 }
 require'filetype'.setup {}
 
