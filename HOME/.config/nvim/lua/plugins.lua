@@ -50,6 +50,8 @@ local plugins = require'packer'.startup(function()
   -- Themes
   use 'folke/tokyonight.nvim'
   use 'catppuccin/nvim'
+  use 'ellisonleao/gruvbox.nvim'
+  use 'projekt0n/github-nvim-theme'
 end)
 
 require'impatient'
@@ -63,7 +65,9 @@ require'goto-preview'.setup {}
 require'colorizer'.setup {
   '*';
 }
-require'toggleterm'.setup {}
+require'toggleterm'.setup {
+  shading_factor = 0.08,
+}
 require'filetype'.setup {}
 
 return plugins
