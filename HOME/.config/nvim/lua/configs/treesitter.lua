@@ -17,9 +17,7 @@ require'nvim-treesitter.configs'.setup {
     "html",
     "scss",
     "java",
-    "norg",
-    "norg_meta",
-    "norg_table",
+    "prisma",
   },
 }
 

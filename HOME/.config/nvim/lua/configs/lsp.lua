@@ -37,7 +37,8 @@ local servers = {
   'cssls',
   'jsonls',
   'html',
-  'eslint'
+  'eslint',
+  'prismals'
 }
 
 local config_path = vim.fn.stdpath('config')
