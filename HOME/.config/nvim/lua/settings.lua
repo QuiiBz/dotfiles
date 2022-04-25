@@ -1,11 +1,11 @@
 vim.g.tokyonight_style = "night"
--- vim.cmd("colorscheme tokyonight")
+vim.cmd("colorscheme tokyonight")
 -- vim.cmd("colorscheme catppuccin")
 
-require'github-theme'.setup {
-  theme_style = 'light',
-  sidebars = { 'terminal' }
-}
+-- require'github-theme'.setup {
+--   theme_style = 'light',
+--   sidebars = { 'terminal' }
+-- }
 
 vim.opt.termguicolors = true
 vim.opt.tabstop = 2

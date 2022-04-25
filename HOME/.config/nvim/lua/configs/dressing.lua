@@ -11,10 +11,7 @@ require('dressing').setup({
   },
   select = {
     backend = { "telescope" },
-    telescope = {
-      -- can be 'dropdown', 'cursor', or 'ivy'
-      theme = "cursor",
-    },
+    telescope = nil,
     get_config = nil,
   },
 })
