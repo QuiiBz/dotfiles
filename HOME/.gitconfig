@@ -1,3 +1,5 @@
 [user]
 	name = QuiiBz
 	email = tom.lienrd@gmail.com
+[init]
+	defaultBranch = main
