@@ -57,7 +57,18 @@ end)
 
 require'impatient'
 
-require'nvim-tree'.setup {}
+require'nvim-tree'.setup {
+  renderer = {
+    indent_markers = {
+      enable = true,
+    },
+    icons = {
+      show = {
+        folder_arrow = false,
+      },
+    },
+  },
+}
 require'gitsigns'.setup {}
 require'zen-mode'.setup {}
 require'todo-comments'.setup {}

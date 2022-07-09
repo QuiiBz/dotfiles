@@ -27,18 +27,9 @@ vim.opt.bs = { 2 }
 vim.opt.updatetime = 300
 vim.cmd("set formatoptions-=cro")
 
-vim.g.nvim_tree_git_hl = 1
-vim.g.nvim_tree_indent_markers = 1
-vim.g.nvim_tree_show_icons = {
-  git = 1,
-  folders = 1,
-  files = 1,
-  folder_arrows = 0
-}
-
 -- Dashboard
-vim.g.dashboard_default_executive = "telescope"
-vim.g.dashboard_custom_header = {
+local dashboard = require("dashboard")
+dashboard.custom_header = {
   "                                 ",
   "                                 ",
   " ▐ ▄ ▄▄▄ .       ▌ ▐·▪  • ▌ ▄ ·. ",
@@ -50,23 +41,27 @@ vim.g.dashboard_custom_header = {
   "                                 "
 }
 
-vim.g.dashboard_custom_footer = { }
-vim.g.dashboard_custom_section = {
-  a = {
-    description = { "  Recently Used Files" },
-    command = "Telescope oldfiles"
+dashboard.custom_footer = { }
+dashboard.custom_center = {
+  {
+    icon = "  ",
+    desc = "Recently Used Files",
+    action = "Telescope oldfiles"
   },
-  b = {
-    description = { "  Load Last Session  " },
-    command = "SessionLoad"
+  {
+    icon = "  ",
+    desc = "Load Last Session",
+    action = "SessionLoad"
   },
-  c = {
-    description = { "  Find File          " },
-    command = "Telescope find_files"
+  {
+    icon = "  ",
+    desc = "Find File",
+    action = "Telescope find_files"
   },
-  d = {
-    description = { "  Find Word          "},
-    command = "Telescope live_grep"
+  {
+    icon = "  ",
+    desc = "Find Word",
+    action = "Telescope live_grep"
   },
  }
 
