@@ -124,6 +124,7 @@ eval "$(starship init zsh)"
 
 alias luamake=/Users/tom/dev/lua-language-server/3rd/luamake/luamake
 alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+alias ssh="kitty +kitten ssh"
 
 # Scaleway CLI autocomplete initialization.
 eval "$(scw autocomplete script shell=zsh)"
