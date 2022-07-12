@@ -1,7 +1,8 @@
+require("plugins")
+
 require("settings")
 require("keybinds")
 
-require("plugins")
 require("configs/compe")
 require("configs/bufferline")
 require("configs/lsp")
