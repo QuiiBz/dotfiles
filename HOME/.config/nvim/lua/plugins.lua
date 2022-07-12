@@ -78,5 +78,41 @@ require'colorizer'.setup {
   '*';
 }
 require'filetype'.setup {}
+local dashboard = require'dashboard'
+dashboard.custom_header = {
+  "                                 ",
+  "                                 ",
+  " ▐ ▄ ▄▄▄ .       ▌ ▐·▪  • ▌ ▄ ·. ",
+  "•█▌▐█▀▄.▀·▪     ▪█·█▌██ ·██ ▐███▪",
+  "▐█▐▐▌▐▀▀▪▄ ▄█▀▄ ▐█▐█•▐█·▐█ ▌▐▌▐█·",
+  "██▐█▌▐█▄▄▌▐█▌.▐▌ ███ ▐█▌██ ██▌▐█▌",
+  "▀▀ █▪ ▀▀▀  ▀█▄▀▪. ▀  ▀▀▀▀▀  █▪▀▀▀",
+  "                                 ",
+  "                                 "
+}
+
+dashboard.custom_footer = { }
+dashboard.custom_center = {
+  {
+    icon = "  ",
+    desc = "Recently Used Files",
+    action = "Telescope oldfiles"
+  },
+  {
+    icon = "  ",
+    desc = "Load Last Session",
+    action = "SessionLoad"
+  },
+  {
+    icon = "  ",
+    desc = "Find File",
+    action = "Telescope find_files"
+  },
+  {
+    icon = "  ",
+    desc = "Find Word",
+    action = "Telescope live_grep"
+  },
+ }
 
 return plugins
