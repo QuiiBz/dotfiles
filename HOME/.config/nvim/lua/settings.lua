@@ -1,7 +1,10 @@
 vim.g.tokyonight_style = "night"
-vim.cmd("colorscheme tokyonight")
--- vim.cmd("colorscheme catppuccin")
+vim.g.catppuccin_flavour = "macchiato" -- latte, frappe, macchiato, mocha
 
+-- vim.cmd("colorscheme tokyonight")
+-- vim.cmd("colorscheme catppuccin")
+require("catppuccin").setup()
+vim.cmd("colorscheme catppuccin")
 -- require'github-theme'.setup {
 --   theme_style = 'light',
 --   sidebars = { 'terminal' }
