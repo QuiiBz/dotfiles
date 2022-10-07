@@ -1,32 +1,49 @@
-vim.g.tokyonight_style = "night"
-vim.g.catppuccin_flavour = "macchiato" -- latte, frappe, macchiato, mocha
-
--- vim.cmd("colorscheme tokyonight")
--- vim.cmd("colorscheme catppuccin")
-require("catppuccin").setup()
-vim.cmd("colorscheme catppuccin")
--- require'github-theme'.setup {
---   theme_style = 'light',
---   sidebars = { 'terminal' }
--- }
-
+vim.g.mapleader = ' '
 vim.opt.termguicolors = true
+-- Line numbers
+vim.opt.number = true
+vim.opt.relativenumber = true
+-- Show extra column https://www.reddit.com/r/neovim/comments/neaeej/only_just_discovered_set_signcolumnnumber_i_like/
+vim.opt.signcolumn = 'yes'
+-- Hide status bar
+-- vim.o.ls = 0
+-- Hide command height
+vim.o.ch = 0
+-- Spelling in comments
+-- vim.opt.spell = true
+-- Indentation
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
 vim.opt.expandtab = true
 vim.opt.smartindent = true
+-- Show cursor line
 vim.opt.cursorline = true
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.scrolloff = 10
-vim.opt.hlsearch = true
-vim.opt.incsearch = true
-vim.opt.signcolumn = "yes"
-vim.cmd("set noswapfile")
-vim.opt.completeopt = "menuone,noselect"
-vim.opt.laststatus = 2
-vim.opt.bs = { 2 }
-vim.opt.updatetime = 300
-vim.cmd("set formatoptions-=cro")
 
+-- Diagnostic icons
+vim.fn.sign_define('DiagnosticSignError',
+  {text = ' ', texthl = 'DiagnosticSignError'})
+vim.fn.sign_define('DiagnosticSignWarn',
+  {text = ' ', texthl = 'DiagnosticSignWarn'})
+vim.fn.sign_define('DiagnosticSignInfo',
+  {text = ' ', texthl = 'DiagnosticSignInfo'})
+vim.fn.sign_define('DiagnosticSignHint',
+  {text = '', texthl = 'DiagnosticSignHint'})
+
+-- Keybinds
+-- Git
+vim.cmd('nnoremap <leader>gp :Gitsigns preview_hunk<CR>')
+vim.cmd('nnoremap <leader>gr :Gitsigns reset_hunk<CR>')
+vim.cmd('nnoremap <leader>gg :LazyGit<CR>')
+-- Resize
+vim.cmd('nnoremap <C-Up> :resize -2<CR>')
+vim.cmd('nnoremap <C-Down> :resize +2<CR>')
+vim.cmd('nnoremap <C-Left> :vertical resize -2<CR>')
+vim.cmd('nnoremap <C-Right> :vertical resize +2<CR>')
+-- Bufferline
+vim.cmd('nnoremap <A-Left> :BufferLineCyclePrev<CR>')
+vim.cmd('nnoremap <A-Right> :BufferLineCycleNext<CR>')
+vim.cmd('nnoremap <leader>< :BufferLineMovePrev<CR>')
+vim.cmd('nnoremap <leader>> :BufferLineMoveNext<CR>')
+vim.cmd('nnoremap <leader>c :bp\\|bd #<CR>')
+vim.cmd('nnoremap <C-s> :BufferLinePick<CR>')
