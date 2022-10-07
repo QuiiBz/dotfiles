@@ -19,6 +19,8 @@ vim.opt.expandtab = true
 vim.opt.smartindent = true
 -- Show cursor line
 vim.opt.cursorline = true
+-- Overscroll by 10 lines
+vim.opt.scrolloff = 10
 
 -- Diagnostic icons
 vim.fn.sign_define('DiagnosticSignError',
