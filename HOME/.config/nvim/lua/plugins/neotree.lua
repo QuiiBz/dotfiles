@@ -34,6 +34,11 @@ require('neo-tree').setup({
       }
     },
   },
+  window = {
+    mappings = {
+      ['/'] = 'noop',
+    },
+  },
   filesystem = {
     follow_current_file = true,
   },
