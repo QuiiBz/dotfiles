@@ -73,5 +73,6 @@ return require('packer').startup(function(use)
     end
   }
   use 'kdheepak/lazygit.nvim'
+  use 'tversteeg/registers.nvim'
 
 end)

@@ -8,4 +8,4 @@ require('plugins/lsp')
 require('plugins/cmp')
 require('plugins/lualine')
 require('plugins/bufferline')
-
+require('plugins/registers')
