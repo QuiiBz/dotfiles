@@ -140,3 +140,12 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
+
+# pnpm
+export PNPM_HOME="/Users/tom/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
+
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
+
