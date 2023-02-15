@@ -29,8 +29,13 @@ return require('packer').startup(function(use)
     tag = 'nightly'
   }
   use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.0',
+    'nvim-telescope/telescope.nvim', branch = '0.1.x',
   }
+  use {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+  }
+
   use {
     'windwp/nvim-ts-autotag',
     config = function()
