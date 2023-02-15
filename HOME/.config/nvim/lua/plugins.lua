@@ -80,5 +80,6 @@ return require('packer').startup(function(use)
   }
   use 'kdheepak/lazygit.nvim'
   use 'tversteeg/registers.nvim'
+  use 'github/copilot.vim'
 
 end)
