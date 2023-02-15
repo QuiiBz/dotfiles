@@ -2,12 +2,13 @@ local lsp = require('lspconfig')
 
 local servers = {
   -- Languages
-  'sumneko_lua',
+  'lua_ls',
   'rust_analyzer',
   'tsserver',
   'cssls',
   'html',
   'jsonls',
+  'gopls',
   -- Web
   'prismals',
   'astro',
@@ -53,17 +54,6 @@ for _, server in pairs(servers) do
     on_attach = on_attach,
     capabilities = capabilities,
   }
-
-  -- Add 'vim' as global for lua LSP https://www.reddit.com/r/neovim/comments/p0p0kr/solved_undefined_global_vim_error/
-  if server == 'sumneko_lua' then
-    config.settings = {
-      Lua = {
-        diagnostics = {
-          globals = { 'vim' }
-        }
-      }
-    }
-  end
 
   lsp[server].setup(config)
 end

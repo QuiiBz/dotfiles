@@ -12,9 +12,10 @@ return require('packer').startup(function(use)
     'catppuccin/nvim',
     as = 'catppuccin',
     config = function()
-      vim.g.catppuccin_flavour = 'macchiato' -- latte, frappe, macchiato, mocha
-      require('catppuccin').setup()
-      vim.api.nvim_command 'colorscheme catppuccin'
+      require('catppuccin').setup({
+        flavour = 'macchiato' -- latte, frappe, macchiato, mocha
+      })
+      vim.cmd.colorscheme "catppuccin"
     end
   }
 
@@ -24,8 +25,8 @@ return require('packer').startup(function(use)
     run = ':TSUpdate'
   }
   use {
-    'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v2.x',
+    'nvim-tree/nvim-tree.lua',
+    tag = 'nightly'
   }
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',

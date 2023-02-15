@@ -1,7 +1,7 @@
 require('plugins')
 require('settings')
 
-require('plugins/neotree')
+require('plugins/tree')
 require('plugins/telescope')
 require('plugins/treesitter')
 require('plugins/lsp')
