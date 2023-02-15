@@ -81,5 +81,14 @@ return require('packer').startup(function(use)
   use 'kdheepak/lazygit.nvim'
   use 'tversteeg/registers.nvim'
   use 'github/copilot.vim'
+  use {
+    'folke/persistence.nvim',
+    event = 'BufReadPre', -- this will only start session saving when an actual file was opened
+    module = 'persistence',
+    config = function()
+      require('persistence').setup()
+    end,
+  }
+  use 'echasnovski/mini.starter'
 
 end)
