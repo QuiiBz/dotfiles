@@ -148,4 +148,8 @@ export PATH="$PNPM_HOME:$PATH"
 
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"
+export PATH="/Users/tom/Library/Python/3.10/bin:$PATH"
+export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
+# For Turborepo colors
+export FORCE_COLOR=1
 
