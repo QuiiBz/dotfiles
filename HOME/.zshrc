@@ -109,10 +109,6 @@ alias ll="exa -lh"
 alias l="exa -lah"
 alias cat="bat"
 
-# NVM initialisation
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
 eval "$(starship init zsh)"
 
 
@@ -129,27 +125,26 @@ alias ssh="kitty +kitten ssh"
 # Scaleway CLI autocomplete initialization.
 eval "$(scw autocomplete script shell=zsh)"
 
-# bun completions
-[ -s "/Users/tom/.bun/_bun" ] && source "/Users/tom/.bun/_bun"
-
-# Bun
-export BUN_INSTALL="/Users/tom/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-export DENO_INSTALL="/Users/tom/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
-
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
 
 # pnpm
 export PNPM_HOME="/Users/tom/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
 # pnpm end
 
-export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$PATH"
 export PATH="/Users/tom/Library/Python/3.10/bin:$PATH"
 export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
 # For Turborepo colors
 export FORCE_COLOR=1
 
+# proto
+export PROTO_ROOT="$HOME/.proto"
+export PATH="$PROTO_ROOT/bin:$PATH"
+
+# go
+export GOBIN="$HOME/go/bin"
+export PATH="$GOBIN:$PATH"
