@@ -19,6 +19,7 @@ local servers = {
 }
 
 -- Auto install the LSP servers
+require('mason').setup()
 require('mason-lspconfig').setup({
   ensure_installed = servers,
 })
