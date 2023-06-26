@@ -138,7 +138,14 @@ export FORCE_COLOR=1
 # proto
 export PROTO_ROOT="$HOME/.proto"
 export PATH="$PROTO_ROOT/bin:$PATH"
+export PATH="$PROTO_ROOT/tools/node/globals/bin:$PATH"
 
 # go
 export GOBIN="$HOME/go/bin"
 export PATH="$GOBIN:$PATH"
+
+export PATH="/Users/tom/dev/depot_tools:$PATH"
+alias d8=/Users/tom/dev/v8/v8/out/arm64.optdebug/d8
+alias tick-processor=/Users/tom/dev/v8/v8/tools/mac-tick-processor
+export D8_PATH="/Users/tom/dev/v8/v8/out/arm64.optdebug"
+alias pnpx="pnpm dlx"
