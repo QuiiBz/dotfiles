@@ -13,6 +13,7 @@ local servers = {
   'prismals',
   'astro',
   'tailwindcss',
+  'vls',
   -- Other
   'dockerls',
   'terraformls',
