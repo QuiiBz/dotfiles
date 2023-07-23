@@ -149,3 +149,4 @@ alias d8=/Users/tom/dev/v8/v8/out/arm64.optdebug/d8
 alias tick-processor=/Users/tom/dev/v8/v8/tools/mac-tick-processor
 export D8_PATH="/Users/tom/dev/v8/v8/out/arm64.optdebug"
 alias pnpx="pnpm dlx"
+alias lg="lazygit"
