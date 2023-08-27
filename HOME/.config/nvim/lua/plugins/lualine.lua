@@ -1,3 +1,11 @@
+local function LspStatus()
+  return require("lsp-progress").progress({
+    format = function(messages)
+      return #messages > 0 and table.concat(messages, " ") or ""
+    end,
+  })
+end
+
 require('lualine').setup({
   options = {
     component_separators = '|',
@@ -7,7 +15,7 @@ require('lualine').setup({
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch'},
-    lualine_c = {'diff'},
+    lualine_c = {'diff', LspStatus},
     lualine_x = {},
     lualine_y = {'filetype'},
     lualine_z = {'progress'}
@@ -17,4 +25,10 @@ require('lualine').setup({
   winbar = {},
   inactive_winbar = {},
   extensions = {}
+})
+
+vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+vim.api.nvim_create_autocmd("User LspProgressStatusUpdated", {
+    group = "lualine_augroup",
+    callback = require("lualine").refresh,
 })

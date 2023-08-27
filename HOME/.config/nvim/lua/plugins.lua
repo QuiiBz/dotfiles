@@ -66,6 +66,12 @@ return require('packer').startup(function(use)
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/nvim-cmp'
   use 'nvim-lualine/lualine.nvim'
+  use {
+    'linrongbin16/lsp-progress.nvim',
+    config = function()
+      require('lsp-progress').setup()
+    end
+  }
   use {'akinsho/bufferline.nvim', tag = 'v2.*' }
   use {
     'lewis6991/gitsigns.nvim',
