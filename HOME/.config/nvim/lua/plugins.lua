@@ -91,5 +91,6 @@ return require('packer').startup(function(use)
     end,
   }
   use 'echasnovski/mini.starter'
+  use 'nvim-pack/nvim-spectre'
 
 end)

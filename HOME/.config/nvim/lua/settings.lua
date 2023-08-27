@@ -53,3 +53,5 @@ vim.cmd('nnoremap <leader>< :BufferLineMovePrev<CR>')
 vim.cmd('nnoremap <leader>> :BufferLineMoveNext<CR>')
 vim.cmd('nnoremap <leader>c :bp\\|bd #<CR>')
 vim.cmd('nnoremap <C-s> :BufferLinePick<CR>')
+-- Spectre
+vim.cmd('nnoremap <leader>S :lua require("spectre").toggle()<CR>')
