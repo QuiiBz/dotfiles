@@ -31,10 +31,11 @@ return {
   end
   },
   {
-    'linrongbin16/lsp-progress.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    'j-hui/fidget.nvim',
+    tag = 'legacy',
+    event = 'LspAttach',
     config = function()
-      require('lsp-progress').setup()
+      require('fidget').setup()
     end
   },
   { 'akinsho/bufferline.nvim', version = 'v2.*' },
