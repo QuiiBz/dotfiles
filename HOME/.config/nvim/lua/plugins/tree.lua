@@ -2,9 +2,9 @@ return {
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    init = function()
-      vim.cmd([[nnoremap <C-n> :NvimTreeToggle<cr>]])
-    end,
+    keys = {
+      { '<C-n>', '<cmd>NvimTreeToggle<cr>' }
+    },
     config = function()
       require('nvim-tree').setup({
         view = {

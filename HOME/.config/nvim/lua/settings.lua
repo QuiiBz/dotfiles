@@ -2,7 +2,6 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
-vim.g.mapleader = ' '
 vim.opt.termguicolors = true
 -- Line numbers
 vim.opt.number = true
@@ -40,7 +39,7 @@ vim.fn.sign_define('DiagnosticSignHint',
 -- Git
 vim.cmd('nnoremap <leader>gp :Gitsigns preview_hunk<CR>')
 vim.cmd('nnoremap <leader>gr :Gitsigns reset_hunk<CR>')
-vim.cmd('nnoremap <leader>gg :LazyGit<CR>')
+-- vim.cmd('nnoremap <leader>gg :LazyGit<CR>')
 -- Resize
 vim.cmd('nnoremap <C-Up> :resize -2<CR>')
 vim.cmd('nnoremap <C-Down> :resize +2<CR>')

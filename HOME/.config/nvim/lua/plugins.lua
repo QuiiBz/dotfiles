@@ -18,6 +18,7 @@ return {
   },
   {
     'windwp/nvim-autopairs',
+    event = 'InsertEnter',
     config = function()
       require('nvim-autopairs').setup()
     end
@@ -38,18 +39,21 @@ return {
       require('fidget').setup()
     end
   },
-  { 'akinsho/bufferline.nvim', version = 'v2.*' },
   {
-  'lewis6991/gitsigns.nvim',
+    'lewis6991/gitsigns.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       require('gitsigns').setup()
     end
   },
   'kdheepak/lazygit.nvim',
-  'github/copilot.vim',
+  {
+    'github/copilot.vim',
+    event = 'InsertEnter',
+  },
   {
   'folke/persistence.nvim',
-    event = 'BufReadPre',
+    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       require('persistence').setup()
     end,

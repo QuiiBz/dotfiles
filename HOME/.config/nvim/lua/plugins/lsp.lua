@@ -22,9 +22,9 @@ local servers = {
 return {
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'jose-elias-alvarez/null-ls.nvim', 'hrsh7th/cmp-nvim-lsp', 'williamboman/mason.nvim', 'williamboman/mason-lspconfig.nvim' },
+    dependencies = { 'jose-elias-alvarez/null-ls.nvim', 'hrsh7th/cmp-nvim-lsp', 'williamboman/mason-lspconfig.nvim' },
+    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
-      require('mason').setup()
       require('mason-lspconfig').setup({
         ensure_installed = servers,
       })
@@ -99,6 +99,14 @@ return {
         return orig_util_open_floating_preview(contents, syntax, opts, ...)
       end
     end
-  }
+  },
+  {
+    'williamboman/mason.nvim',
+    cmd = 'Mason',
+    build = ':MasonUpdate',
+    config = function()
+      require('mason').setup()
+    end
+  },
 }
 
