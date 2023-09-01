@@ -52,7 +52,7 @@ return {
         end
 
         -- Mappings
-        local bufopts = { noremap=true, silent=true, buffer=bufnr }
+        local bufopts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
@@ -65,7 +65,8 @@ return {
         -- end, bufopts)
         vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
         vim.keymap.set('n', '<space>r', vim.lsp.buf.rename, bufopts)
-        vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, bufopts)
+        -- Handled by :CodeActionMenu
+        -- vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, bufopts)
         vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
         vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
       end
@@ -83,12 +84,9 @@ return {
       end
 
       -- Rounded borders for hover
-      local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-      function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-        opts = opts or {}
-        opts.border = opts.border or 'rounded'
-        return orig_util_open_floating_preview(contents, syntax, opts, ...)
-      end
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = 'rounded'
+      })
     end
   },
   {
@@ -96,8 +94,13 @@ return {
     cmd = 'Mason',
     build = ':MasonUpdate',
     config = function()
-      require('mason').setup()
+      require('mason').setup({
+        ui = {
+          border = 'rounded',
+          width = 0.8,
+          height = 0.8,
+        }
+      })
     end
   },
 }
-

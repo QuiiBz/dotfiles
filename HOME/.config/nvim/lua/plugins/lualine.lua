@@ -13,12 +13,12 @@ return {
           globalstatus = true,
         },
         sections = {
-          lualine_a = {'mode'},
-          lualine_b = {'branch'},
-          lualine_c = {'diff'},
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch' },
+          lualine_c = { 'diff' },
           lualine_x = {},
-          lualine_y = {'filetype'},
-          lualine_z = {'progress'}
+          lualine_y = { 'filetype' },
+          lualine_z = { 'progress' }
         },
         inactive_sections = {},
         tabline = {},

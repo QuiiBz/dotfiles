@@ -4,20 +4,20 @@ return {
     config = function()
       local starter = require('mini.starter')
       starter.setup({
-         items = {
+        items = {
           function()
             return {
               {
                 name = 'Load session (directory)',
                 action = function()
-                  require("persistence").load()
+                  require('persistence').load()
                 end,
                 section = 'Session'
               },
               {
                 name = 'Load last session',
                 action = function()
-                  require("persistence").load({ last = true })
+                  require('persistence').load({ last = true })
                 end,
                 section = 'Session'
               },

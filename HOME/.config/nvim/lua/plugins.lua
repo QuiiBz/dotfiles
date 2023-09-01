@@ -3,10 +3,10 @@ return {
   {
     'catppuccin/nvim',
     config = function()
-    require('catppuccin').setup({
-      flavour = 'macchiato' -- latte, frappe, macchiato, mocha
-    })
-    vim.cmd.colorscheme "catppuccin"
+      require('catppuccin').setup({
+        flavour = 'macchiato' -- latte, frappe, macchiato, mocha
+      })
+      vim.cmd.colorscheme 'catppuccin'
     end
   },
   -- Others
@@ -24,12 +24,12 @@ return {
     end
   },
   {
-  'numToStr/Comment.nvim',
+    'numToStr/Comment.nvim',
     config = function()
-    require('Comment').setup({
-      pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-    })
-  end
+      require('Comment').setup({
+        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+      })
+    end
   },
   {
     'j-hui/fidget.nvim',
@@ -43,7 +43,11 @@ return {
     'lewis6991/gitsigns.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
-      require('gitsigns').setup()
+      require('gitsigns').setup({
+        preview_config = {
+          border = 'rounded',
+        }
+      })
     end
   },
   'kdheepak/lazygit.nvim',
@@ -52,7 +56,7 @@ return {
     event = 'InsertEnter',
   },
   {
-  'folke/persistence.nvim',
+    'folke/persistence.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       require('persistence').setup()
@@ -62,6 +66,16 @@ return {
     'nvim-pack/nvim-spectre',
     keys = { '<leader>S' },
     dependencies = { 'nvim-lua/plenary.nvim' }
+  },
+  {
+    'tversteeg/registers.nvim',
+    config = function()
+      require('registers').setup({
+        window = {
+          border = 'rounded',
+        },
+      })
+    end
   },
   {
     'weilbith/nvim-code-action-menu',
