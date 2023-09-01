@@ -13,7 +13,7 @@ local servers = {
   'prismals',
   'astro',
   'tailwindcss',
-  'eslint_d',
+  'eslint',
   -- Other
   'dockerls',
   'terraformls',
@@ -22,7 +22,7 @@ local servers = {
 return {
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'jose-elias-alvarez/null-ls.nvim', 'hrsh7th/cmp-nvim-lsp', 'williamboman/mason-lspconfig.nvim' },
+    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'williamboman/mason-lspconfig.nvim' },
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       require('mason-lspconfig').setup({
@@ -34,7 +34,27 @@ return {
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-        -- Mappings.
+        if client.name == 'eslint' then
+           vim.api.nvim_create_autocmd('BufWritePre', {
+            buffer = bufnr,
+            command = 'EslintFixAll',
+          })
+        end
+
+        if client.name == 'rust_analyzer' then
+          local augroup = vim.api.nvim_create_augroup('LspFormatting', { clear = true })
+
+          vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            group = augroup,
+            buffer = bufnr,
+            callback = function()
+              vim.lsp.buf.format({ bufnr = bufnr })
+            end,
+          })
+        end
+
+        -- Mappings
         local bufopts = { noremap=true, silent=true, buffer=bufnr }
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
@@ -64,32 +84,6 @@ return {
 
         lsp[server].setup(config)
       end
-
-      local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
-      local null_ls = require('null-ls')
-
-      -- Setup formatting and diagnostics with null-ls
-      null_ls.setup({
-        sources = {
-          null_ls.builtins.formatting.eslint_d,
-          null_ls.builtins.formatting.prismaFmt,
-          null_ls.builtins.formatting.rustfmt,
-          null_ls.builtins.diagnostics.eslint_d,
-          null_ls.builtins.code_actions.eslint_d,
-        },
-        on_attach = function(client, bufnr)
-          if client.supports_method('textDocument/formatting') then
-            vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              group = augroup,
-              buffer = bufnr,
-              callback = function()
-                vim.lsp.buf.format({ bufnr = bufnr })
-              end,
-            })
-          end
-        end,
-      })
 
       -- Rounded borders for hover
       local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
