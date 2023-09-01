@@ -30,22 +30,17 @@ return {
       })
 
       local lsp = require('lspconfig')
+      local augroup = vim.api.nvim_create_augroup('LspFormatting', { clear = true })
+
       local on_attach = function(client, bufnr)
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
         if client.name == 'eslint' then
           client.server_capabilities.documentFormattingProvider = true
-
-           vim.api.nvim_create_autocmd('BufWritePre', {
-            buffer = bufnr,
-            command = 'EslintFixAll',
-          })
         end
 
-        if client.name == 'rust_analyzer' then
-          local augroup = vim.api.nvim_create_augroup('LspFormatting', { clear = true })
-
+        if client.supports_method('textDocument/formatting') then
           vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
           vim.api.nvim_create_autocmd('BufWritePre', {
             group = augroup,
