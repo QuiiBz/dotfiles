@@ -35,6 +35,8 @@ return {
         vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
         if client.name == 'eslint' then
+          client.server_capabilities.documentFormattingProvider = true
+
            vim.api.nvim_create_autocmd('BufWritePre', {
             buffer = bufnr,
             command = 'EslintFixAll',
