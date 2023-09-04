@@ -11,6 +11,7 @@ return {
           component_separators = '|',
           section_separators = { left = '', right = '' },
           globalstatus = true,
+          theme = 'catppuccin',
         },
         sections = {
           lualine_a = { 'mode' },

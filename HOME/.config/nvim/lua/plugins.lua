@@ -4,7 +4,18 @@ return {
     'catppuccin/nvim',
     config = function()
       require('catppuccin').setup({
-        flavour = 'macchiato' -- latte, frappe, macchiato, mocha
+        flavour = 'macchiato', -- latte, frappe, macchiato, mocha
+        integrations = {
+          cmp = true,
+          gitsigns = true,
+          nvimtree = true,
+          treesitter = true,
+          -- fidget = true,
+          mason = true,
+          telescope = {
+            enabled = true,
+          },
+        }
       })
       vim.cmd.colorscheme 'catppuccin'
     end
@@ -36,7 +47,11 @@ return {
     tag = 'legacy',
     event = 'LspAttach',
     config = function()
-      require('fidget').setup()
+      require('fidget').setup({
+        text = {
+          spinner = 'arc',
+        },
+      })
     end
   },
   {
