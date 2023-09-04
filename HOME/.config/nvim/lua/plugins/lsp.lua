@@ -87,6 +87,15 @@ return {
       vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
         border = 'rounded'
       })
+
+      -- Fix floating windows color
+      vim.api.nvim_set_hl(0, 'NormalFloat', {
+        link = 'Normal',
+      })
+
+      vim.api.nvim_set_hl(0, 'FloatBorder', {
+        bg = 'none',
+      })
     end
   },
   {

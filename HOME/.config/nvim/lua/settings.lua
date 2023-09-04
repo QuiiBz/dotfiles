@@ -37,20 +37,20 @@ vim.fn.sign_define('DiagnosticSignHint',
 
 -- Keybinds
 -- Git
-vim.cmd('nnoremap <leader>gp :Gitsigns preview_hunk<CR>')
-vim.cmd('nnoremap <leader>gr :Gitsigns reset_hunk<CR>')
-vim.cmd('nnoremap <leader>gg :LazyGit<CR>')
+vim.cmd('nnoremap <silent> <leader>gp :Gitsigns preview_hunk<CR>')
+vim.cmd('nnoremap <silent> <leader>gr :Gitsigns reset_hunk<CR>')
+vim.cmd('nnoremap <silent> <leader>gg :LazyGit<CR>')
 -- Resize
-vim.cmd('nnoremap <C-Up> :resize -2<CR>')
-vim.cmd('nnoremap <C-Down> :resize +2<CR>')
-vim.cmd('nnoremap <C-Left> :vertical resize -2<CR>')
-vim.cmd('nnoremap <C-Right> :vertical resize +2<CR>')
+vim.cmd('nnoremap <silent> <C-Up> :resize -2<CR>')
+vim.cmd('nnoremap <silent> <C-Down> :resize +2<CR>')
+vim.cmd('nnoremap <silent> <C-Left> :vertical resize -2<CR>')
+vim.cmd('nnoremap <silent> <C-Right> :vertical resize +2<CR>')
 -- Bufferline
-vim.cmd('nnoremap <A-Left> :BufferLineCyclePrev<CR>')
-vim.cmd('nnoremap <A-Right> :BufferLineCycleNext<CR>')
-vim.cmd('nnoremap <leader>< :BufferLineMovePrev<CR>')
-vim.cmd('nnoremap <leader>> :BufferLineMoveNext<CR>')
-vim.cmd('nnoremap <leader>c :bp\\|bd #<CR>')
-vim.cmd('nnoremap <C-s> :BufferLinePick<CR>')
+vim.cmd('nnoremap <silent> <A-Left> :BufferLineCyclePrev<CR>')
+vim.cmd('nnoremap <silent> <A-Right> :BufferLineCycleNext<CR>')
+vim.cmd('nnoremap <silent> <leader>< :BufferLineMovePrev<CR>')
+vim.cmd('nnoremap <silent> <leader>> :BufferLineMoveNext<CR>')
+vim.cmd('nnoremap <silent> <leader>c :bp\\|bd #<CR>')
+vim.cmd('nnoremap <silent> <C-s> :BufferLinePick<CR>')
 -- Spectre
-vim.cmd('nnoremap <leader>S :lua require("spectre").toggle()<CR>')
+vim.cmd('nnoremap <silent> <leader>S :lua require("spectre").toggle()<CR>')
