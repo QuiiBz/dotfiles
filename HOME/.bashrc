@@ -1,9 +1,9 @@
 # Fig pre block. Keep at the top of this file.
 [[ -f "$HOME/.fig/shell/bashrc.pre.bash" ]] && builtin source "$HOME/.fig/shell/bashrc.pre.bash"
 alias vim="nvim"
-alias ls="exa"
-alias ll="exa -lh"
-alias l="exa -lah"
+alias ls="eza"
+alias ll="eza -lh"
+alias l="eza -lah"
 alias cat="bat"
 
 GREEN="\[\033[1;36m\]"

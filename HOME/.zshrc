@@ -102,9 +102,9 @@ export LC_ALL=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias vim="nvim"
-alias ls="exa"
-alias ll="exa -lh"
-alias l="exa -lah"
+alias ls="eza"
+alias ll="eza -lh"
+alias l="eza -lah"
 alias cat="bat"
 
 eval "$(starship init zsh)"
