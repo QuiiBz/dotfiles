@@ -80,6 +80,12 @@ return {
           capabilities = capabilities,
         }
 
+        -- Only run the TailwindCSS LSP when a config is present
+        if server == 'tailwindcss' then
+          config.root_dir = lsp.util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs',
+            'tailwind.config.ts')
+        end
+
         lsp[server].setup(config)
       end
 
