@@ -79,7 +79,9 @@ return {
   },
   {
     'nvim-pack/nvim-spectre',
-    keys = { '<leader>S' },
+    keys = {
+      { '<leader>S', '<cmd>lua require("spectre").toggle()<cr>' }
+    },
     dependencies = { 'nvim-lua/plenary.nvim' }
   },
   {
