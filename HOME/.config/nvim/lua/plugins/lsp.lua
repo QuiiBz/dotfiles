@@ -7,7 +7,6 @@ local servers = {
   'html',
   'jsonls',
   'gopls',
-  'phpactor',
   'volar',
   -- Web
   'prismals',
