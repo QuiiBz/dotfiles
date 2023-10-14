@@ -93,6 +93,11 @@ return {
         border = 'rounded'
       })
 
+      -- Rounded borders for diagnostics float
+      vim.diagnostic.config({
+        float = { border = 'rounded' },
+      })
+
       -- Fix floating windows color
       vim.api.nvim_set_hl(0, 'NormalFloat', {
         link = 'Normal',

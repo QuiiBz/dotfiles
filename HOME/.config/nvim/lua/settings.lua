@@ -52,3 +52,5 @@ vim.cmd('nnoremap <silent> <leader>< :BufferLineMovePrev<CR>')
 vim.cmd('nnoremap <silent> <leader>> :BufferLineMoveNext<CR>')
 vim.cmd('nnoremap <silent> <leader>c :bp\\|bd #<CR>')
 vim.cmd('nnoremap <silent> <C-s> :BufferLinePick<CR>')
+
+vim.cmd('nnoremap <silent> <leader>d :lua vim.diagnostic.open_float()<CR>')
