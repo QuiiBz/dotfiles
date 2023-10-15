@@ -5,7 +5,6 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 -- Line numbers
 vim.opt.number = true
-vim.opt.relativenumber = true
 -- Show extra column https://www.reddit.com/r/neovim/comments/neaeej/only_just_discovered_set_signcolumnnumber_i_like/
 vim.opt.signcolumn = 'yes'
 -- Hide status bar
