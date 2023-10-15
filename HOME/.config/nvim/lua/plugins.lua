@@ -104,5 +104,12 @@ return {
       vim.g.code_action_menu_show_action_kind = false
       vim.g.code_action_menu_show_details = false
     end
+  },
+  {
+    'laytan/cloak.nvim',
+    event = { 'BufReadPre *.env' },
+    config = function()
+      require('cloak').setup()
+    end
   }
 }
