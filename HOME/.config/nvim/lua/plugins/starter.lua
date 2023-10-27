@@ -23,7 +23,24 @@ return {
               },
             }
           end,
-          starter.sections.recent_files(5, false, false),
+          function()
+            return {
+              {
+                name = 'Find files',
+                action = function()
+                  require('telescope.builtin').git_files({ silent = true })
+                end,
+                section = 'Files',
+              },
+              {
+                name = 'Search in files',
+                action = function()
+                  require('telescope.builtin').live_grep({ silent = true })
+                end,
+                section = 'Files',
+              }
+            }
+          end,
           starter.sections.builtin_actions(),
         },
         content_hooks = {
