@@ -111,5 +111,12 @@ return {
     config = function()
       require('cloak').setup()
     end
+  },
+  {
+    'chrishrb/gx.nvim',
+    keys = { 'gx' },
+    config = function()
+      require('gx').setup()
+    end
   }
 }
