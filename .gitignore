@@ -3,4 +3,5 @@ HOME/.config/nvim/plugin/packer_compiled.lua
 HOME/.proto/bin/
 HOME/.proto/temp/
 HOME/.proto/tools/
-
+HOME/.proto/shims/
+HOME/.proto/plugins/

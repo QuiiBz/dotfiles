@@ -136,7 +136,7 @@ export FORCE_COLOR=1
 
 # proto
 export PROTO_ROOT="$HOME/.proto"
-export PATH="$PROTO_ROOT/bin:$PATH"
+export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
 export PATH="$PROTO_ROOT/tools/node/globals/bin:$PATH"
 
 # go
