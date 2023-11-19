@@ -21,11 +21,11 @@ return {
         indent = {
           enable = true,
         },
-        -- Commenting in JSX/TSX
-        context_commentstring = {
-          enable = true,
-          enable_autocmd = false,
-        },
+      })
+
+      -- Commenting in JSX/TSX
+      require('ts_context_commentstring').setup({
+        enable_autocmd = false,
       })
     end
   }
