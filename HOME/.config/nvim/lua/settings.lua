@@ -32,7 +32,7 @@ vim.fn.sign_define('DiagnosticSignWarn',
 vim.fn.sign_define('DiagnosticSignInfo',
   { text = ' ', texthl = 'DiagnosticSignInfo' })
 vim.fn.sign_define('DiagnosticSignHint',
-  { text = '', texthl = 'DiagnosticSignHint' })
+  { text = '', texthl = 'DiagnosticSignHint' })
 
 vim.g.skip_ts_context_commentstring_module = true
 
