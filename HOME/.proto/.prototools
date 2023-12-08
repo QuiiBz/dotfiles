@@ -1,0 +1,13 @@
+bun = "1.0.6"
+deno = "1.37.2"
+go = "1.21.3"
+node = "18.18.2"
+npm = "bundled"
+pnpm = "8.9.2"
+yarn = "1.22.21"
+
+[tools.node]
+intercept-globals = false
+
+[settings]
+auto-install = true
