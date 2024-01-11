@@ -16,7 +16,13 @@ return {
         sections = {
           lualine_a = { 'mode' },
           lualine_b = { 'branch' },
-          lualine_c = { 'diff' },
+          lualine_c = {
+            'diff',
+            {
+              'filename',
+              path = 1,
+            },
+          },
           lualine_x = { 'searchcount' },
           lualine_y = { 'filetype' },
           lualine_z = { 'progress' }
