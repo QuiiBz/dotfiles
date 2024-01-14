@@ -137,7 +137,6 @@ export FORCE_COLOR=1
 # proto
 export PROTO_HOME="$HOME/.proto"
 export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
-export PATH="$PROTO_ROOT/tools/node/globals/bin:$PATH"
 
 # go
 export GOBIN="$HOME/go/bin"
@@ -152,3 +151,6 @@ alias lg="lazygit"
 
 # bun completions
 [ -s "/Users/tom/.bun/_bun" ] && source "/Users/tom/.bun/_bun"
+
+# Turso
+export PATH="/Users/tom/.turso:$PATH"
