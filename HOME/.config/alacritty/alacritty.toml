@@ -1,0 +1,17 @@
+import = ["/Users/tom/.config/alacritty/catppuccin/catppuccin-macchiato.toml"]
+
+[font]
+size = 15.5
+
+[font.normal]
+family = "JetbrainsMono Nerd Font"
+
+[selection]
+save_to_clipboard = true
+
+[window]
+decorations = "buttonless"
+
+[window.padding]
+x = 6
+y = 6
