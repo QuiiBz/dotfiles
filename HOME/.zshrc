@@ -148,6 +148,7 @@ alias tick-processor=/Users/tom/dev/v8/v8/tools/mac-tick-processor
 export D8_PATH="/Users/tom/dev/v8/v8/out/arm64.optdebug"
 alias pnpx="pnpm dlx"
 alias lg="lazygit"
+alias k="kubectl"
 
 # bun completions
 [ -s "/Users/tom/.bun/_bun" ] && source "/Users/tom/.bun/_bun"
