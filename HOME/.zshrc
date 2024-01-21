@@ -1,11 +1,9 @@
-DISABLE_AUTO_UPDATE="true"
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
+#
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -26,7 +24,7 @@ ZSH_THEME="robbyrussell"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
 # DISABLE_UPDATE_PROMPT="true"
@@ -76,84 +74,33 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-export LC_ALL=en_US.UTF-8
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+# Aliases
 alias vim="nvim"
 alias ls="eza"
 alias ll="eza -lh"
 alias l="eza -lah"
 alias cat="bat"
-
-eval "$(starship init zsh)"
-
-
-# The next line updates PATH for the Google Cloud SDK.
-# if [ -f '/Users/tom/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/tom/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-# if [ -f '/Users/tom/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/tom/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
 alias luamake=/Users/tom/dev/lua-language-server/3rd/luamake/luamake
 alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
-
-# pnpm
-export PNPM_HOME="/Users/tom/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-export PATH="/Users/tom/Library/Python/3.10/bin:$PATH"
-export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
-# For Turborepo colors
-export FORCE_COLOR=1
-
-# proto
-export PROTO_HOME="$HOME/.proto"
-export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
-
-# go
-export GOBIN="$HOME/go/bin"
-export PATH="$GOBIN:$PATH"
-
-export PATH="/Users/tom/dev/depot_tools:$PATH"
-alias d8=/Users/tom/dev/v8/v8/out/arm64.optdebug/d8
-alias tick-processor=/Users/tom/dev/v8/v8/tools/mac-tick-processor
-export D8_PATH="/Users/tom/dev/v8/v8/out/arm64.optdebug"
 alias pnpx="pnpm dlx"
 alias lg="lazygit"
 alias k="kubectl"
-# kubectl completions
+
+# Paths
+export PATH="/Users/tom/Library/Python/3.10/bin:$PATH"
+export PROTO_HOME="$HOME/.proto"
+export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
+export GOBIN="$HOME/go/bin"
+export PATH="$GOBIN:$PATH"
+export PATH="$HOME/.turso:$PATH"
+
+# Configurations
+export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
+export FORCE_COLOR=1 # Enable Turborepo colors
+export LC_ALL=en_US.UTF-8
+
+# Completions
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
-# bun completions
-[ -s "/Users/tom/.bun/_bun" ] && source "/Users/tom/.bun/_bun"
-
-# Turso
-export PATH="/Users/tom/.turso:$PATH"
+eval "$(starship init zsh)"
