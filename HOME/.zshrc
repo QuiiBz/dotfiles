@@ -99,8 +99,16 @@ export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
 export FORCE_COLOR=1 # Enable Turborepo colors
 export LC_ALL=en_US.UTF-8
 
+# PNPM
+export PNPM_HOME="/Users/tom/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
 # Completions
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 eval "$(starship init zsh)"
+
