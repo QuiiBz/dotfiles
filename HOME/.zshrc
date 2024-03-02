@@ -93,6 +93,8 @@ export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
 export GOBIN="$HOME/go/bin"
 export PATH="$GOBIN:$PATH"
 export PATH="$HOME/.turso:$PATH"
+export WASMTIME_HOME="$HOME/.wasmtime"
+export PATH="$WASMTIME_HOME/bin:$PATH"
 
 # Configurations
 export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
