@@ -8,6 +8,7 @@ local servers = {
   'jsonls',
   'gopls',
   'volar',
+  'clangd',
   -- Web
   'prismals',
   'astro',
