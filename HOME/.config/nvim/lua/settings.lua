@@ -23,6 +23,15 @@ vim.opt.smartindent = true
 vim.opt.cursorline = true
 -- Overscroll by 10 lines
 vim.opt.scrolloff = 10
+-- Ignore case in search
+vim.opt.ignorecase = true
+-- Do not ignore case in search if there is a capital letter
+vim.opt.smartcase = true
+vim.opt.undofile = true
+vim.opt.swapfile = false
+-- Just makes sense when spliting windows
+vim.opt.splitright = true
+vim.opt.splitbelow = true
 
 -- Diagnostic icons
 vim.fn.sign_define('DiagnosticSignError',
