@@ -1,7 +1,6 @@
 return {
   {
     'akinsho/bufferline.nvim',
-    version = 'v2.*',
     event = { 'BufReadPre', 'BufNewFile' },
     after = 'catppuccin',
     config = function()
