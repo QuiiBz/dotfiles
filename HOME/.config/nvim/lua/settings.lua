@@ -43,8 +43,6 @@ vim.fn.sign_define('DiagnosticSignInfo',
 vim.fn.sign_define('DiagnosticSignHint',
   { text = '', texthl = 'DiagnosticSignHint' })
 
-vim.g.skip_ts_context_commentstring_module = true
-
 -- Keybinds
 -- Git
 vim.cmd('nnoremap <silent> <leader>gp :Gitsigns preview_hunk<CR>')

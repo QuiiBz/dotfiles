@@ -5,7 +5,6 @@ return {
     build = ':TSUpdate',
     event = { 'BufReadPost', 'BufNewFile' },
     cmd = { 'TSUpdateSync' },
-    dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring' },
     init = function()
       local configs = require('nvim-treesitter.configs')
 
@@ -21,11 +20,6 @@ return {
         indent = {
           enable = true,
         },
-      })
-
-      -- Commenting in JSX/TSX
-      require('ts_context_commentstring').setup({
-        enable_autocmd = false,
       })
     end
   }
