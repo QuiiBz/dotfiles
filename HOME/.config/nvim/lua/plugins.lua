@@ -87,14 +87,22 @@ return {
     end
   },
   {
-    'weilbith/nvim-code-action-menu',
+    'aznhe21/actions-preview.nvim',
     keys = {
-      { 'ga', '<cmd>CodeActionMenu<cr>' }
+      { 'ga', '<cmd>lua require("actions-preview").code_actions()<cr>' }
     },
-    init = function()
-      vim.g.code_action_menu_window_border = 'rounded'
-      vim.g.code_action_menu_show_action_kind = false
-      vim.g.code_action_menu_show_details = false
+    config = function()
+      require('actions-preview').setup({
+        telescope = {
+          sorting_strategy = "ascending",
+          layout_strategy = "vertical",
+          layout_config = {
+            width = 0.4,
+            height = 0.4,
+            prompt_position = "top",
+          },
+        },
+      })
     end
   },
   {
