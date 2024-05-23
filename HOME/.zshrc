@@ -1,3 +1,6 @@
+# Enable profiling
+# zmodload zsh/zprof
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -95,6 +98,7 @@ export PATH="$GOBIN:$PATH"
 export PATH="$HOME/.turso:$PATH"
 export WASMTIME_HOME="$HOME/.wasmtime"
 export PATH="$WASMTIME_HOME/bin:$PATH"
+export PATH=/Users/tom/.sst/bin:$PATH
 
 # Configurations
 export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
@@ -114,3 +118,5 @@ esac
 
 eval "$(starship init zsh)"
 
+# Enable profiling
+# zprof
