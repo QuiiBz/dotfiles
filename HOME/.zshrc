@@ -112,9 +112,20 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
-# Completions
-[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+# Check if 'kubectl' is a command in $PATH
+if [ $commands[kubectl] ]; then
+  # Placeholder 'kubectl' shell function:
+  # Will only be executed on the first call to 'kubectl'
+  kubectl() {
+    # Remove this function, subsequent calls will execute 'kubectl' directly
+    unfunction "$0"
+    # Load auto-completion
+    source <(kubectl completion zsh)
+    # Execute 'kubectl' binary
+    $0 "$@"
+  }
+fi
+
 
 eval "$(starship init zsh)"
 
