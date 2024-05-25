@@ -112,4 +112,9 @@ return {
       require('cloak').setup()
     end
   },
+  {
+    'folke/ts-comments.nvim',
+    opts = {},
+    event = 'VeryLazy',
+  }
 }
