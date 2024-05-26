@@ -12,3 +12,9 @@ disabled = true
 
 [golang]
 disabled = true
+
+[c]
+disabled = true
+
+[cmake]
+disabled = true
