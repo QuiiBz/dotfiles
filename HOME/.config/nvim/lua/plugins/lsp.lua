@@ -80,6 +80,17 @@ return {
           capabilities = capabilities,
         }
 
+        -- Check with clippy by default
+        if server == 'rust_analyzer' then
+          config.settings = {
+            ['rust-analyzer'] = {
+              check = {
+                command = "clippy"
+              }
+            }
+          }
+        end
+
         -- Only run the TailwindCSS LSP when a config is present
         if server == 'tailwindcss' then
           config.root_dir = lsp.util.root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs',
