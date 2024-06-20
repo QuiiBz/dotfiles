@@ -58,6 +58,10 @@ eval "$(fzf --zsh)"
 eval "$(starship init zsh)"
 
 # ZSH settings
+bindkey "\e[1;3D" backward-word
+bindkey "\e[1;3C" forward-word
+bindkey "\e[1;2D" backward-word
+bindkey "\e[1;2C" forward-word
 WORDCHARS=''
 setopt menu_complete
 setopt auto_menu
