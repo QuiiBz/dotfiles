@@ -13,9 +13,6 @@ return {
         highlight = {
           enable = true,
         },
-        autotag = {
-          enable = true,
-        },
         -- Indent based on treesitter for =
         indent = {
           enable = true,
