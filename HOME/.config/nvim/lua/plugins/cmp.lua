@@ -2,9 +2,10 @@ return {
   {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
-    dependencies = { 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path' },
+    dependencies = { 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'onsails/lspkind.nvim' },
     config = function()
       local cmp = require('cmp')
+      local lspkind = require('lspkind')
 
       cmp.setup({
         snippet = {
@@ -29,6 +30,11 @@ return {
         }),
         completion = {
           completeopt = 'menu,menuone,noinsert',
+        },
+        formatting = {
+          format = lspkind.cmp_format({
+            mode = 'symbol_text',
+          })
         }
       })
 
