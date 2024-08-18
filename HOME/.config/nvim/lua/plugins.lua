@@ -116,5 +116,12 @@ return {
     'folke/ts-comments.nvim',
     opts = {},
     event = 'VeryLazy',
+  },
+  {
+    'lewis6991/satellite.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function()
+      require('satellite').setup()
+    end
   }
 }

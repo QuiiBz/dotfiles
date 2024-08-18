@@ -2,9 +2,9 @@ return {
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    -- keys = {
-    --   { '<C-n>', '<cmd>NvimTreeToggle<cr>' }
-    -- },
+    keys = {
+      { '<C-b>', '<cmd>NvimTreeToggle<cr>' }
+    },
     config = function()
       require('nvim-tree').setup({
         view = {
@@ -40,6 +40,7 @@ return {
   {
     'echasnovski/mini.files',
     version = '*',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
       { '<C-n>', '<cmd>lua if not MiniFiles.close() then MiniFiles.open() end<cr>' }
     },
