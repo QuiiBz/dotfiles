@@ -56,6 +56,8 @@ vim.cmd('nnoremap <silent> <C-Right> :vertical resize +2<CR>')
 -- Bufferline
 vim.cmd('nnoremap <silent> <A-Left> :BufferLineCyclePrev<CR>')
 vim.cmd('nnoremap <silent> <A-Right> :BufferLineCycleNext<CR>')
+vim.cmd('nnoremap <silent> <C-S-Tab> :BufferLineCyclePrev<CR>')
+vim.cmd('nnoremap <silent> <C-Tab> :BufferLineCycleNext<CR>')
 vim.cmd('nnoremap <silent> <leader>< :BufferLineMovePrev<CR>')
 vim.cmd('nnoremap <silent> <leader>> :BufferLineMoveNext<CR>')
 vim.cmd('nnoremap <silent> <leader>c :bp<bar>sp<bar>bn<bar>bd<CR>')
