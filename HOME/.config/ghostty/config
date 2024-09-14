@@ -1,0 +1,9 @@
+theme = catppuccin-macchiato
+font-family = JetbrainsMono Nerd Font
+font-size = 15
+cursor-style-blink = false
+window-decoration = false
+window-padding-x = 6,6
+window-padding-y = 6,6
+window-padding-balance = true
+confirm-close-surface = false
