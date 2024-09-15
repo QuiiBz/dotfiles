@@ -5,6 +5,5 @@ cursor-style-blink = false
 window-decoration = false
 window-padding-x = 6,6
 window-padding-y = 6,6
-window-padding-balance = true
 confirm-close-surface = false
 shell-integration-features = no-cursor
