@@ -9,6 +9,7 @@ local servers = {
   'gopls',
   'volar',
   'clangd',
+  'basedpyright',
   -- Web
   'prismals',
   'astro',
