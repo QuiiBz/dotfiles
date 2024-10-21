@@ -2,7 +2,7 @@ local servers = {
   -- Languages
   'lua_ls',
   'rust_analyzer',
-  'ts_ls',
+  'vtsls',
   'cssls',
   'html',
   'jsonls',
