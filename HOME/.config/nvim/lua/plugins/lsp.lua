@@ -90,6 +90,9 @@ return {
         lsp[server].setup(config)
       end
 
+      -- Disable LSP logs from ~/.local/state/nvim/lsp.log
+      vim.lsp.set_log_level('off')
+
       -- Rounded borders for hover
       vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
         border = 'rounded'
