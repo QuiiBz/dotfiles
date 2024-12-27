@@ -47,7 +47,7 @@ vim.fn.sign_define('DiagnosticSignHint',
 -- Git
 vim.cmd('nnoremap <silent> <leader>gp :Gitsigns preview_hunk<CR>')
 vim.cmd('nnoremap <silent> <leader>gr :Gitsigns reset_hunk<CR>')
-vim.cmd('nnoremap <silent> <leader>gg :LazyGit<CR>')
+vim.cmd('nnoremap <silent> <leader>gg :lua Snacks.lazygit()<CR>')
 -- Resize
 vim.cmd('nnoremap <silent> <C-Up> :resize -2<CR>')
 vim.cmd('nnoremap <silent> <C-Down> :resize +2<CR>')
@@ -73,4 +73,12 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
     vim.highlight.on_yank({ higroup = 'Visual' })
   end
+})
+
+-- LSP-integrated file renaming
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'MiniFilesActionRename',
+  callback = function(event)
+    Snacks.rename.on_rename_file(event.data.from, event.data.to)
+  end,
 })

@@ -57,7 +57,6 @@ return {
       })
     end
   },
-  'kdheepak/lazygit.nvim',
   {
     'github/copilot.vim',
     event = 'InsertEnter',
