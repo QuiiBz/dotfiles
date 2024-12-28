@@ -6,26 +6,31 @@ return {
       'linrongbin16/lsp-progress.nvim',
     },
     config = function()
+      local C = require('catppuccin.palettes').get_palette()
+      local theme = require('catppuccin.utils.lualine')()
+      -- Overwrite the background color to be the same as all backgrounds
+      theme.normal.c.bg = C.base
+
       require('lualine').setup({
         options = {
-          component_separators = '|',
+          component_separators = '',
           section_separators = { left = '', right = '' },
           globalstatus = true,
-          theme = 'catppuccin',
+          theme = theme,
         },
         sections = {
           lualine_a = { 'mode' },
-          lualine_b = { 'branch' },
+          lualine_b = {},
           lualine_c = {
-            'diff',
             {
               'filename',
               path = 1,
             },
+            'diff',
           },
           lualine_x = { 'searchcount' },
           lualine_y = { 'filetype' },
-          lualine_z = { 'progress' }
+          lualine_z = {}
         },
         inactive_sections = {},
         tabline = {},
