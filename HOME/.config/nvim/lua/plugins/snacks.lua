@@ -24,7 +24,18 @@ return {
           header = '',
         },
         sections = {
-          { section = 'header' },
+          {
+            section = 'terminal',
+            cmd = [[
+WALLPAPER=$(echo "$HOME/Pictures/Your-Name-beautiful-sky-meteor-anime_2880x1800.jpeg
+$HOME/Pictures/wallpaper.png
+$HOME/Pictures/background.jpg
+$HOME/Pictures/wallpaper-your-name.png" | shuf -n 1) && chafa "$WALLPAPER" --format symbols --symbols vhalf --size 60x16 --stretch
+            ]],
+            height = 16,
+            padding = 3,
+            ttl = 0,
+          },
           { section = 'keys',   gap = 1, padding = 3 },
           { section = 'startup' },
         },
