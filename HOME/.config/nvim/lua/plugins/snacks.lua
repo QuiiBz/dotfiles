@@ -34,7 +34,6 @@ $HOME/Pictures/wallpaper-your-name.png" | shuf -n 1) && chafa "$WALLPAPER" --for
             ]],
             height = 16,
             padding = 3,
-            ttl = 0,
           },
           { section = 'keys',   gap = 1, padding = 3 },
           { section = 'startup' },
