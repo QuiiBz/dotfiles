@@ -10,7 +10,7 @@ return {
       },
       bigfile = {
         enabled = true,
-        size = 1024 * 100, -- 100kB
+        size = 1024 * 300, -- 300kB
       },
       dashboard = {
         enabled = true,
