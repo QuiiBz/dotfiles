@@ -24,7 +24,6 @@ return {
   {
     'neovim/nvim-lspconfig',
     dependencies = {
-      -- 'hrsh7th/cmp-nvim-ls
       'saghen/blink.cmp',
       'williamboman/mason-lspconfig.nvim',
     },
@@ -76,7 +75,6 @@ return {
         vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
       end
 
-      -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       -- Attach LSP servers
