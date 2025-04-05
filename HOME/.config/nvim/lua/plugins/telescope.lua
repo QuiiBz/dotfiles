@@ -26,6 +26,7 @@ return {
               ['<esc>'] = actions.close
             },
           },
+          border = false,
         },
         extensions = {
           fzf = {

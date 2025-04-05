@@ -13,6 +13,8 @@ vim.opt.signcolumn = 'yes'
 vim.o.ch = 0
 -- Spelling in comments
 -- vim.opt.spell = true
+-- Set rounded borders
+vim.o.winborder = 'rounded'
 -- Indentation
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
