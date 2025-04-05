@@ -35,6 +35,7 @@ export FZF_DEFAULT_OPTS=" \
 --color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
 export TERM=xterm-256color
 export XDG_CONFIG_HOME="$HOME/.config"
+export HOMEBREW_NO_AUTO_UPDATE=1
 
 # PNPM
 export PNPM_HOME="/Users/tom/Library/pnpm"
