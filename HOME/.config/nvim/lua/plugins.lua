@@ -58,8 +58,35 @@ return {
     end
   },
   {
-    'github/copilot.vim',
-    event = 'InsertEnter',
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    event = 'VeryLazy',
+    config = function()
+      require('copilot').setup({
+        suggestion = {
+          auto_trigger = true,
+          keymap = {
+            accept = '<tab>',
+          }
+        },
+        filetypes = {
+          yaml = true,
+          markdown = true,
+        },
+      })
+    end
+  },
+  {
+    'olimorris/codecompanion.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    config = function()
+      require('codecompanion').setup({
+      })
+    end
   },
   {
     'folke/persistence.nvim',

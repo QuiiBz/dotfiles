@@ -31,6 +31,7 @@ return {
     config = function()
       require('mason-lspconfig').setup({
         ensure_installed = servers,
+        automatic_enable = false,
       })
 
       local lsp = require('lspconfig')

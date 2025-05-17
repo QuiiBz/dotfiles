@@ -72,6 +72,9 @@ vim.cmd('nnoremap <silent> <leader>d :lua vim.diagnostic.open_float()<CR>')
 vim.cmd('nnoremap <silent> <leader>n :cnext<CR>')
 vim.cmd('nnoremap <silent> <leader>p :cprev<CR>')
 
+vim.keymap.set('n', '<leader>t', '<cmd>CodeCompanionChat Toggle<cr>', { noremap = true, silent = true })
+vim.keymap.set('v', 'ga', '<cmd>CodeCompanionChat Add<cr>', { noremap = true, silent = true })
+
 -- Highlight yanked text
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
