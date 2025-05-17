@@ -13,6 +13,7 @@ alias pnpx="pnpm dlx"
 alias lg="lazygit"
 alias k="kubectl"
 alias kk6='kubectl -n k6-operator-system'
+alias tf="terraform"
 
 # Paths
 export PATH="/Users/tom/Library/Python/3.10/bin:$PATH"
