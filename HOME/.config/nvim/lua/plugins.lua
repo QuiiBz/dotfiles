@@ -58,37 +58,6 @@ return {
     end
   },
   {
-    'zbirenbaum/copilot.lua',
-    cmd = 'Copilot',
-    event = 'VeryLazy',
-    config = function()
-      require('copilot').setup({
-        suggestion = {
-          auto_trigger = true,
-          keymap = {
-            accept = '<tab>',
-          }
-        },
-        filetypes = {
-          yaml = true,
-          markdown = true,
-        },
-      })
-    end
-  },
-  {
-    'olimorris/codecompanion.nvim',
-    event = 'VeryLazy',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-treesitter/nvim-treesitter',
-    },
-    config = function()
-      require('codecompanion').setup({
-      })
-    end
-  },
-  {
     'folke/persistence.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
@@ -147,7 +116,11 @@ return {
     'lewis6991/satellite.nvim',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
-      require('satellite').setup()
+      require('satellite').setup({
+        current_only = true,
+        winblend = 100,
+        width = 1,
+      })
     end
   }
 }
