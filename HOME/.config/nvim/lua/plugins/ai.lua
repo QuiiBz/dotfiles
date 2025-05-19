@@ -29,6 +29,7 @@ return {
       provider = 'copilot',
       copilot = {
         model = 'gpt-4.1',
+        max_tokens = 120000, -- max tokens for GPT-4.1 is 128k, so add some buffer
       },
       auto_suggestions_provider = nil,
       behaviour = {
