@@ -17,7 +17,10 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup('plugins', {
   ui = {
     border = 'rounded',
-  }
+  },
+  change_detection = {
+    enabled = false,
+  },
 })
 
 require('settings')

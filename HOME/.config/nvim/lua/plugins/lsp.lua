@@ -7,7 +7,6 @@ local servers = {
   'html',
   'jsonls',
   'gopls',
-  'volar',
   'clangd',
   'basedpyright',
   -- Web
@@ -77,6 +76,7 @@ return {
       end
 
       local capabilities = require('blink.cmp').get_lsp_capabilities()
+      capabilities.general = { positionEncodings = { 'utf-16' } } -- Make sure we always use UTF-16 for all LSPs
 
       -- Attach LSP servers
       for _, server in pairs(servers) do

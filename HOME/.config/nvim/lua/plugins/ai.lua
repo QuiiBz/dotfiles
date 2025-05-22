@@ -2,7 +2,7 @@ return {
   {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
-    event = 'VeryLazy',
+    event = 'InsertEnter',
     config = function()
       require('copilot').setup({
         suggestion = {
@@ -14,6 +14,12 @@ return {
         filetypes = {
           yaml = true,
           markdown = true,
+        },
+        server = {
+          type = 'binary',
+        },
+        server_opts_overrides = {
+          offset_encoding = 'utf-16',
         },
       })
     end
@@ -46,13 +52,7 @@ return {
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
       'zbirenbaum/copilot.lua',
-      {
-        'MeanderingProgrammer/render-markdown.nvim',
-        opts = {
-          file_types = { 'markdown', 'Avante' },
-        },
-        ft = { 'markdown', 'Avante' },
-      },
+      'MeanderingProgrammer/render-markdown.nvim',
     },
   }
 }

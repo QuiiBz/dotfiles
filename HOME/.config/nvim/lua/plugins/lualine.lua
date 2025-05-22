@@ -1,10 +1,7 @@
 return {
   {
     'nvim-lualine/lualine.nvim',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-      'linrongbin16/lsp-progress.nvim',
-    },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       local C = require('catppuccin.palettes').get_palette()
       local theme = require('catppuccin.utils.lualine')()

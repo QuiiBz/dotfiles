@@ -23,6 +23,7 @@ return {
   -- Others
   {
     'windwp/nvim-ts-autotag',
+    event = 'InsertEnter',
     config = function()
       require('nvim-ts-autotag').setup()
     end
@@ -36,7 +37,7 @@ return {
   },
   {
     'j-hui/fidget.nvim',
-    tag = 'legacy',
+    tag = 'v1.6.0',
     event = 'LspAttach',
     config = function()
       require('fidget').setup({
@@ -73,6 +74,10 @@ return {
   },
   {
     'tversteeg/registers.nvim',
+    keys = {
+      { '\"',    mode = { 'n', 'v' } },
+      { '<C-R>', mode = 'i' }
+    },
     config = function()
       require('registers').setup({
         window = {
@@ -109,8 +114,7 @@ return {
   },
   {
     'folke/ts-comments.nvim',
-    opts = {},
-    event = 'VeryLazy',
+    event = { 'BufReadPre', 'BufNewFile' },
   },
   {
     'lewis6991/satellite.nvim',
@@ -122,5 +126,18 @@ return {
         width = 1,
       })
     end
-  }
+  },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    opts = {
+      file_types = { 'markdown', 'Avante' },
+      preset = 'lazy',
+      code = {
+        language_icon = false,
+        language_name = false,
+        disable_background = true,
+      },
+    },
+    ft = { 'markdown', 'Avante' },
+  },
 }
