@@ -10,9 +10,13 @@ return {
           gitsigns = true,
           nvimtree = true,
           treesitter = true,
-          -- fidget = true,
+          fidget = true,
           mason = true,
+          render_markdown = true,
           telescope = {
+            enabled = true,
+          },
+          snacks = {
             enabled = true,
           },
         }
@@ -37,14 +41,10 @@ return {
   },
   {
     'j-hui/fidget.nvim',
-    tag = 'v1.6.0',
+    tag = 'v1.6.1',
     event = 'LspAttach',
     config = function()
-      require('fidget').setup({
-        text = {
-          spinner = 'arc',
-        },
-      })
+      require('fidget').setup()
     end
   },
   {

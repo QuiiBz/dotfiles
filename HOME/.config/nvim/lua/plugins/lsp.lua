@@ -9,6 +9,7 @@ local servers = {
   'gopls',
   'clangd',
   'basedpyright',
+  'vue_ls',
   -- Web
   'prismals',
   'astro',
