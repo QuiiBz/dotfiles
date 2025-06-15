@@ -67,8 +67,10 @@ vim.cmd('nnoremap <silent> <leader>> :BufferLineMoveNext<CR>')
 vim.cmd('nnoremap <silent> <leader>c :bp<bar>sp<bar>bn<bar>bd<CR>')
 vim.cmd('nnoremap <silent> <C-s> :BufferLinePick<CR>')
 
+-- Open diagnostics in floating window
 vim.cmd('nnoremap <silent> <leader>d :lua vim.diagnostic.open_float()<CR>')
 
+-- Go to next/previous item in quickfix list
 vim.cmd('nnoremap <silent> <leader>n :cnext<CR>')
 vim.cmd('nnoremap <silent> <leader>p :cprev<CR>')
 
