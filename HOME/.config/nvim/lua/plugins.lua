@@ -13,9 +13,6 @@ return {
           fidget = true,
           mason = true,
           render_markdown = true,
-          telescope = {
-            enabled = true,
-          },
           snacks = {
             enabled = true,
           },
@@ -93,13 +90,9 @@ return {
     },
     config = function()
       require('actions-preview').setup({
-        telescope = {
-          sorting_strategy = "ascending",
-          layout_strategy = "vertical",
-          layout_config = {
-            width = 0.4,
-            height = 0.4,
-            prompt_position = "top",
+        snacks = {
+          layout = {
+            preset = 'dropdown',
           },
         },
       })
