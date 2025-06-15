@@ -89,3 +89,7 @@ vim.api.nvim_create_autocmd('User', {
     Snacks.rename.on_rename_file(event.data.from, event.data.to)
   end,
 })
+
+-- Disable automatic comments on new lines
+vim.cmd('autocmd BufEnter * set formatoptions-=cro')
+vim.cmd('autocmd BufEnter * setlocal formatoptions-=cro')
