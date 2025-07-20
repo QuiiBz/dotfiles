@@ -15,6 +15,8 @@ alias k="kubectl"
 alias kk6='kubectl -n k6-operator-system'
 alias tf="terraform"
 alias cd="z"
+alias ts="tailscale"
+alias home="~/home.sh"
 
 # Paths
 export PATH="/Users/tom/Library/Python/3.10/bin:$PATH"
