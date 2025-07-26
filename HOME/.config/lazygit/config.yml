@@ -21,3 +21,5 @@ gui:
       - '#eed49f'
   authorColors:
     '*': '#b7bdf8'
+git:
+  autoFetch: false
