@@ -88,58 +88,59 @@ automatically-unhide-macos-hidden-apps = true
     # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
     # You can uncomment the following lines to open up terminal with alt + enter shortcut
     # (like in i3)
-    alt-enter = '''exec-and-forget osascript -e '
-    tell application "Ghostty"
-      if it is running then
-        activate
-        tell application "System Events" to keystroke "n" using {command down}
-      else
-        activate
-      end if
-    end tell'
-    '''
+    # cmd-alt-ctrl-enter = '''exec-and-forget osascript -e '
+    # tell application "Ghostty"
+    #   if it is running then
+    #     activate
+    #     tell application "System Events" to keystroke "n" using {command down}
+    #   else
+    #     activate
+    #   end if
+    # end tell'
+    # '''
+    cmd-alt-ctrl-e = 'exec-and-forget open .' # open Finder
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    alt-shift-slash = 'layout tiles horizontal vertical'
-    alt-shift-comma = 'layout accordion horizontal vertical'
+    cmd-alt-ctrl-slash = 'layout tiles horizontal vertical'
+    cmd-alt-ctrl-comma = 'layout accordion horizontal vertical'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    alt-shift-h = 'focus left'
-    alt-shift-j = 'focus down'
-    alt-shift-k = 'focus up'
-    alt-shift-l = 'focus right'
+    cmd-alt-ctrl-h = 'focus left'
+    cmd-alt-ctrl-j = 'focus down'
+    cmd-alt-ctrl-k = 'focus up'
+    cmd-alt-ctrl-l = 'focus right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    alt-shift-ctrl-h = 'move left'
-    alt-shift-ctrl-j = 'move down'
-    alt-shift-ctrl-k = 'move up'
-    alt-shift-ctrl-l = 'move right'
+    cmd-alt-ctrl-shift-h = 'move left'
+    cmd-alt-ctrl-shift-j = 'move down'
+    cmd-alt-ctrl-shift-k = 'move up'
+    cmd-alt-ctrl-shift-l = 'move right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    alt-shift-minus = 'resize smart -50'
-    alt-shift-equal = 'resize smart +50'
+    cmd-alt-ctrl-minus = 'resize smart -50'
+    cmd-alt-ctrl-equal = 'resize smart +50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    alt-shift-1 = 'workspace 1'
-    alt-shift-2 = 'workspace 2'
-    alt-shift-3 = 'workspace 3'
-    alt-shift-4 = 'workspace 4'
-    alt-shift-5 = 'workspace 5'
-    alt-shift-6 = 'workspace 6'
-    alt-shift-7 = 'workspace 7'
-    alt-shift-8 = 'workspace 8'
-    alt-shift-9 = 'workspace 9'
+    cmd-alt-ctrl-1 = 'workspace 1'
+    cmd-alt-ctrl-2 = 'workspace 2'
+    cmd-alt-ctrl-3 = 'workspace 3'
+    cmd-alt-ctrl-4 = 'workspace 4'
+    cmd-alt-ctrl-5 = 'workspace 5'
+    cmd-alt-ctrl-6 = 'workspace 6'
+    cmd-alt-ctrl-7 = 'workspace 7'
+    cmd-alt-ctrl-8 = 'workspace 8'
+    cmd-alt-ctrl-9 = 'workspace 9'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-shift-ctrl-1 = 'move-node-to-workspace 1'
-    alt-shift-ctrl-2 = 'move-node-to-workspace 2'
-    alt-shift-ctrl-3 = 'move-node-to-workspace 3'
-    alt-shift-ctrl-4 = 'move-node-to-workspace 4'
-    alt-shift-ctrl-5 = 'move-node-to-workspace 5'
-    alt-shift-ctrl-6 = 'move-node-to-workspace 6'
-    alt-shift-ctrl-7 = 'move-node-to-workspace 7'
-    alt-shift-ctrl-8 = 'move-node-to-workspace 8'
-    alt-shift-ctrl-9 = 'move-node-to-workspace 9'
+    cmd-alt-ctrl-shift-1 = 'move-node-to-workspace 1'
+    cmd-alt-ctrl-shift-2 = 'move-node-to-workspace 2'
+    cmd-alt-ctrl-shift-3 = 'move-node-to-workspace 3'
+    cmd-alt-ctrl-shift-4 = 'move-node-to-workspace 4'
+    cmd-alt-ctrl-shift-5 = 'move-node-to-workspace 5'
+    cmd-alt-ctrl-shift-6 = 'move-node-to-workspace 6'
+    cmd-alt-ctrl-shift-7 = 'move-node-to-workspace 7'
+    cmd-alt-ctrl-shift-8 = 'move-node-to-workspace 8'
+    cmd-alt-ctrl-shift-9 = 'move-node-to-workspace 9'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     # alt-tab = 'workspace-back-and-forth'
@@ -149,8 +150,8 @@ automatically-unhide-macos-hidden-apps = true
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
     # alt-shift-semicolon = 'mode service'
 
-    alt-shift-r = ['flatten-workspace-tree', 'mode main'] # reset layout
-    alt-shift-f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
+    cmd-alt-ctrl-r = ['flatten-workspace-tree', 'mode main'] # reset layout
+    cmd-alt-ctrl-f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
 
 # Workspace 4 will always be on the 2nd monitor
 [workspace-to-monitor-force-assignment]
