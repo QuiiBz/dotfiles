@@ -124,7 +124,7 @@ return {
   {
     'MeanderingProgrammer/render-markdown.nvim',
     opts = {
-      file_types = { 'markdown', 'Avante' },
+      file_types = { 'markdown' },
       preset = 'lazy',
       code = {
         language_icon = false,
@@ -132,6 +132,6 @@ return {
         disable_background = true,
       },
     },
-    ft = { 'markdown', 'Avante' },
+    ft = { 'markdown' },
   },
 }
