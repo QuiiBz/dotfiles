@@ -117,7 +117,7 @@ return {
       require('satellite').setup({
         current_only = true,
         winblend = 100,
-        width = 1,
+        width = 2,
       })
     end
   },
