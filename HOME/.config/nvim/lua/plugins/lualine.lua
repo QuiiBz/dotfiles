@@ -26,7 +26,7 @@ return {
             'diff',
           },
           lualine_x = { 'searchcount' },
-          lualine_y = { 'filetype' },
+          lualine_y = {},
           lualine_z = {}
         },
         inactive_sections = {},
