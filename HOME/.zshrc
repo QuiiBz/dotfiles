@@ -14,7 +14,6 @@ alias lg="lazygit"
 alias k="kubectl"
 alias kk6='kubectl -n k6-operator-system'
 alias tf="terraform"
-alias cd="z"
 alias ts="tailscale"
 alias home="~/home.sh"
 
@@ -25,18 +24,23 @@ export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
 export GOBIN="$HOME/go/bin"
 export PATH="$GOBIN:$PATH"
 export PATH=/Users/tom/.opencode/bin:$PATH
+export PATH="$PATH:/Users/tom/.lmstudio/bin"
 
 # Configurations
 export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
 export FORCE_COLOR=1 # Enable Turborepo colors
 export LC_ALL=en_US.UTF-8
 export FZF_DEFAULT_OPTS=" \
---color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
---color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
---color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
+--color=bg+:#363A4F,bg:#24273A,spinner:#F4DBD6,hl:#ED8796 \
+--color=fg:#CAD3F5,header:#ED8796,info:#C6A0F6,pointer:#F4DBD6 \
+--color=marker:#B7BDF8,fg+:#CAD3F5,prompt:#C6A0F6,hl+:#ED8796 \
+--color=selected-bg:#494D64 \
+--color=border:#6E738D,label:#CAD3F5"
 export TERM=xterm-256color
 export XDG_CONFIG_HOME="$HOME/.config"
 export HOMEBREW_NO_AUTO_UPDATE=1
+export STARSHIP_CONFIG=${HOME}/.config/starship.toml
+export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 # PNPM
 export PNPM_HOME="/Users/tom/Library/pnpm"
@@ -59,9 +63,7 @@ if [ $commands[kubectl] ]; then
   }
 fi
 
-eval "$(fzf --zsh)"
 eval "$(starship init zsh)"
-eval "$(zoxide init zsh)"
 
 # ZSH settings
 bindkey "\e[1;3D" backward-word
@@ -73,6 +75,10 @@ setopt menu_complete
 setopt auto_menu
 setopt complete_in_word
 setopt always_to_end
+setopt SHARE_HISTORY       # Share command history data
+setopt INC_APPEND_HISTORY  # Append to history file immediately
+setopt HIST_FIND_NO_DUPS   # Avoid duplicates in searches
+setopt HIST_IGNORE_ALL_DUPS # Remove older duplicates
 zstyle ':completion:*:*:*:*:*' menu select
 zmodload zsh/complist
 zstyle ':completion:*' special-dirs true
@@ -81,7 +87,25 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
-bindkey -M menuselect '^[[Z' reverse-menu-complete
+
+# Ctrl+R history search via fzf
+fzf-history-widget() {
+  local selected
+  selected=$(
+    tac "$HISTFILE" \
+    | sed -E 's/^: [0-9]+:[0-9]+;//' \
+    | awk '!seen[$0]++' \
+    | fzf --height 40% --no-border --prompt="> " --no-sort --query="$LBUFFER"
+  )
+  if [[ -n $selected ]]; then
+    BUFFER=$selected
+    CURSOR=${#BUFFER}
+    zle reset-prompt
+  fi
+}
+zle     -N   fzf-history-widget
+bindkey '^R' fzf-history-widget
+
 autoload -Uz compinit
 for dump in ~/.zcompdump(N.mh+24); do
   compinit
