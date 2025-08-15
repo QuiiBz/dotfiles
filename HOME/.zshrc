@@ -39,8 +39,9 @@ export FZF_DEFAULT_OPTS=" \
 export TERM=xterm-256color
 export XDG_CONFIG_HOME="$HOME/.config"
 export HOMEBREW_NO_AUTO_UPDATE=1
-export STARSHIP_CONFIG=${HOME}/.config/starship.toml
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
+export PURE_GIT_DOWN_ARROW='↓'
+export PURE_GIT_UP_ARROW='↑'
 
 # PNPM
 export PNPM_HOME="/Users/tom/Library/pnpm"
@@ -63,7 +64,8 @@ if [ $commands[kubectl] ]; then
   }
 fi
 
-eval "$(starship init zsh)"
+autoload -U promptinit; promptinit
+prompt pure
 
 # ZSH settings
 bindkey "\e[1;3D" backward-word
@@ -87,21 +89,26 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 zstyle ':completion:*' use-cache yes
 zstyle ':completion:*' cache-path $ZSH_CACHE_DIR
+zstyle ':prompt:pure:path' color 'cyan'
+zstyle ':prompt:pure:prompt:success' color 'green'
+zstyle ':prompt:pure:git:branch' color 'magenta'
+zstyle ':prompt:pure:git:dirty' color 'magenta'
+zstyle ':prompt:pure:git:arrow' color 'red'
 
 # Ctrl+R history search via fzf
 fzf-history-widget() {
   local selected
   selected=$(
     tac "$HISTFILE" \
-    | sed -E 's/^: [0-9]+:[0-9]+;//' \
+    | LC_ALL=C sed -E 's/^: [0-9]+:[0-9]+;//' \
     | awk '!seen[$0]++' \
     | fzf --height 40% --no-border --prompt="> " --no-sort --query="$LBUFFER"
   )
   if [[ -n $selected ]]; then
     BUFFER=$selected
     CURSOR=${#BUFFER}
-    zle reset-prompt
   fi
+  zle reset-prompt
 }
 zle     -N   fzf-history-widget
 bindkey '^R' fzf-history-widget
