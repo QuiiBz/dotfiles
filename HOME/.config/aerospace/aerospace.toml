@@ -132,15 +132,15 @@ automatically-unhide-macos-hidden-apps = true
     cmd-alt-ctrl-9 = 'workspace 9'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    cmd-alt-ctrl-shift-1 = 'move-node-to-workspace 1'
-    cmd-alt-ctrl-shift-2 = 'move-node-to-workspace 2'
-    cmd-alt-ctrl-shift-3 = 'move-node-to-workspace 3'
-    cmd-alt-ctrl-shift-4 = 'move-node-to-workspace 4'
-    cmd-alt-ctrl-shift-5 = 'move-node-to-workspace 5'
-    cmd-alt-ctrl-shift-6 = 'move-node-to-workspace 6'
-    cmd-alt-ctrl-shift-7 = 'move-node-to-workspace 7'
-    cmd-alt-ctrl-shift-8 = 'move-node-to-workspace 8'
-    cmd-alt-ctrl-shift-9 = 'move-node-to-workspace 9'
+    cmd-alt-ctrl-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
+    cmd-alt-ctrl-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
+    cmd-alt-ctrl-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
+    cmd-alt-ctrl-shift-4 = 'move-node-to-workspace 4 --focus-follows-window'
+    cmd-alt-ctrl-shift-5 = 'move-node-to-workspace 5 --focus-follows-window'
+    cmd-alt-ctrl-shift-6 = 'move-node-to-workspace 6 --focus-follows-window'
+    cmd-alt-ctrl-shift-7 = 'move-node-to-workspace 7 --focus-follows-window'
+    cmd-alt-ctrl-shift-8 = 'move-node-to-workspace 8 --focus-follows-window'
+    cmd-alt-ctrl-shift-9 = 'move-node-to-workspace 9 --focus-follows-window'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     # alt-tab = 'workspace-back-and-forth'
