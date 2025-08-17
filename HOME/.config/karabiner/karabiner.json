@@ -110,6 +110,14 @@
                                     }
                                 ],
                                 "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "return_or_enter",
+                                    "modifiers": { "mandatory": ["right_control", "right_option", "right_command"] }
+                                },
+                                "to": [{ "shell_command": "workspace=$(/usr/local/bin/aerospace list-workspaces --focused); osascript -e 'tell application \"System Events\" to set isRunning to (exists (process \"Ghostty\"))' -e 'if isRunning then' -e 'tell application \"Ghostty\" to activate' -e 'tell application \"System Events\" to keystroke \"n\" using {command down}' -e 'else' -e 'tell application \"Ghostty\" to activate' -e 'end if'; /usr/local/bin/aerospace move-node-to-workspace --focus-follows-window $workspace" }],
+                                "type": "basic"
                             }
                         ]
                     }
