@@ -21,8 +21,8 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # You can set 0 to disable the padding feature
 accordion-padding = 30
 
-# Possible values: tiles|accordion
-default-root-container-layout = 'tiles'
+# Possible values: tiles|accordion|bsp
+default-root-container-layout = 'bsp'
 
 # Possible values: horizontal|vertical|auto
 # 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
@@ -101,14 +101,14 @@ automatically-unhide-macos-hidden-apps = true
     cmd-alt-ctrl-e = 'exec-and-forget open .' # open Finder
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    cmd-alt-ctrl-slash = 'layout tiles horizontal vertical'
+    cmd-alt-ctrl-slash = 'layout bsp' # 'layout tiles horizontal vertical'
     cmd-alt-ctrl-comma = 'layout accordion horizontal vertical'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    cmd-alt-ctrl-h = 'focus left'
-    cmd-alt-ctrl-j = 'focus down'
-    cmd-alt-ctrl-k = 'focus up'
-    cmd-alt-ctrl-l = 'focus right'
+    cmd-alt-ctrl-h = 'focus --boundaries-action wrap-around-the-workspace left'
+    cmd-alt-ctrl-j = 'focus --boundaries-action wrap-around-the-workspace down'
+    cmd-alt-ctrl-k = 'focus --boundaries-action wrap-around-the-workspace up'
+    cmd-alt-ctrl-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
     cmd-alt-ctrl-shift-h = 'move left'
@@ -151,7 +151,7 @@ automatically-unhide-macos-hidden-apps = true
     # alt-shift-semicolon = 'mode service'
 
     cmd-alt-ctrl-r = ['flatten-workspace-tree', 'mode main'] # reset layout
-    cmd-alt-ctrl-f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
+    cmd-alt-ctrl-f = ['layout floating bsp', 'mode main'] # Toggle between floating and tiling layout
 
 # Workspace 4 will always be on the 2nd monitor
 [workspace-to-monitor-force-assignment]
