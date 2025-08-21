@@ -1,6 +1,6 @@
 theme = catppuccin-macchiato
-font-family = JetbrainsMono Nerd Font
-font-size = 15
+font-family = IosevkaTerm Nerd Font
+font-size = 16
 cursor-style-blink = false
 macos-titlebar-style = hidden
 window-padding-x = 8,8
