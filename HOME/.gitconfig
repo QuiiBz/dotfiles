@@ -3,12 +3,13 @@
 	email = tom.lienrd@gmail.com
 [init]
 	defaultBranch = main
+[alias]
+  parent = "!git show-branch | grep '*' | grep -v \"$(git rev-parse --abbrev-ref HEAD)\" | head -n1 | sed 's/.*\\[\\(.*\\)\\].*/\\1/' | sed 's/[\\^~].*//' #"
 [core]
   editor = vim
   fsmonitor = true
   untrackedcache = true
-[alias]
-  parent = "!git show-branch | grep '*' | grep -v \"$(git rev-parse --abbrev-ref HEAD)\" | head -n1 | sed 's/.*\\[\\(.*\\)\\].*/\\1/' | sed 's/[\\^~].*//' #"
+  pager = delta
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -16,3 +17,26 @@
 	required = true
 [url "ssh://git@github.com/"]
   insteadOf = https://github.com/
+[interactive]
+  diffFilter = delta --color-only
+[include]
+  path = ~/.config/delta/catppuccin.gitconfig
+[delta]
+  features = catppuccin-macchiato
+  dark =  true
+  navigate = true
+  side-by-side = true
+  line-numbers = true
+  hunk-header-style = omit
+  file-style = bold
+  file-modified-label = ~
+  file-copied-label = ~
+  file-renamed-label = ~
+  file-added-label = +
+  file-removed-label = -
+  line-numbers-left-format = "{nm:>1} "
+  line-numbers-right-format = "{np:>1} "
+[merge]
+  conflictStyle = zdiff3
+[diff]
+  colorMoved = default

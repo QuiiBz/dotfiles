@@ -23,3 +23,6 @@ gui:
     '*': '#b7bdf8'
 git:
   autoFetch: false
+  paging:
+    colorArg: always
+    pager: delta --paging=never
