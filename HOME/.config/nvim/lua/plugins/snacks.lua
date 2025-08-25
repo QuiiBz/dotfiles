@@ -49,6 +49,11 @@ return {
             },
           },
         },
+        formatters = {
+          file = {
+            truncate = 90, -- default is 60
+          },
+        }
       },
     },
   },

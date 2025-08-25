@@ -21,8 +21,6 @@ vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
 vim.opt.expandtab = true
 vim.opt.smartindent = true
--- Show cursor line
-vim.opt.cursorline = true
 -- Overscroll by 10 lines
 vim.opt.scrolloff = 10
 -- Ignore case in search

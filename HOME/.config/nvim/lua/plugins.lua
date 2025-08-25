@@ -5,9 +5,16 @@ return {
     config = function()
       require('catppuccin').setup({
         flavour = 'macchiato', -- latte, frappe, macchiato, mocha
+        transparent_background = true,
+        float = {
+          transparent = true
+        },
         integrations = {
           cmp = true,
-          gitsigns = true,
+          gitsigns = {
+            enabled = true,
+            transparent = true,
+          },
           nvimtree = true,
           treesitter = true,
           fidget = true,
@@ -16,6 +23,7 @@ return {
           snacks = {
             enabled = true,
           },
+          grug_far = true,
         }
       })
       vim.cmd.colorscheme 'catppuccin'
@@ -41,7 +49,13 @@ return {
     tag = 'v1.6.1',
     event = 'LspAttach',
     config = function()
-      require('fidget').setup()
+      require('fidget').setup({
+        notification = {
+          window = {
+            winblend = 0
+          }
+        }
+      })
     end
   },
   {
@@ -130,7 +144,7 @@ return {
     config = function()
       require('satellite').setup({
         current_only = true,
-        winblend = 100,
+        winblend = 0,
         width = 2,
       })
     end
