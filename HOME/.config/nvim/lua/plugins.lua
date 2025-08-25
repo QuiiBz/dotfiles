@@ -63,11 +63,25 @@ return {
     end,
   },
   {
-    'nvim-pack/nvim-spectre',
+    'MagicDuck/grug-far.nvim',
     keys = {
-      { '<leader>S', '<cmd>lua require("spectre").toggle()<cr>' }
+      { '<leader>S', '<cmd>GrugFar<cr>' }
     },
-    dependencies = { 'nvim-lua/plenary.nvim' }
+    config = function()
+      require('grug-far').setup({
+        enabledEngines = { 'rg' },
+        showCompactInputs = true,
+        showStatusIcon = false,
+        showEngineInfo = false,
+        transient = true,
+        folding = {
+          enabled = false,
+        },
+        resultLocation = {
+          showNumberLabel = false,
+        },
+      })
+    end
   },
   {
     'tversteeg/registers.nvim',
