@@ -22,6 +22,8 @@ gui:
   authorColors:
     '*': '#b7bdf8'
 git:
+  log:
+    order: default
   autoFetch: false
   paging:
     colorArg: always
