@@ -39,7 +39,7 @@ return {
 
       local on_attach = function(client, bufnr)
         -- Enable completion triggered by <c-x><c-o>
-        vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+        vim.api.nvim_set_option_value('omnifunc', 'v:lua.vim.lsp.omnifunc', { buf = bufnr })
 
         if client.name == 'eslint' then
           client.server_capabilities.documentFormattingProvider = true
@@ -117,13 +117,22 @@ return {
       end
 
       -- Disable LSP logs from ~/.local/state/nvim/lsp.log
-      vim.lsp.set_log_level('off')
+      vim.lsp.log.set_level(vim.log.levels.OFF)
 
       vim.diagnostic.config({
         -- Show inline diagnostics
         virtual_text = true,
         -- Rounded borders for diagnostics float
         float = { border = 'rounded' },
+        -- Diagnostic icons
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = " ",
+            [vim.diagnostic.severity.WARN] = " ",
+            [vim.diagnostic.severity.INFO] = " ",
+            [vim.diagnostic.severity.HINT] = "",
+          }
+        }
       })
 
       -- Fix floating windows color
