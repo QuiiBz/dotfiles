@@ -83,6 +83,7 @@ return {
     },
     config = function()
       require('grug-far').setup({
+        debounceMs = 100,
         enabledEngines = { 'rg' },
         showCompactInputs = true,
         showStatusIcon = false,
