@@ -16,8 +16,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
     -- Buffer-local caches (cleaned up when buffer is closed)
     local icon_cache = {}
-    local qf_cache = {}
-    local qf_cache_version = 0
+    local bufname_cache = {}
 
     local function get_cached_icon(filename, ext)
       local key = filename .. '.' .. (ext or '')
@@ -31,29 +30,53 @@ vim.api.nvim_create_autocmd('FileType', {
       return icon_cache[key].icon, icon_cache[key].icon_hl
     end
 
-    local function get_cached_qf_list()
-      local current_version = vim.fn.getqflist({ changedtick = 0 }).changedtick
-      if qf_cache_version ~= current_version then
-        qf_cache = vim.fn.getqflist()
-        qf_cache_version = current_version
+    local function get_cached_bufname(bufnr)
+      if not bufname_cache[bufnr] then
+        bufname_cache[bufnr] = vim.fn.bufname(bufnr)
       end
-      return qf_cache
+      return bufname_cache[bufnr]
     end
 
     local function format_qf_entries()
-      local qf_list = get_cached_qf_list()
+      local qf_list = vim.fn.getqflist()
       local formatted_entries = {}
 
-      for i, item in ipairs(qf_list) do
+      -- Check if all entries are files (lnum == 0, col == 0) to determine if we should show line numbers
+      local all_files = true
+      for i = 1, #qf_list do
+        local item = qf_list[i]
+        if item.lnum > 1 and item.col > 1 then
+          all_files = false
+          break
+        end
+      end
+
+      for i = 1, #qf_list do
+        local item = qf_list[i]
         if item.bufnr ~= 0 then
-          local bufname = vim.fn.bufname(item.bufnr)
+          local bufname = get_cached_bufname(item.bufnr)
+
           if bufname ~= '' then
-            local filename = vim.fn.fnamemodify(bufname, ':t')
-            local ext = vim.fn.fnamemodify(filename, ':e')
+            -- Use single fnamemodify call with multiple modifiers
+            local filename = vim.fn.fnamemodify(bufname, ':t:r')
+            local ext = vim.fn.fnamemodify(bufname, ':e')
+            -- Re-add extension if it exists
+            if ext ~= '' then
+              filename = filename .. '.' .. ext
+            end
+
             local icon, icon_hl = get_cached_icon(filename, ext)
 
-            local line_part = item.lnum > 0 and (':' .. item.lnum) or ''
+            local line_part = ':' .. item.lnum
             local content = item.text and (' ' .. item.text:gsub('^%s+', '')) or ''
+
+            if all_files then
+              -- Hide line numbers and content if all entries are files
+              -- and show the filename as the filepath without leading space
+              line_part = ''
+              filename = content:gsub('^%s+', '')
+              content = ''
+            end
 
             formatted_entries[i] = {
               icon = icon,
@@ -97,6 +120,7 @@ vim.api.nvim_create_autocmd('FileType', {
       vim.api.nvim_buf_set_option(buf, 'modifiable', true)
       vim.api.nvim_buf_set_lines(buf, 0, -1, false, new_lines)
       vim.api.nvim_buf_set_option(buf, 'modifiable', false)
+      vim.api.nvim_buf_set_option(buf, 'modified', false)
 
       -- Apply syntax highlighting with extmarks
       vim.api.nvim_buf_clear_namespace(buf, ns, 0, -1)
@@ -134,34 +158,34 @@ vim.api.nvim_create_autocmd('FileType', {
       end
     end
 
-    vim.schedule(update_qf_display)
+    -- Apply formatting immediately (synchronously) to avoid flicker
+    update_qf_display()
+    -- Set initial cursor position to avoid icon area
+    vim.api.nvim_win_set_cursor(0, { 1, 2 })
 
     -- Update when quickfix list changes
     vim.api.nvim_create_autocmd({ 'QuickFixCmdPost' }, {
       callback = function()
-        vim.schedule(function()
-          if vim.api.nvim_buf_is_valid(buf) then
-            update_qf_display()
-          end
-        end)
+        if vim.api.nvim_buf_is_valid(buf) then
+          update_qf_display()
+        end
       end,
     })
-
-    -- Adjust cursor position to avoid icon overlap
-    vim.keymap.set('n', '<CR>', function()
-      local line = vim.api.nvim_win_get_cursor(0)[1]
-      vim.cmd('cc ' .. line)
-    end, { buffer = buf, silent = true })
 
     -- Move cursor to avoid icon area
     vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
       buffer = buf,
       callback = function()
         local cursor = vim.api.nvim_win_get_cursor(0)
-        local col = cursor[2]
-        -- Ensure cursor is positioned after the icon (column 2 or more)
-        if col < 2 then
-          vim.api.nvim_win_set_cursor(0, { cursor[1], 2 })
+        local line_content = vim.api.nvim_buf_get_lines(buf, cursor[1] - 1, cursor[1], false)[1] or ""
+
+        -- Find where the actual filename starts (after icon and space)
+        local icon_and_space_pattern = "^[^ ]* " -- matches icon + space
+        local _, icon_end = line_content:find(icon_and_space_pattern)
+        local min_col = icon_end or 2            -- fallback to column 2 if pattern not found
+
+        if cursor[2] < min_col then
+          vim.api.nvim_win_set_cursor(0, { cursor[1], min_col })
         end
       end,
     })
