@@ -22,7 +22,16 @@ return {
           },
           lualine_x = { 'searchcount' },
           lualine_y = {},
-          lualine_z = {}
+          lualine_z = {
+            -- Show macro recording status
+            function()
+              local reg = vim.fn.reg_recording()
+              if reg == '' then
+                return ''
+              end
+              return '󰵆  ' .. reg
+            end
+          }
         },
         inactive_sections = {},
         tabline = {},
