@@ -108,6 +108,17 @@ return {
           }
         end
 
+        -- Increase max memory for tsserver
+        if server == 'vtsls' then
+          config.settings = {
+            typescript = {
+              tsserver = {
+                maxTsServerMemory = 8192, -- 8GB
+              },
+            },
+          }
+        end
+
         lsp[server].setup(config)
       end
 
