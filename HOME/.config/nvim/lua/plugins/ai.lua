@@ -20,6 +20,11 @@ return {
         },
         server_opts_overrides = {
           offset_encoding = 'utf-16',
+          settings = {
+            telemetry = {
+              telemetryLevel = "off",
+            },
+          },
         },
       })
     end
