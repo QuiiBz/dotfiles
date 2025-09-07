@@ -77,3 +77,21 @@ vim.api.nvim_create_autocmd('User', {
 -- Disable automatic comments on new lines
 vim.cmd('autocmd BufEnter * set formatoptions-=cro')
 vim.cmd('autocmd BufEnter * setlocal formatoptions-=cro')
+
+function ToggleQuickfix()
+  local windows = vim.fn.getwininfo()
+  for _, win in ipairs(windows) do
+    if win.quickfix == 1 then
+      vim.cmd('cclose')
+      return
+    end
+  end
+  vim.cmd('copen')
+end
+
+-- Toggle quickfix list
+vim.keymap.set('n', '<leader>q', ToggleQuickfix, { noremap = true, silent = true })
+
+-- Go to next/previous item in quickfix list
+vim.cmd('nnoremap <silent> <leader>n :cnext<CR>')
+vim.cmd('nnoremap <silent> <leader>p :cprev<CR>')

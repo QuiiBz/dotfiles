@@ -185,5 +185,12 @@ return {
         virtualtext = '●',
       }
     },
-  }
+  },
+  {
+    'QuiiBz/pretty-quickfix.nvim',
+    -- dir = '~/dev/pretty-quickfix.nvim',
+    dependencies = { 'nvim-web-devicons' },
+    ft = { 'qf' },
+    opts = {},
+  },
 }
