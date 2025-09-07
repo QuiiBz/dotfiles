@@ -127,7 +127,9 @@ return {
 
       vim.diagnostic.config({
         -- Show inline diagnostics
-        virtual_text = true,
+        virtual_text = {
+          prefix = '●',
+        },
         -- Rounded borders for diagnostics float
         float = { border = 'rounded' },
         -- Diagnostic icons
