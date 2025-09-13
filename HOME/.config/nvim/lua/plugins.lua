@@ -2,6 +2,7 @@ return {
   -- Themes
   {
     'catppuccin/nvim',
+    priority = 1000,
     config = function()
       require('catppuccin').setup({
         flavour = 'macchiato', -- latte, frappe, macchiato, mocha
@@ -71,9 +72,12 @@ return {
   },
   {
     'folke/persistence.nvim',
-    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
+      if vim.fn.argc() > 0 then
+        return
+      end
       require('persistence').setup()
+      require('persistence').load()
     end,
   },
   {
