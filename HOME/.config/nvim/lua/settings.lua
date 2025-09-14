@@ -37,6 +37,8 @@ vim.opt.splitbelow = true
 -- Git
 vim.cmd('nnoremap <silent> <leader>gp :Gitsigns preview_hunk<CR>')
 vim.cmd('nnoremap <silent> <leader>gr :Gitsigns reset_hunk<CR>')
+vim.cmd('nnoremap <silent> <leader>gl :Gitsigns blame_line<CR>')
+vim.cmd('nnoremap <silent> <leader>gb :Gitsigns blame<CR>')
 vim.cmd('nnoremap <silent> <leader>gg :lua Snacks.lazygit()<CR>')
 -- Resize
 vim.cmd('nnoremap <silent> <C-Up> :resize -2<CR>')

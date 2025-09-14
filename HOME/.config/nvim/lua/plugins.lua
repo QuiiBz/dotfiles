@@ -55,6 +55,11 @@ return {
           window = {
             winblend = 0
           }
+        },
+        integration = {
+          ['nvim-tree'] = {
+            enable = false
+          }
         }
       })
     end
@@ -166,29 +171,6 @@ return {
       },
     },
     ft = { 'markdown' },
-  },
-  {
-    'catgoose/nvim-colorizer.lua',
-    event = 'VeryLazy',
-    opts = {
-      lazy_load = true,
-      user_commands = false,
-      user_default_options = {
-        names = false,
-        RGB = true,
-        RGBA = true,
-        RRGGBB = true,
-        RRGGBBAA = true,
-        AARRGGBB = true,
-        rgb_fn = true,
-        hsl_fn = true,
-        css = true,
-        css_fn = true,
-        tailwind = 'lsp',
-        mode = 'virtualtext',
-        virtualtext = '●',
-      }
-    },
   },
   {
     'QuiiBz/pretty-quickfix.nvim',
