@@ -34,7 +34,6 @@ return {
         automatic_enable = false,
       })
 
-      local lsp = require('lspconfig')
       local augroup = vim.api.nvim_create_augroup('LspFormatting', { clear = true })
 
       local on_attach = function(client, bufnr)
@@ -119,7 +118,8 @@ return {
           }
         end
 
-        lsp[server].setup(config)
+        vim.lsp.config(server, config)
+        vim.lsp.enable(server)
       end
 
       -- Disable LSP logs from ~/.local/state/nvim/lsp.log
