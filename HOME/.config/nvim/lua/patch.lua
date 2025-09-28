@@ -4,7 +4,7 @@ local patches = {
 
 -- Reset repos to clean state before update
 vim.api.nvim_create_autocmd('User', {
-  pattern = { 'LazyInstallPre', 'LazyUpdatePre' },
+  pattern = { 'LazyInstallPre', 'LazyUpdatePre', 'LazyCheckPre' },
   callback = function()
     for repo, _ in pairs(patches) do
       local cmd = string.format('cd ~/.local/share/nvim/lazy/%s && git reset --hard', repo)
