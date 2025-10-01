@@ -10,6 +10,12 @@ return {
         ['<Down>'] = { 'select_next', 'fallback' },
         ['<Enter>'] = { 'accept', 'fallback' },
         ['<C-Space>'] = { 'show', 'fallback' },
+        ['<Tab>'] = {
+          function() -- sidekick next edit suggestion
+            return require('sidekick').nes_jump_or_apply()
+          end,
+          'fallback',
+        },
       },
       appearance = {
         use_nvim_cmp_as_default = true,
