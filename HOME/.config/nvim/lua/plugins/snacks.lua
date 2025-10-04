@@ -8,7 +8,7 @@ return {
         Snacks.picker.files({ hidden = true, layout = { preset = 'telescope' } })
       end },
       { '<C-f>', function()
-        Snacks.picker.grep({ layout = { preset = 'telescope' } })
+        Snacks.picker.grep({ hidden = true, layout = { preset = 'telescope' } })
       end },
     },
     opts = {
