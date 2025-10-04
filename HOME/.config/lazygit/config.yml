@@ -27,4 +27,4 @@ git:
   autoFetch: false
   paging:
     colorArg: always
-    pager: delta --paging=never
+    pager: delta --side-by-side --paging=never --features=catppuccin-macchiato

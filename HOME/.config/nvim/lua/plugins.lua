@@ -128,7 +128,12 @@ return {
       { 'ga', '<cmd>lua require("actions-preview").code_actions()<cr>' }
     },
     config = function()
+      local hl = require('actions-preview.highlight')
       require('actions-preview').setup({
+        backend = { 'snacks' },
+        highlight_command = {
+          hl.delta("delta --file-style=omit --paging=never")
+        },
         snacks = {
           layout = {
             preset = 'dropdown',
