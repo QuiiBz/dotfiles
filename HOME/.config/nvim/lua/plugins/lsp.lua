@@ -1,6 +1,7 @@
 local servers = {
   -- Languages
   'lua_ls',
+  'stylua',
   'rust_analyzer',
   'vtsls',
   'cssls',
@@ -15,6 +16,7 @@ local servers = {
   'astro',
   'tailwindcss',
   'eslint',
+  'biome',
   -- Other
   'dockerls',
   'terraformls',
@@ -40,7 +42,9 @@ return {
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_set_option_value('omnifunc', 'v:lua.vim.lsp.omnifunc', { buf = bufnr })
 
-        if client.name == 'eslint' then
+        if client.name == 'vtsls' then
+          client.server_capabilities.documentFormattingProvider = false
+        elseif client.name == 'biome' or client.name == 'eslint' then
           client.server_capabilities.documentFormattingProvider = true
         end
 
