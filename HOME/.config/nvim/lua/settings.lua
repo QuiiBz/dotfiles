@@ -58,9 +58,17 @@ vim.cmd('nnoremap <silent> <leader>< :BufferLineMovePrev<CR>')
 vim.cmd('nnoremap <silent> <leader>> :BufferLineMoveNext<CR>')
 vim.cmd('nnoremap <silent> <leader>c :bp<bar>sp<bar>bn<bar>bd<CR>')
 vim.cmd('nnoremap <silent> <C-s> :BufferLinePick<CR>')
-
 -- Open diagnostics in floating window
 vim.cmd('nnoremap <silent> <leader>d :lua vim.diagnostic.open_float()<CR>')
+-- Copilot super tab
+vim.keymap.set('i', '<Tab>', function()
+  local copilot = require('copilot.suggestion')
+  if copilot.is_visible() then
+    copilot.accept()
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
+  end
+end)
 
 -- Highlight yanked text
 vim.api.nvim_create_autocmd('TextYankPost', {
