@@ -154,14 +154,15 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
   },
   {
-    'lewis6991/satellite.nvim',
+    'dstein64/nvim-scrollview',
     event = { 'BufReadPre', 'BufNewFile' },
+    after = 'gitsigns.nvim',
     config = function()
-      require('satellite').setup({
+      require('scrollview').setup({
         current_only = true,
-        winblend = 0,
-        width = 2,
+        signs_on_startup = { 'diagnostics', 'folds', 'search' },
       })
+      require('scrollview.contrib.gitsigns').setup()
     end
   },
   {
