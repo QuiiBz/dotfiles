@@ -18,6 +18,6 @@ return {
           sort_by = 'insert_after_current',
         },
       })
-    end
-  }
+    end,
+  },
 }

@@ -8,7 +8,7 @@ return {
         flavour = 'macchiato', -- latte, frappe, macchiato, mocha
         transparent_background = true,
         float = {
-          transparent = true
+          transparent = true,
         },
         integrations = {
           cmp = true,
@@ -25,10 +25,10 @@ return {
             enabled = true,
           },
           grug_far = true,
-        }
+        },
       })
-      vim.cmd.colorscheme 'catppuccin'
-    end
+      vim.cmd.colorscheme('catppuccin')
+    end,
   },
   -- Others
   {
@@ -36,14 +36,14 @@ return {
     event = 'InsertEnter',
     config = function()
       require('nvim-ts-autotag').setup()
-    end
+    end,
   },
   {
     'windwp/nvim-autopairs',
     event = 'InsertEnter',
     config = function()
       require('nvim-autopairs').setup()
-    end
+    end,
   },
   {
     'j-hui/fidget.nvim',
@@ -53,16 +53,16 @@ return {
       require('fidget').setup({
         notification = {
           window = {
-            winblend = 0
-          }
+            winblend = 0,
+          },
         },
         integration = {
           ['nvim-tree'] = {
-            enable = false
-          }
-        }
+            enable = false,
+          },
+        },
       })
-    end
+    end,
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -71,9 +71,9 @@ return {
       require('gitsigns').setup({
         preview_config = {
           border = 'rounded',
-        }
+        },
       })
-    end
+    end,
   },
   {
     'folke/persistence.nvim',
@@ -88,7 +88,7 @@ return {
   {
     'MagicDuck/grug-far.nvim',
     keys = {
-      { '<leader>S', '<cmd>GrugFar<cr>' }
+      { '<leader>S', '<cmd>GrugFar<cr>' },
     },
     config = function()
       require('grug-far').setup({
@@ -105,13 +105,12 @@ return {
           showNumberLabel = false,
         },
       })
-    end
+    end,
   },
   {
     'tversteeg/registers.nvim',
     keys = {
-      { '\"',    mode = { 'n', 'v' } },
-      { '<C-R>', mode = 'i' }
+      { '"', mode = { 'n', 'v' } },
     },
     config = function()
       require('registers').setup({
@@ -120,19 +119,19 @@ return {
           transparency = 0,
         },
       })
-    end
+    end,
   },
   {
     'aznhe21/actions-preview.nvim',
     keys = {
-      { 'ga', '<cmd>lua require("actions-preview").code_actions()<cr>' }
+      { 'ga', '<cmd>lua require("actions-preview").code_actions()<cr>' },
     },
     config = function()
       local hl = require('actions-preview.highlight')
       require('actions-preview').setup({
         backend = { 'snacks' },
         highlight_command = {
-          hl.delta("delta --file-style=omit --paging=never")
+          hl.delta('delta --file-style=omit --paging=never'),
         },
         snacks = {
           layout = {
@@ -140,14 +139,14 @@ return {
           },
         },
       })
-    end
+    end,
   },
   {
     'laytan/cloak.nvim',
     event = { 'BufReadPre *.env' },
     config = function()
       require('cloak').setup()
-    end
+    end,
   },
   {
     'folke/ts-comments.nvim',
@@ -163,7 +162,7 @@ return {
         signs_on_startup = { 'diagnostics', 'folds', 'search' },
       })
       require('scrollview.contrib.gitsigns').setup()
-    end
+    end,
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',

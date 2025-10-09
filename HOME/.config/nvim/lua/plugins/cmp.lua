@@ -19,7 +19,7 @@ return {
       },
       appearance = {
         use_nvim_cmp_as_default = true,
-        nerd_font_variant = 'mono'
+        nerd_font_variant = 'mono',
       },
       sources = {
         default = { 'lsp', 'buffer', 'path' },
@@ -30,8 +30,8 @@ return {
           border = 'rounded',
           draw = {
             columns = {
-              { "kind_icon" },
-              { "label",    "label_description", gap = 1 },
+              { 'kind_icon' },
+              { 'label', 'label_description', gap = 1 },
             },
           },
         },
@@ -43,6 +43,6 @@ return {
       },
       signature = { window = { border = 'rounded' } },
     },
-    opts_extend = { 'sources.default' }
-  }
+    opts_extend = { 'sources.default' },
+  },
 }

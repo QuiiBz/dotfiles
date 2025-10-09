@@ -3,7 +3,7 @@ return {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
-      { '<C-b>', '<cmd>NvimTreeToggle<cr>' }
+      { '<C-b>', '<cmd>NvimTreeToggle<cr>' },
     },
     config = function()
       require('nvim-tree').setup({
@@ -15,8 +15,8 @@ return {
             git_placement = 'after',
             show = {
               folder_arrow = false,
-            }
-          }
+            },
+          },
         },
         update_focused_file = {
           enable = true,
@@ -31,18 +31,18 @@ return {
           enable = true,
           debounce_delay = 50,
           ignore_dirs = {
-            "node_modules"
+            'node_modules',
           },
         },
       })
-    end
+    end,
   },
   {
     'echasnovski/mini.files',
     version = '*',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
-      { '<C-n>', '<cmd>lua if not MiniFiles.close() then MiniFiles.open() end<cr>' }
+      { '<C-n>', '<cmd>lua if not MiniFiles.close() then MiniFiles.open() end<cr>' },
     },
     config = function()
       local show_dotfiles = false
@@ -102,6 +102,6 @@ return {
           vim.api.nvim_win_set_config(win_id, config)
         end,
       })
-    end
+    end,
   },
 }

@@ -9,7 +9,7 @@ return {
           auto_trigger = true,
           keymap = {
             accept = false,
-          }
+          },
         },
         filetypes = {
           yaml = true,
@@ -27,7 +27,7 @@ return {
           },
         },
       })
-    end
+    end,
   },
   {
     'folke/sidekick.nvim',
@@ -36,8 +36,8 @@ return {
         mux = {
           backend = 'tmux',
           enabled = true,
-        }
-      }
+        },
+      },
     },
     keys = {
       {
@@ -63,7 +63,7 @@ return {
           require('sidekick.cli').send({ selection = true })
         end,
         mode = { 'v' },
-      }
-    }
-  }
+      },
+    },
+  },
 }

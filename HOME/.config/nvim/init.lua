@@ -26,13 +26,13 @@ require('lazy').setup('plugins', {
 
 -- Fix the double border issue while we wait for lazy.nvim to fix it
 -- https://github.com/folke/lazy.nvim/issues/1951
-vim.api.nvim_create_autocmd("FileType", {
-  desc = "User: fix backdrop for lazy window",
-  pattern = "lazy_backdrop",
-  group = vim.api.nvim_create_augroup("lazynvim-fix", { clear = true }),
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'User: fix backdrop for lazy window',
+  pattern = 'lazy_backdrop',
+  group = vim.api.nvim_create_augroup('lazynvim-fix', { clear = true }),
   callback = function(ctx)
     local win = vim.fn.win_findbuf(ctx.buf)[1]
-    vim.api.nvim_win_set_config(win, { border = "none" })
+    vim.api.nvim_win_set_config(win, { border = 'none' })
   end,
 })
 

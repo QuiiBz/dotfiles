@@ -30,15 +30,15 @@ return {
                 return ''
               end
               return '󰵆  ' .. reg
-            end
-          }
+            end,
+          },
         },
         inactive_sections = {},
         tabline = {},
         winbar = {},
         inactive_winbar = {},
-        extensions = {}
+        extensions = {},
       })
     end,
-  }
+  },
 }

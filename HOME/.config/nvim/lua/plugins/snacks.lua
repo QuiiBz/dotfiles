@@ -4,12 +4,18 @@ return {
     priority = 1000,
     lazy = false,
     keys = {
-      { '<C-p>', function()
-        Snacks.picker.files({ hidden = true, layout = { preset = 'telescope' } })
-      end },
-      { '<C-f>', function()
-        Snacks.picker.grep({ hidden = true, layout = { preset = 'telescope' } })
-      end },
+      {
+        '<C-p>',
+        function()
+          Snacks.picker.files({ hidden = true, layout = { preset = 'telescope' } })
+        end,
+      },
+      {
+        '<C-f>',
+        function()
+          Snacks.picker.grep({ hidden = true, layout = { preset = 'telescope' } })
+        end,
+      },
     },
     opts = {
       lazygit = {
@@ -38,7 +44,7 @@ return {
           file = {
             truncate = 90, -- default is 60
           },
-        }
+        },
       },
     },
   },
