@@ -1,7 +1,6 @@
 local servers = {
   -- Languages
   'lua_ls',
-  'stylua',
   'rust_analyzer',
   'vtsls',
   'cssls',
@@ -42,7 +41,7 @@ return {
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_set_option_value('omnifunc', 'v:lua.vim.lsp.omnifunc', { buf = bufnr })
 
-        if client.name == 'vtsls' then
+        if client.name == 'vtsls' or client.name == 'lua_ls' then
           client.server_capabilities.documentFormattingProvider = false
         elseif client.name == 'biome' or client.name == 'eslint' then
           client.server_capabilities.documentFormattingProvider = true
@@ -59,6 +58,33 @@ return {
           })
         end
 
+        -- Use stylua for Lua files since we disabled lua_ls formatting
+        if vim.bo[bufnr].filetype == 'lua' then
+          vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            group = augroup,
+            buffer = bufnr,
+            callback = function()
+              local stylua_cmd = vim.fn.executable('stylua') == 1 and 'stylua' or
+                  vim.fn.stdpath('data') .. '/mason/bin/stylua'
+              if vim.fn.executable(stylua_cmd) == 1 then
+                local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+                local content = table.concat(lines, '\n')
+                local result = vim.fn.system(
+                  stylua_cmd .. ' --stdin-filepath ' .. vim.fn.shellescape(vim.api.nvim_buf_get_name(bufnr)) .. ' -',
+                  content)
+                if vim.v.shell_error == 0 then
+                  local formatted_lines = vim.split(result, '\n')
+                  if formatted_lines[#formatted_lines] == '' then
+                    table.remove(formatted_lines)
+                  end
+                  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted_lines)
+                end
+              end
+            end,
+          })
+        end
+
         -- Mappings
         local bufopts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
@@ -66,17 +92,11 @@ return {
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
         vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-        -- vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-        -- vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-        -- vim.keymap.set('n', '<space>wl', function()
-        --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        -- end, bufopts)
         vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
         vim.keymap.set('n', '<space>r', vim.lsp.buf.rename, bufopts)
         -- Handled by :CodeActionMenu
         -- vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, bufopts)
         vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-        vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
       end
 
       local capabilities = require('blink.cmp').get_lsp_capabilities()
