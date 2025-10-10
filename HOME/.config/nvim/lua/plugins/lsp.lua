@@ -1,6 +1,7 @@
 local servers = {
   -- Languages
   'lua_ls',
+  'stylua3p_ls',
   'rust_analyzer',
   'vtsls',
   'cssls',
@@ -54,34 +55,6 @@ return {
             buffer = bufnr,
             callback = function()
               vim.lsp.buf.format({ bufnr = bufnr })
-            end,
-          })
-        end
-
-        -- Use stylua for Lua files since we disabled lua_ls formatting
-        if vim.bo[bufnr].filetype == 'lua' then
-          vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            group = augroup,
-            buffer = bufnr,
-            callback = function()
-              local stylua_cmd = vim.fn.executable('stylua') == 1 and 'stylua'
-                or vim.fn.stdpath('data') .. '/mason/bin/stylua'
-              if vim.fn.executable(stylua_cmd) == 1 then
-                local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-                local content = table.concat(lines, '\n')
-                local result = vim.fn.system(
-                  stylua_cmd .. ' --stdin-filepath ' .. vim.fn.shellescape(vim.api.nvim_buf_get_name(bufnr)) .. ' -',
-                  content
-                )
-                if vim.v.shell_error == 0 then
-                  local formatted_lines = vim.split(result, '\n')
-                  if formatted_lines[#formatted_lines] == '' then
-                    table.remove(formatted_lines)
-                  end
-                  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted_lines)
-                end
-              end
             end,
           })
         end
