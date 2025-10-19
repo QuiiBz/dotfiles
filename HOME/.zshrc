@@ -87,6 +87,7 @@ setopt HIST_FIND_NO_DUPS   # Avoid duplicates in searches
 setopt HIST_IGNORE_ALL_DUPS # Remove older duplicates
 zstyle ':completion:*:*:*:*:*' menu select
 zmodload zsh/complist
+bindkey -M menuselect '^[[Z' reverse-menu-complete
 zstyle ':completion:*' special-dirs true
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
