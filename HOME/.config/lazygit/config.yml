@@ -25,6 +25,6 @@ git:
   log:
     order: default
   autoFetch: false
-  paging:
-    colorArg: always
-    pager: delta --side-by-side --paging=never --features=catppuccin-macchiato
+  pagers:
+    - colorArg: always
+      pager: delta --side-by-side --paging=never --features=catppuccin-macchiato
