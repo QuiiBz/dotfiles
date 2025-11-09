@@ -39,3 +39,8 @@ run "Building bat cache" bat cache --build
 # Neovim
 run "Updating Neovim" bob install stable
 run "Using stable Neovim" sudo bob use stable
+if [ "$force" = true ]; then
+  run "Updating Lazy plugins" nvim --headless "+Lazy! sync" +qa
+else
+  run "Updating Lazy plugins" nvim --headless "+Lazy! restore" +qa
+fi
