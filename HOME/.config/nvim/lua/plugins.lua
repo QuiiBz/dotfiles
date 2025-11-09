@@ -114,6 +114,14 @@ return {
     },
     config = function()
       require('registers').setup({
+        -- + system clipboard
+        -- " last yank / delete
+        -- 0 last yank
+        -- 1-9 last deletes
+        -- a-z named registers
+        show = '+"0123456789abcdefghijklmnopqrstuvwxyz',
+        show_empty = false,
+        show_register_types = false,
         window = {
           border = 'rounded',
           transparency = 0,
