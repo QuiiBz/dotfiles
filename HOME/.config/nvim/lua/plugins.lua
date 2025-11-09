@@ -157,10 +157,6 @@ return {
     end,
   },
   {
-    'folke/ts-comments.nvim',
-    event = { 'BufReadPre', 'BufNewFile' },
-  },
-  {
     'dstein64/nvim-scrollview',
     event = { 'BufReadPre', 'BufNewFile' },
     after = 'gitsigns.nvim',
