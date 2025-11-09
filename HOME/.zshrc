@@ -27,6 +27,7 @@ export PATH="$GOBIN:$PATH"
 export PATH=/Users/tom/.opencode/bin:$PATH
 export PATH="$PATH:/Users/tom/.lmstudio/bin"
 export PATH="$PATH:/Users/tom/.local/share/bob/nvim-bin"
+export PATH="$PATH:/Users/tom/.local/bin"
 
 # Configurations
 export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
