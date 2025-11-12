@@ -37,6 +37,8 @@ return {
           input = {
             keys = {
               ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
+              ['<S-Tab>'] = { 'select_and_next', mode = { 'i', 'n' } },
+              ['<Tab>'] = { 'select_and_prev', mode = { 'i', 'n' } },
             },
           },
         },
