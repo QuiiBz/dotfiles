@@ -37,5 +37,14 @@
   line-numbers-right-format = "{np:>1} "
 [merge]
   conflictStyle = zdiff3
+  tool = nvimdiff
+[mergetool]
+  prompt = false
+  keepBackup = false
+[mergetool "nvimdiff"]
+  layout = "LOCAL,BASE,REMOTE / MERGED"
 [diff]
   colorMoved = default
+  tool = nvim_difftool
+[difftool "nvim_difftool"]
+  cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
