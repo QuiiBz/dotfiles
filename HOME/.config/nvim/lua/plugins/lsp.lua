@@ -1,7 +1,7 @@
 local servers = {
   -- Languages
   'lua_ls',
-  'stylua3p_ls',
+  'stylua',
   'rust_analyzer',
   'vtsls',
   'cssls',
@@ -48,7 +48,7 @@ return {
           client.server_capabilities.documentFormattingProvider = true
         end
 
-        if client.supports_method('textDocument/formatting') then
+        if client:supports_method('textDocument/formatting') then
           vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
           vim.api.nvim_create_autocmd('BufWritePre', {
             group = augroup,
