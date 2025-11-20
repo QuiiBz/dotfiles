@@ -157,9 +157,14 @@ automatically-unhide-macos-hidden-apps = true
 [workspace-to-monitor-force-assignment]
     4 = 'secondary'
 
-# Finder will alwyas be floating
+# Finder will always be floating
 [[on-window-detected]]
     if.app-id = 'com.apple.finder'
+    run = ['layout floating']
+
+# Zoom will always be floating
+[[on-window-detected]]
+    if.app-id = 'us.zoom.ZoomPresence'
     run = ['layout floating']
 
 # 'service' binding mode declaration.
