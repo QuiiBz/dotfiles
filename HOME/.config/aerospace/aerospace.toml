@@ -164,7 +164,12 @@ automatically-unhide-macos-hidden-apps = true
 
 # Zoom will always be floating
 [[on-window-detected]]
-    if.app-id = 'us.zoom.ZoomPresence'
+    if.app-id = 'us.zoom.xos'
+    run = ['layout floating']
+
+# Raycast will always be floating
+[[on-window-detected]]
+    if.app-id = 'com.raycast.macos'
     run = ['layout floating']
 
 # 'service' binding mode declaration.
