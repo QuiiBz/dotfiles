@@ -48,6 +48,12 @@ return {
           client.server_capabilities.documentFormattingProvider = true
         end
 
+        -- Fix invalid semantic tokens in terraformls causing
+        -- 100% CPU usage in v0.12: https://github.com/neovim/neovim/issues/36257
+        if client.name == 'terraformls' then
+          client.server_capabilities.semanticTokensProvider = nil
+        end
+
         if client:supports_method('textDocument/formatting') then
           vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
           vim.api.nvim_create_autocmd('BufWritePre', {
