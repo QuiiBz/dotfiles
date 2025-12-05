@@ -12,7 +12,7 @@ alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
 alias pnpx="pnpm dlx"
 alias lg="lazygit"
 alias k="kubectl"
-alias kk6='kubectl -n k6-operator-system'
+alias kk6="kubectl -n k6-operator-system"
 alias tf="terraform"
 alias ts="tailscale"
 alias home="~/home.sh"
@@ -45,8 +45,10 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
 export PURE_GIT_DOWN_ARROW='↓'
 export PURE_GIT_UP_ARROW='↑'
-export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -p -lman'"
+export MANPAGER="sh -c 'awk '\''{ gsub(/\x1B\[[0-9;]*m/, \"\", \$0); gsub(/.\x08/, \"\", \$0); print }'\'' | bat -lman'"
 export BAT_STYLE="plain"
+export KUBECOLOR_OBJ_FRESH="1h"
+export EDITOR="nvim"
 
 # PNPM
 export PNPM_HOME="/Users/tom/Library/pnpm"
@@ -57,15 +59,20 @@ esac
 
 # Check if 'kubectl' is a command in $PATH
 if [ $commands[kubectl] ]; then
-  # Placeholder 'kubectl' shell function:
-  # Will only be executed on the first call to 'kubectl'
+  # Remove any existing alias to allow function definition
+  unalias kubectl 2>/dev/null
+  # Lazy-load kubectl completions and alias to kubecolor
   kubectl() {
-    # Remove this function, subsequent calls will execute 'kubectl' directly
+    # Remove this function, subsequent calls will execute 'kubecolor' directly
     unfunction "$0"
     # Load auto-completion
     source <(kubectl completion zsh)
+    # Alias when lazy loading since we already have a kubectl function
+    alias kubectl="kubecolor"
+    # Use the completions for kubecolor
+    compdef kubecolor=kubectl
     # Execute 'kubectl' binary
-    $0 "$@"
+    kubecolor "$@"
   }
 fi
 
