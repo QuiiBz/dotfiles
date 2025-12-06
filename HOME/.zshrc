@@ -89,10 +89,14 @@ setopt menu_complete
 setopt auto_menu
 setopt complete_in_word
 setopt always_to_end
-setopt SHARE_HISTORY       # Share command history data
-setopt INC_APPEND_HISTORY  # Append to history file immediately
-setopt HIST_FIND_NO_DUPS   # Avoid duplicates in searches
+HISTSIZE=10000 # Lines kept in memory during session
+SAVEHIST=10000 # Lines saved to history file
+setopt SHARE_HISTORY # Share command history data
+setopt INC_APPEND_HISTORY # Append to history file immediately
+setopt HIST_FIND_NO_DUPS # Avoid duplicates in searches
+setopt HIST_IGNORE_DUPS # Remove consecutive duplicates
 setopt HIST_IGNORE_ALL_DUPS # Remove older duplicates
+setopt HIST_REDUCE_BLANKS # Remove superfluous blanks before saving
 zstyle ':completion:*:*:*:*:*' menu select
 zmodload zsh/complist
 bindkey -M menuselect '^[[Z' reverse-menu-complete
