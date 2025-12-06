@@ -18,7 +18,6 @@ return {
               'filename',
               path = 1,
             },
-            'diff',
           },
           lualine_x = { 'searchcount' },
           lualine_y = {},
