@@ -9,6 +9,12 @@ after-startup-command = [
     # 'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=2.1'
 ]
 
+# Keep some windows sticky even when changing workspaces
+exec-on-workspace-change = [
+    '/bin/bash', '-c',
+    '~/.config/aerospace/sticky-window.sh',
+]
+
 # Start AeroSpace at login
 start-at-login = true
 
