@@ -65,6 +65,8 @@ vim.keymap.set('i', '<Tab>', function()
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
   end
 end)
+-- Disable q: because I accidentally hit it
+vim.cmd('nnoremap q: <Nop>')
 
 -- Highlight yanked text
 vim.api.nvim_create_autocmd('TextYankPost', {
