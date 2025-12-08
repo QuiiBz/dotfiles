@@ -111,6 +111,7 @@ zstyle ':prompt:pure:prompt:success' color 'green'
 zstyle ':prompt:pure:git:branch' color 'magenta'
 zstyle ':prompt:pure:git:dirty' color 'magenta'
 zstyle ':prompt:pure:git:arrow' color 'red'
+echo -ne '\e[6 q' # Set bar cursor
 
 # Ctrl+R history search via fzf
 fzf-history-widget() {
