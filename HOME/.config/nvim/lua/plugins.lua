@@ -177,6 +177,18 @@ return {
         language_icon = false,
         language_name = false,
         disable_background = true,
+        conceal_delimiters = false,
+      },
+      pipe_table = {
+        cell = 'raw',
+      },
+      link = {
+        enabled = false,
+      },
+      win_options = {
+        conceallevel = {
+          rendered = 0,
+        },
       },
     },
     ft = { 'markdown' },
