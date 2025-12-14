@@ -74,7 +74,7 @@ return {
         },
       })
 
-      --- Use '.' to toggle dotfiles visibility (off by default)
+      -- Use '.' to toggle dotfiles visibility (off by default)
       vim.api.nvim_create_autocmd('User', {
         pattern = 'MiniFilesBufferCreate',
         callback = function(args)
@@ -92,7 +92,7 @@ return {
         end,
       })
 
-      --- Rounded borders
+      -- Rounded borders
       vim.api.nvim_create_autocmd('User', {
         pattern = 'MiniFilesWindowOpen',
         callback = function(args)
@@ -100,6 +100,14 @@ return {
           local config = vim.api.nvim_win_get_config(win_id)
           config.border = 'rounded'
           vim.api.nvim_win_set_config(win_id, config)
+        end,
+      })
+
+      -- LSP-integrated file renaming
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'MiniFilesActionRename',
+        callback = function(event)
+          Snacks.rename.on_rename_file(event.data.from, event.data.to)
         end,
       })
     end,
