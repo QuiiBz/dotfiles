@@ -80,6 +80,7 @@ autoload -U promptinit; promptinit
 prompt pure
 
 # ZSH settings
+bindkey -e
 bindkey "\e[1;3D" backward-word
 bindkey "\e[1;3C" forward-word
 bindkey "\e[1;2D" backward-word
@@ -111,7 +112,6 @@ zstyle ':prompt:pure:prompt:success' color 'green'
 zstyle ':prompt:pure:git:branch' color 'magenta'
 zstyle ':prompt:pure:git:dirty' color 'magenta'
 zstyle ':prompt:pure:git:arrow' color 'red'
-echo -ne '\e[6 q' # Set bar cursor
 
 # Ctrl+R history search via fzf
 fzf-history-widget() {
