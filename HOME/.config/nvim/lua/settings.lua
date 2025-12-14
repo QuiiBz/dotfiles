@@ -32,6 +32,8 @@ vim.opt.swapfile = false
 -- Just makes sense when spliting windows
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+-- Enable background cursor line
+vim.opt.cursorline = true
 -- Only save useful info in sessions
 vim.o.sessionoptions = 'buffers,curdir,folds,globals,tabpages,winpos,winsize'
 

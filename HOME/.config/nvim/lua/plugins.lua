@@ -7,6 +7,12 @@ return {
       require('catppuccin').setup({
         flavour = 'macchiato', -- latte, frappe, macchiato, mocha
         transparent_background = true,
+        custom_highlights = function(colors)
+          local utils = require('catppuccin.utils.colors')
+          return {
+            CursorLine = { bg = utils.blend(colors.overlay0, colors.base, 0.2) },
+          }
+        end,
         float = {
           transparent = true,
         },
