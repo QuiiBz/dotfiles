@@ -13,7 +13,7 @@ return {
       {
         '<C-f>',
         function()
-          Snacks.picker.grep({ hidden = true, layout = { preset = 'telescope' } })
+          Snacks.picker.grep({ hidden = true, regex = false, layout = { preset = 'telescope' } })
         end,
       },
     },
