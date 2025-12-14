@@ -185,11 +185,6 @@ return {
       link = {
         enabled = false,
       },
-      win_options = {
-        conceallevel = {
-          rendered = 0,
-        },
-      },
     },
     ft = { 'markdown' },
   },
