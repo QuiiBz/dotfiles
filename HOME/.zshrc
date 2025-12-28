@@ -131,6 +131,15 @@ fzf-history-widget() {
 zle     -N   fzf-history-widget
 bindkey '^R' fzf-history-widget
 
+# Quickly switch between AWS profiles
+awsp() {
+  if [ -n "$1" ]; then
+    export AWS_PROFILE="$1"
+    return
+  fi
+  echo $AWS_PROFILE
+}
+
 autoload -Uz compinit
 for dump in ~/.zcompdump(N.mh+24); do
   compinit
