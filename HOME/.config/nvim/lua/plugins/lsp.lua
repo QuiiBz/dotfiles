@@ -3,7 +3,6 @@ local servers = {
   'lua_ls',
   'stylua',
   'rust_analyzer',
-  'vtsls',
   'cssls',
   'html',
   'jsonls',
@@ -21,6 +20,17 @@ local servers = {
   'dockerls',
   'terraformls',
 }
+
+-- Experimental tsgo support, fallback to vtsls
+local use_tsgo = true
+local ts_lsp
+if use_tsgo then
+  ts_lsp = 'tsgo'
+else
+  ts_lsp = 'vtsls'
+end
+
+table.insert(servers, ts_lsp)
 
 return {
   {
@@ -42,7 +52,7 @@ return {
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_set_option_value('omnifunc', 'v:lua.vim.lsp.omnifunc', { buf = bufnr })
 
-        if client.name == 'vtsls' or client.name == 'lua_ls' then
+        if client.name == ts_lsp or client.name == 'lua_ls' then
           client.server_capabilities.documentFormattingProvider = false
         elseif client.name == 'biome' or client.name == 'eslint' then
           client.server_capabilities.documentFormattingProvider = true
@@ -120,7 +130,7 @@ return {
         end
 
         -- Increase max memory for tsserver
-        if server == 'vtsls' then
+        if server == ts_lsp then
           config.settings = {
             typescript = {
               tsserver = {
