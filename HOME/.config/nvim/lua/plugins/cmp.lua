@@ -7,7 +7,9 @@ return {
       keymap = {
         preset = 'none',
         ['<Up>'] = { 'select_prev', 'fallback' },
+        ['<C-N>'] = { 'select_next', 'fallback' },
         ['<Down>'] = { 'select_next', 'fallback' },
+        ['<C-P>'] = { 'select_prev', 'fallback' },
         ['<Enter>'] = { 'accept', 'fallback' },
         ['<C-Space>'] = { 'show', 'fallback' },
         ['<Tab>'] = {
