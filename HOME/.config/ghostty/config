@@ -11,3 +11,4 @@ confirm-close-surface = false
 shell-integration-features = no-cursor
 auto-update = download
 auto-update-channel = tip
+mouse-scroll-multiplier = 2

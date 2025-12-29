@@ -36,6 +36,8 @@ vim.opt.splitbelow = true
 vim.opt.cursorline = true
 -- Only save useful info in sessions
 vim.o.sessionoptions = 'buffers,curdir,folds,globals,tabpages,winpos,winsize'
+-- Scroll line by line
+vim.o.mousescroll = 'ver:1'
 
 -- Keybinds
 -- Git
