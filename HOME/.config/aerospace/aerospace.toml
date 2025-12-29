@@ -30,6 +30,9 @@ accordion-padding = 30
 # Possible values: tiles|accordion|bsp
 default-root-container-layout = 'bsp'
 
+# Enable animations when moving windows
+window-animation-duration = 0.15
+
 # Possible values: horizontal|vertical|auto
 # 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
 #               tall monitor (anything higher than wide) gets vertical orientation
