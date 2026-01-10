@@ -37,8 +37,7 @@ run "Updating tldr pages" tldr --update
 run "Building bat cache" bat cache --build
 
 # Neovim
-run "Updating Neovim" bob install stable
-run "Using stable Neovim" sudo bob use stable
+run "Updating Neovim" bob update
 if [ "$force" = true ]; then
   run "Updating Lazy plugins" nvim --headless "+Lazy! sync" +qa
 else
