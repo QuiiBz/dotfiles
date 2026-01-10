@@ -98,6 +98,7 @@ setopt HIST_FIND_NO_DUPS # Avoid duplicates in searches
 setopt HIST_IGNORE_DUPS # Remove consecutive duplicates
 setopt HIST_IGNORE_ALL_DUPS # Remove older duplicates
 setopt HIST_REDUCE_BLANKS # Remove superfluous blanks before saving
+setopt autocd # cd to directory by typing its name
 zstyle ':completion:*:*:*:*:*' menu select
 zmodload zsh/complist
 bindkey -M menuselect '^[[Z' reverse-menu-complete
