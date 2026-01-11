@@ -38,6 +38,8 @@ vim.opt.cursorline = true
 vim.o.sessionoptions = 'buffers,curdir,folds,globals,tabpages,winpos,winsize,localoptions'
 -- Scroll line by line
 vim.o.mousescroll = 'ver:1'
+-- :term should use zsh
+vim.o.shell = '/bin/zsh -l'
 
 -- Keybinds
 -- Git
@@ -71,6 +73,9 @@ vim.keymap.set('i', '<Tab>', function()
 end)
 -- Disable q: because I accidentally hit it
 vim.cmd('nnoremap q: <Nop>')
+-- Terminal mode and escape with Esc
+vim.cmd('nnoremap <silent> <leader>t :term<CR>')
+vim.cmd('tnoremap <C-q> <C-\\><C-n>')
 
 -- Highlight yanked text
 vim.api.nvim_create_autocmd('TextYankPost', {
