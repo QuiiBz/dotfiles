@@ -13,3 +13,4 @@ auto-update = download
 auto-update-channel = tip
 mouse-scroll-multiplier = 2
 keybind = global:cmd+alt+ctrl+enter=toggle_quick_terminal
+macos-option-as-alt = true
