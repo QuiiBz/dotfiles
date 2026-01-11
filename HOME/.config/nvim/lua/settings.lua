@@ -35,7 +35,7 @@ vim.opt.splitbelow = true
 -- Enable background cursor line
 vim.opt.cursorline = true
 -- Only save useful info in sessions
-vim.o.sessionoptions = 'buffers,curdir,folds,globals,tabpages,winpos,winsize'
+vim.o.sessionoptions = 'buffers,curdir,folds,globals,tabpages,winpos,winsize,localoptions'
 -- Scroll line by line
 vim.o.mousescroll = 'ver:1'
 
