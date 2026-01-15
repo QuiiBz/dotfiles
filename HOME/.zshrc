@@ -76,6 +76,15 @@ if [ $commands[kubectl] ]; then
   }
 fi
 
+# Update tmux environment with AWS_PROFILE after each command, async
+_update_tmux_aws_profile() {
+  if [ -n "$TMUX" ]; then
+    tmux set-environment -g "PANE_${TMUX_PANE}_AWS_PROFILE" "$AWS_PROFILE" &!
+  fi
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _update_tmux_aws_profile
+
 autoload -U promptinit; promptinit
 prompt pure
 
