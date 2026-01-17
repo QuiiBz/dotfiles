@@ -35,6 +35,7 @@ run "Updating global pnpm packages" pnpm update -g
 # Tools
 run "Updating tldr pages" tldr --update
 run "Building bat cache" bat cache --build
+run "Cleaning pnpm cache" pnpm store prune
 
 # Neovim
 run "Updating Neovim" bob update
