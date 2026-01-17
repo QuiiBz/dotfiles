@@ -36,6 +36,14 @@ return {
         mux = {
           enabled = true,
         },
+        tools = {
+          amp = {
+            cmd = { 'amp' },
+          },
+          droid = {
+            cmd = { 'droid' },
+          },
+        },
       },
     },
     keys = {
