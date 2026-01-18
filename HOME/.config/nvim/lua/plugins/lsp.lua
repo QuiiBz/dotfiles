@@ -165,6 +165,25 @@ return {
         },
       })
 
+      -- Enable undercurl for diagnostics
+      local function copy_fg_to_sp(from, to)
+        local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = from, link = false })
+        if not ok or not hl.fg then
+          return
+        end
+
+        vim.api.nvim_set_hl(0, to, {
+          undercurl = true,
+          sp = string.format('#%06x', hl.fg),
+        })
+      end
+
+      copy_fg_to_sp('DiagnosticError', 'DiagnosticUnderlineError')
+      copy_fg_to_sp('DiagnosticWarn', 'DiagnosticUnderlineWarn')
+      copy_fg_to_sp('DiagnosticInfo', 'DiagnosticUnderlineInfo')
+      copy_fg_to_sp('DiagnosticHint', 'DiagnosticUnderlineHint')
+      copy_fg_to_sp('DiagnosticOk', 'DiagnosticUnderlineOk')
+
       -- Fix floating windows color
       vim.api.nvim_set_hl(0, 'NormalFloat', {
         link = 'Normal',
