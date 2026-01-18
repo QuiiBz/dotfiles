@@ -11,6 +11,10 @@ return {
           local utils = require('catppuccin.utils.colors')
           return {
             CursorLine = { bg = utils.blend(colors.overlay0, colors.base, 0.2) },
+            SpellBad = { sp = colors.overlay2, style = { 'undercurl' } },
+            SpellCap = { sp = colors.overlay2, style = { 'undercurl' } },
+            SpellLocal = { sp = colors.overlay2, style = { 'undercurl' } },
+            SpellRare = { sp = colors.overlay2, style = { 'undercurl' } },
           }
         end,
         float = {

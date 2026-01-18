@@ -16,6 +16,12 @@ return {
           Snacks.picker.grep({ hidden = true, regex = false, layout = { preset = 'telescope' } })
         end,
       },
+      {
+        'z=',
+        function()
+          Snacks.picker.spelling({ layout = { preset = 'select' } })
+        end,
+      },
     },
     opts = {
       lazygit = {

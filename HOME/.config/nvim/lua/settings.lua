@@ -12,7 +12,7 @@ vim.opt.signcolumn = 'yes'
 -- Hide command height
 vim.o.ch = 0
 -- Spelling in comments
--- vim.opt.spell = true
+vim.opt.spell = true
 -- Set rounded borders
 vim.o.winborder = 'rounded'
 -- Indentation
