@@ -179,26 +179,6 @@ return {
     end,
   },
   {
-    'MeanderingProgrammer/render-markdown.nvim',
-    opts = {
-      file_types = { 'markdown' },
-      preset = 'lazy',
-      code = {
-        language_icon = false,
-        language_name = false,
-        disable_background = true,
-        conceal_delimiters = false,
-      },
-      pipe_table = {
-        cell = 'raw',
-      },
-      link = {
-        enabled = false,
-      },
-    },
-    ft = { 'markdown' },
-  },
-  {
     'QuiiBz/pretty-quickfix.nvim',
     -- dir = '~/dev/pretty-quickfix.nvim',
     dependencies = { 'nvim-web-devicons' },
