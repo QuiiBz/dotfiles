@@ -40,9 +40,6 @@ return {
           amp = {
             cmd = { 'amp' },
           },
-          droid = {
-            cmd = { 'droid' },
-          },
         },
       },
     },
