@@ -83,8 +83,7 @@ return {
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
         vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
         vim.keymap.set('n', '<space>r', vim.lsp.buf.rename, bufopts)
-        -- Handled by :CodeActionMenu
-        -- vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, bufopts)
+        vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, bufopts)
         vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
       end
 

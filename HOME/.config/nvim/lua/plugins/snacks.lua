@@ -1,3 +1,37 @@
+local preview_layout = {
+  layout = {
+    box = 'vertical',
+    backdrop = false,
+    row = -1,
+    width = 0,
+    height = 0.5,
+    border = 'top',
+    title = ' {title} {live} {flags}',
+    title_pos = 'left',
+    { win = 'input', height = 1, border = 'bottom' },
+    {
+      box = 'horizontal',
+      { win = 'list', border = 'none' },
+      { win = 'preview', title = '{preview}', width = 0.4, border = 'left' },
+    },
+  },
+}
+
+local list_layout = {
+  layout = {
+    box = 'vertical',
+    backdrop = false,
+    row = -1,
+    width = 0,
+    height = 8,
+    border = 'top',
+    title = ' {title} {live} {flags}',
+    title_pos = 'left',
+    { win = 'input', height = 1, border = 'bottom' },
+    { win = 'list', height = 0, border = 'none' },
+  },
+}
+
 return {
   {
     'folke/snacks.nvim',
@@ -7,19 +41,19 @@ return {
       {
         '<C-p>',
         function()
-          Snacks.picker.files({ hidden = true, layout = { preset = 'telescope' } })
+          Snacks.picker.files({ hidden = true, layout = preview_layout })
         end,
       },
       {
         '<C-f>',
         function()
-          Snacks.picker.grep({ hidden = true, regex = false, layout = { preset = 'telescope' } })
+          Snacks.picker.grep({ hidden = true, regex = false, layout = preview_layout })
         end,
       },
       {
         'z=',
         function()
-          Snacks.picker.spelling({ layout = { preset = 'select' } })
+          Snacks.picker.spelling({ layout = list_layout })
         end,
       },
     },
@@ -34,6 +68,11 @@ return {
         size = 1024 * 300, -- 300kB
       },
       picker = {
+        sources = {
+          select = {
+            layout = list_layout,
+          },
+        },
         matcher = {
           fuzzy = true,
           smartcase = true,
@@ -43,8 +82,8 @@ return {
           input = {
             keys = {
               ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
-              ['<S-Tab>'] = { 'select_and_next', mode = { 'i', 'n' } },
-              ['<Tab>'] = { 'select_and_prev', mode = { 'i', 'n' } },
+              ['<S-Tab>'] = { 'select_and_prev', mode = { 'i', 'n' } },
+              ['<Tab>'] = { 'select_and_next', mode = { 'i', 'n' } },
             },
           },
         },
