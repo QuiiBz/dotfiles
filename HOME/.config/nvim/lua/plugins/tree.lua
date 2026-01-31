@@ -42,7 +42,16 @@ return {
     version = '*',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
-      { '<C-n>', '<cmd>lua if not MiniFiles.close() then MiniFiles.open() end<cr>' },
+      {
+        '<C-n>',
+        function()
+          -- Close or open based on the current file path
+          if not MiniFiles.close() then
+            MiniFiles.open(vim.api.nvim_buf_get_name(0))
+          end
+          MiniFiles.reveal_cwd()
+        end,
+      },
     },
     config = function()
       local show_dotfiles = false
