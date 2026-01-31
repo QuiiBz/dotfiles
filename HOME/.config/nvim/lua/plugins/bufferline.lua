@@ -4,8 +4,11 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     after = 'catppuccin',
     config = function()
-      require('bufferline').setup({
-        highlights = require('catppuccin.special.bufferline').get_theme(),
+      local bufferline = require('bufferline')
+      bufferline.setup({
+        highlights = require('catppuccin.special.bufferline').get_theme({
+          styles = { 'bold' },
+        }),
         options = {
           indicator = {
             style = 'none',

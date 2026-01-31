@@ -26,7 +26,6 @@ return {
           treesitter = true,
           fidget = true,
           mason = true,
-          render_markdown = true,
           snacks = {
             enabled = true,
           },
