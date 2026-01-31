@@ -62,11 +62,6 @@ return {
             winblend = 0,
           },
         },
-        integration = {
-          ['nvim-tree'] = {
-            enable = false,
-          },
-        },
       })
     end,
   },

@@ -1,43 +1,5 @@
 return {
   {
-    'nvim-tree/nvim-tree.lua',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    keys = {
-      { '<C-b>', '<cmd>lua require("nvim-tree.api").tree.toggle()<cr>' },
-    },
-    config = function()
-      require('nvim-tree').setup({
-        view = {
-          width = 36,
-        },
-        renderer = {
-          icons = {
-            git_placement = 'after',
-            show = {
-              folder_arrow = false,
-            },
-          },
-        },
-        update_focused_file = {
-          enable = true,
-        },
-        diagnostics = {
-          enable = true,
-        },
-        filters = {
-          dotfiles = true,
-        },
-        filesystem_watchers = {
-          enable = true,
-          debounce_delay = 50,
-          ignore_dirs = {
-            'node_modules',
-          },
-        },
-      })
-    end,
-  },
-  {
     'echasnovski/mini.files',
     version = '*',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
