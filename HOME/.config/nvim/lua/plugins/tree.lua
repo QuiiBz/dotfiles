@@ -5,6 +5,15 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
       {
+        '<C-b>',
+        function()
+          -- Close or open based on the current file path
+          if not MiniFiles.close() then
+            MiniFiles.open()
+          end
+        end,
+      },
+      {
         '<C-n>',
         function()
           -- Close or open based on the current file path
