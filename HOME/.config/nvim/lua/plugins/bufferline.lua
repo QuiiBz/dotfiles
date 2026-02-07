@@ -8,10 +8,17 @@ return {
       bufferline.setup({
         highlights = require('catppuccin.special.bufferline').get_theme({
           styles = { 'bold' },
+          custom = {
+            all = {
+              modified = { fg = '#c6a0f6' },
+              modified_selected = { fg = '#c6a0f6' },
+              indicator_selected = { fg = '#c6a0f6' },
+            },
+          },
         }),
         options = {
           indicator = {
-            style = 'none',
+            style = 'icon',
           },
           show_buffer_close_icons = false,
           show_tab_indicators = false,
@@ -19,6 +26,7 @@ return {
           separator_style = { '', '' },
           diagnostics = 'nvim_lsp',
           sort_by = 'insert_after_current',
+          tab_size = 10,
         },
       })
     end,
