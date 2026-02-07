@@ -145,9 +145,15 @@ bindkey '^R' fzf-history-widget
 awsp() {
   if [ -n "$1" ]; then
     export AWS_PROFILE="$1"
+    echo "Switched to $AWS_PROFILE"
     return
   fi
   echo $AWS_PROFILE
+}
+
+# Utility to lowercase a string, print & copy to clipboard
+lower() {
+  printf '%s' "$*" | tr '[:upper:]' '[:lower:]' | tee >(pbcopy)
 }
 
 autoload -Uz compinit
