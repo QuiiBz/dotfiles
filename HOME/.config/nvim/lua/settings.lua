@@ -41,6 +41,8 @@ vim.cmd('nnoremap <silent> <leader>gp :Gitsigns preview_hunk<CR>')
 vim.cmd('nnoremap <silent> <leader>gr :Gitsigns reset_hunk<CR>')
 vim.cmd('nnoremap <silent> <leader>gl :Gitsigns blame_line<CR>')
 vim.cmd('nnoremap <silent> <leader>gb :Gitsigns blame<CR>')
+vim.cmd('nnoremap <silent> ]g :Gitsigns next_hunk<CR>')
+vim.cmd('nnoremap <silent> [g :Gitsigns prev_hunk<CR>')
 vim.cmd('nnoremap <silent> <leader>gg :lua Snacks.lazygit()<CR>')
 -- Resize
 vim.cmd('nnoremap <silent> <C-Up> :resize -2<CR>')
@@ -67,8 +69,7 @@ vim.keymap.set('i', '<Tab>', function()
 end)
 -- Disable q: because I accidentally hit it
 vim.cmd('nnoremap q: <Nop>')
--- Terminal mode and escape with Esc
-vim.cmd('nnoremap <silent> <leader>t :term<CR>')
+-- Escale terminal mode with Esc
 vim.cmd('tnoremap <C-q> <C-\\><C-n>')
 
 -- Highlight yanked text
@@ -96,7 +97,3 @@ end
 
 -- Toggle quickfix list
 vim.keymap.set('n', '<leader>q', ToggleQuickfix, { noremap = true, silent = true })
-
--- Go to next/previous item in quickfix list
-vim.cmd('nnoremap <silent> <leader>n :cnext<CR>')
-vim.cmd('nnoremap <silent> <leader>p :cprev<CR>')
