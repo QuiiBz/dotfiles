@@ -112,7 +112,8 @@ zstyle ':completion:*:*:*:*:*' menu select
 zmodload zsh/complist
 bindkey -M menuselect '^[[Z' reverse-menu-complete
 zstyle ':completion:*' special-dirs true
-zstyle ':completion:*' list-colors ''
+LS_COLORS='di=1;34:ln=36:so=35:pi=33:ex=32:bd=33;46:cd=33;43:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:mi=05;37;41:fi=0:no=0' # Match eza colors
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 zstyle ':completion:*' use-cache yes
