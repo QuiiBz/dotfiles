@@ -40,6 +40,11 @@ return {
           amp = {
             cmd = { 'amp' },
           },
+          -- current default is `"codex", "--enable", "web_search_request"` which is
+          -- deprecated and produces a warning, so remove it in the meantime
+          codex = {
+            cmd = { 'codex' },
+          },
         },
       },
     },
