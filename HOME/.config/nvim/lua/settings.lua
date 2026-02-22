@@ -29,7 +29,7 @@ vim.opt.splitbelow = true
 -- Enable background cursor line
 vim.opt.cursorline = true
 -- Only save useful info in sessions
-vim.o.sessionoptions = 'buffers,curdir,folds,globals,tabpages,winpos,winsize,localoptions'
+vim.o.sessionoptions = 'buffers,curdir,folds,globals,tabpages,winpos,winsize'
 -- Scroll line by line
 vim.o.mousescroll = 'ver:1'
 -- :term should use zsh
