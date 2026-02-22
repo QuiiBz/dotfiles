@@ -82,8 +82,14 @@ _update_tmux_aws_profile() {
     tmux set-environment -g "PANE_${TMUX_PANE}_AWS_PROFILE" "$AWS_PROFILE" &!
   fi
 }
+
+_set_cursor_bar() {
+  printf '\e[5 q'
+}
+
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd _update_tmux_aws_profile
+add-zsh-hook precmd _set_cursor_bar
 
 autoload -U promptinit; promptinit
 prompt pure

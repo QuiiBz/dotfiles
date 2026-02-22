@@ -1,14 +1,14 @@
 theme = catppuccin-macchiato
 font-family = IosevkaTerm Nerd Font
 font-size = 16
-cursor-style-blink = false
+cursor-style-blink = true
 macos-titlebar-style = hidden
 window-padding-x = 8,8
 window-padding-y = 6,6
 background-opacity = 0.9
 background-blur = 20
 confirm-close-surface = false
-shell-integration-features = no-cursor,ssh-terminfo,ssh-env
+shell-integration-features = ssh-terminfo,ssh-env
 auto-update = download
 auto-update-channel = tip
 mouse-scroll-multiplier = 2
