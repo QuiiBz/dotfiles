@@ -38,7 +38,7 @@ run "Building bat cache" bat cache --build
 run "Cleaning pnpm cache" pnpm store prune
 
 # Neovim
-run "Updating Neovim" bob update
+run "Updating Neovim" sudo bob update
 if [ "$force" = true ]; then
   run "Updating Lazy plugins" nvim --headless "+Lazy! sync" +qa
 else
