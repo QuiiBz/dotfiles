@@ -61,6 +61,10 @@ return {
       lazygit = {
         enabled = true,
         configure = false,
+        win = {
+          height = 0,
+          width = 0,
+        },
       },
       bigfile = {
         enabled = true,
