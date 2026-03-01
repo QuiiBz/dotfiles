@@ -30,6 +30,7 @@ git:
 os:
   editPreset: nvim-remote
 promptToReturnFromSubprocess: false
+notARepository: skip
 customCommands:
   - key: "G"
     command: "gh pr view -w {{.SelectedLocalBranch.Name}}"
