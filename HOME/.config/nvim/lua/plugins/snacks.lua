@@ -62,8 +62,8 @@ return {
         enabled = true,
         configure = false,
         win = {
-          height = 0,
-          width = 0,
+          height = 0.98,
+          width = 0.98,
         },
       },
       bigfile = {
