@@ -1,0 +1,24 @@
+model = "gpt-5.3-codex"
+model_reasoning_effort = "high"
+notify = ["bash", "-lc", "afplay /System/Library/Sounds/Submarine.aiff"] # Ping, Glass
+check_for_update_on_startup = false
+web_search = "live"
+suppress_unstable_features_warning = true
+sandbox_mode = "workspace-write"
+approval_policy = "untrusted"
+personality = "pragmatic"
+
+[features]
+unified_exec = true
+shell_snapshot = true
+steer = true
+personality = true
+
+[feedback]
+enabled = false
+
+[sandbox_workspace_write]
+network_access = true
+
+[tui]
+theme = "catppuccin-macchiato"
