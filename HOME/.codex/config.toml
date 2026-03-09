@@ -5,7 +5,7 @@ check_for_update_on_startup = false
 web_search = "live"
 suppress_unstable_features_warning = true
 sandbox_mode = "workspace-write"
-approval_policy = "untrusted"
+approval_policy = "on-request"
 personality = "pragmatic"
 
 [features]
@@ -23,3 +23,6 @@ network_access = true
 [tui]
 theme = "catppuccin-macchiato"
 show_tooltips = false
+
+[notice.model_migrations]
+"gpt-5.3-codex" = "gpt-5.4"
