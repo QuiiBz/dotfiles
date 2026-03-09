@@ -10,6 +10,5 @@ background-blur = 20
 confirm-close-surface = false
 shell-integration-features = ssh-terminfo,ssh-env
 auto-update = download
-auto-update-channel = tip
 mouse-scroll-multiplier = 2
 keybind = global:cmd+alt+ctrl+enter=toggle_quick_terminal
