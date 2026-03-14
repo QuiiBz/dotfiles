@@ -21,6 +21,9 @@ gui:
       - '#eed49f'
   authorColors:
     '*': '#b7bdf8'
+  sidePanelWidth: 0.2
+  commandLogSize: 4
+  showRandomTip: false
 git:
   log:
     order: default
