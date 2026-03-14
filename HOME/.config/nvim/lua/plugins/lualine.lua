@@ -8,7 +8,7 @@ return {
           component_separators = '',
           section_separators = { left = '', right = '' },
           globalstatus = true,
-          theme = 'catppuccin',
+          theme = 'catppuccin-nvim',
         },
         sections = {
           lualine_a = { 'mode' },

@@ -32,7 +32,7 @@ return {
           grug_far = true,
         },
       })
-      vim.cmd.colorscheme('catppuccin')
+      vim.cmd.colorscheme('catppuccin-nvim')
     end,
   },
   -- Others
