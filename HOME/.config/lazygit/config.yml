@@ -27,6 +27,7 @@ gui:
 git:
   log:
     order: default
+  branchLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative {{branchName}} -- # default command but without `--pretty=medium` to inherit my ~/.gitconfig setting
   autoFetch: false
   pagers:
     - pager: delta --side-by-side --dark --paging=never --features=catppuccin-macchiato

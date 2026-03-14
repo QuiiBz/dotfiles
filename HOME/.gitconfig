@@ -17,6 +17,8 @@
 	required = true
 [url "ssh://git@github.com/"]
   insteadOf = https://github.com/
+[format]
+  pretty = format:%C(green)%h%C(yellow)%d%Creset %s %C(black)%ar, %an%Creset
 [interactive]
   diffFilter = delta --color-only
 [include]
@@ -26,6 +28,7 @@
   dark =  true
   navigate = true
   line-numbers = true
+  tabs = 2
   hunk-header-style = omit
   file-style = bold
   file-modified-label = ~
