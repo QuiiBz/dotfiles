@@ -80,6 +80,17 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- When opening a file from lazygit within neovim, it sometimes breaks the line numbers
+vim.api.nvim_create_autocmd({ 'BufWinEnter', 'WinEnter' }, {
+  group = vim.api.nvim_create_augroup('force-line-numbers', { clear = true }),
+  callback = function(args)
+    if vim.bo[args.buf].buftype == '' then
+      vim.go.number = true
+      vim.wo.number = true
+    end
+  end,
+})
+
 -- Disable automatic comments on new lines
 vim.cmd('autocmd BufEnter * set formatoptions-=cro')
 vim.cmd('autocmd BufEnter * setlocal formatoptions-=cro')
