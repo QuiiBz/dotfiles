@@ -5,7 +5,7 @@ check_for_update_on_startup = false
 web_search = "live"
 suppress_unstable_features_warning = true
 sandbox_mode = "workspace-write"
-approval_policy = "on-request"
+approval_policy = "never"
 personality = "pragmatic"
 
 [features]
