@@ -38,6 +38,18 @@
   file-removed-label = -
   line-numbers-left-format = "{nm:>1} "
   line-numbers-right-format = "{np:>1} "
+[pull]
+  ff = only
+[fetch]
+  prune = true
+  pruneTags = true
+[rerere]
+  enabled = true
+  autoUpdate = true
+[rebase]
+  autoStash = true
+  autoSquash = true
+  updateRefs = true
 [merge]
   conflictStyle = zdiff3
   tool = nvimdiff
@@ -49,5 +61,6 @@
 [diff]
   colorMoved = default
   tool = nvim_difftool
+  algorithm = histogram
 [difftool "nvim_difftool"]
   cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
