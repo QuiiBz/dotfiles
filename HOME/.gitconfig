@@ -38,6 +38,8 @@
   file-removed-label = -
   line-numbers-left-format = "{nm:>1} "
   line-numbers-right-format = "{np:>1} "
+  line-numbers-zero-style = "#494D64"
+  zero-style = syntax dim
 [pull]
   ff = only
 [fetch]
