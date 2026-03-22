@@ -64,5 +64,6 @@
   colorMoved = default
   tool = nvim_difftool
   algorithm = histogram
+  context = 2
 [difftool "nvim_difftool"]
   cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
