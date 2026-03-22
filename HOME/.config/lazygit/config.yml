@@ -31,6 +31,7 @@ git:
   autoFetch: false
   pagers:
     - pager: delta --side-by-side --dark --paging=never --features=catppuccin-macchiato
+  diffContextSize: 2
 os:
   editPreset: nvim-remote
 promptToReturnFromSubprocess: false
