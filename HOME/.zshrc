@@ -31,7 +31,6 @@ export PATH="$PATH:/Users/tom/.local/bin"
 
 # Configurations
 export RUSTC_WRAPPER="/opt/homebrew/bin/sccache"
-export FORCE_COLOR=1 # Enable Turborepo colors
 export LC_ALL=en_US.UTF-8
 export FZF_DEFAULT_OPTS=" \
 --color=bg+:#363A4F,bg:-1,spinner:#F4DBD6,hl:#ED8796 \
