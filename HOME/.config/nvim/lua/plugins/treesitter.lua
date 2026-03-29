@@ -2,6 +2,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     version = false,
+    branch = 'master',
     build = ':TSUpdate',
     event = { 'BufReadPost', 'BufNewFile' },
     cmd = { 'TSUpdateSync' },
