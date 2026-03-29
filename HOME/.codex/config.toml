@@ -19,6 +19,7 @@ enabled = false
 
 [sandbox_workspace_write]
 network_access = true
+writable_roots = ["/Users/tom/dev"]
 
 [tui]
 theme = "catppuccin-macchiato"
