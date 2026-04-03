@@ -97,6 +97,20 @@ return {
           },
         },
       },
+      input = {
+        icon = '',
+        win = {
+          title_pos = 'left',
+          relative = 'cursor',
+          row = 1,
+          wo = {
+            winhighlight = 'NormalFloat:NormalFloat,FloatBorder:FloatBorder,FloatTitle:FloatTitle',
+          },
+          keys = {
+            i_esc = { '<esc>', { 'cmp_close', 'cancel' }, mode = 'i', expr = true },
+          },
+        },
+      },
     },
   },
 }
