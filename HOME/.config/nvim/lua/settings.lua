@@ -108,3 +108,12 @@ end
 
 -- Toggle quickfix list
 vim.keymap.set('n', '<leader>q', ToggleQuickfix, { noremap = true, silent = true })
+
+-- Testing out ui2
+require('vim._core.ui2').enable({
+  msg = {
+    pager = {
+      height = 0.5,
+    },
+  },
+})

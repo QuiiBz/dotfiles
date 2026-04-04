@@ -2,7 +2,9 @@ return {
   {
     'saghen/blink.cmp',
     event = 'InsertEnter',
-    version = '*',
+    -- Pinned to specific commit as I'm trying ui2, waiting for proper release
+    commit = '6731979aa370be0e5c7cc73258ce945730a515c9',
+    build = 'cargo build --release',
     opts = {
       keymap = {
         preset = 'none',
