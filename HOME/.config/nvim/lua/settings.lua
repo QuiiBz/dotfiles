@@ -117,3 +117,6 @@ require('vim._core.ui2').enable({
     },
   },
 })
+
+-- Enable builtin :Undotree
+vim.cmd('packadd nvim.undotree')
