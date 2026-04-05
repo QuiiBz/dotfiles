@@ -14,6 +14,8 @@ shell_snapshot = true
 steer = true
 personality = true
 apps = false
+js_repl = true
+prevent_idle_sleep = true
 
 [feedback]
 enabled = false
