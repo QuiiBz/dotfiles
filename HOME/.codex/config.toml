@@ -13,6 +13,7 @@ unified_exec = true
 shell_snapshot = true
 steer = true
 personality = true
+apps = false
 
 [feedback]
 enabled = false
@@ -24,6 +25,7 @@ writable_roots = ["/Users/tom/dev"]
 [tui]
 theme = "catppuccin-macchiato"
 show_tooltips = false
+status_line = ["context-remaining", "current-dir", "used-tokens", "total-input-tokens", "total-output-tokens"]
 
 [notice.model_migrations]
 "gpt-5.3-codex" = "gpt-5.4"
