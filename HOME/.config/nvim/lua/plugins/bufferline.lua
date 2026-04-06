@@ -10,6 +10,7 @@ return {
           styles = { 'bold' },
           custom = {
             all = {
+              buffer_selected = { bg = '#34364B' },
               modified = { fg = '#c6a0f6' },
               modified_selected = { fg = '#c6a0f6' },
               indicator_selected = { fg = '#c6a0f6' },
@@ -18,7 +19,7 @@ return {
         }),
         options = {
           indicator = {
-            style = 'icon',
+            style = 'none',
           },
           show_buffer_close_icons = false,
           show_tab_indicators = false,

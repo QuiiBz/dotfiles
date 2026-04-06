@@ -6,7 +6,7 @@
 after-startup-command = [
     # JankyBorders has a built-in detection of already running process,
     # so it won't be run twice on AeroSpace restart
-    'exec-and-forget borders active_color=0xffc6a0f6 inactive_color=0x00000000 width=2 order=a hidpi=on'
+    'exec-and-forget borders active_color=0xffc6a0f6 inactive_color=0x00000000 width=1 order=a hidpi=on'
 ]
 
 # Keep some windows sticky even when changing workspaces
@@ -31,7 +31,7 @@ accordion-padding = 30
 default-root-container-layout = 'bsp'
 
 # Enable animations when moving windows
-window-animation-duration = 0.15
+window-animation-duration = 0.2
 
 # Possible values: horizontal|vertical|auto
 # 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
@@ -64,12 +64,12 @@ automatically-unhide-macos-hidden-apps = true
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 8
-    inner.vertical =   8
-    outer.left =       8
-    outer.bottom =     8
+    inner.horizontal = 4
+    inner.vertical =   4
+    outer.left =       4
+    outer.bottom =     4
     outer.top =        0
-    outer.right =      8
+    outer.right =      4
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes

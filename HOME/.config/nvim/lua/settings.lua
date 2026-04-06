@@ -1,8 +1,10 @@
 vim.opt.termguicolors = true
 -- Line numbers
 vim.opt.number = true
--- Show extra column https://www.reddit.com/r/neovim/comments/neaeej/only_just_discovered_set_signcolumnnumber_i_like/
-vim.opt.signcolumn = 'yes'
+-- Minimum 1 char for line numbers, instead of 4 default
+vim.opt.numberwidth = 1
+-- Show extra column but max 1 https://www.reddit.com/r/neovim/comments/neaeej/only_just_discovered_set_signcolumnnumber_i_like/
+vim.opt.signcolumn = 'yes:1'
 -- Hide status bar
 -- vim.o.ls = 0
 -- Hide command height
