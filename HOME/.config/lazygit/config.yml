@@ -36,12 +36,3 @@ os:
   editPreset: nvim-remote
 promptToReturnFromSubprocess: false
 notARepository: skip
-customCommands:
-  - key: "G"
-    command: "gh pr view -w {{.SelectedLocalBranch.Name}}"
-    context: "localBranches"
-    description: "Open Github PR"
-  - key: "G"
-    command: "gh pr view -w"
-    context: "commits"
-    description: "Open Github PR"
