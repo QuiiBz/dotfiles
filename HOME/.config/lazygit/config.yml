@@ -24,6 +24,8 @@ gui:
   sidePanelWidth: 0.2
   commandLogSize: 4
   showRandomTip: false
+  nerdFontsVersion: "3"
+  showFileIcons: false
 git:
   log:
     order: default
