@@ -97,8 +97,8 @@ return {
           capabilities = capabilities,
         }
 
-        -- Only run the TailwindCSS LSP when a config is present
         if server == 'tailwindcss' then
+          -- Only run the TailwindCSS LSP on these filetypes
           config.filetypes = {
             'html',
             'css',
@@ -109,6 +109,14 @@ return {
             'typescriptreact',
             'vue',
             'astro',
+          }
+          -- Fix freeze when opening large repositories without a TailwindCSS config file
+          config.settings = {
+            tailwindCSS = {
+              experimental = {
+                configFile = '',
+              },
+            },
           }
         end
 
