@@ -40,6 +40,12 @@ return {
           diagnostics = 'nvim_lsp',
           sort_by = 'insert_after_current',
           tab_size = 10,
+          close_command = function(bufnr)
+            if bufnr == vim.api.nvim_get_current_buf() then
+              vim.cmd('BufferLineCyclePrev')
+            end
+            vim.cmd('bdelete ' .. bufnr)
+          end,
         },
       })
     end,
