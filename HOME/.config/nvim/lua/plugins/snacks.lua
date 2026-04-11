@@ -6,13 +6,24 @@ local preview_layout = {
     width = 0,
     height = 0.5,
     border = 'top',
+    wo = {
+      winhighlight = 'NormalFloat:NormalFloat,FloatBorder:WinSeparator,FloatTitle:FloatTitle',
+    },
     title = ' {title} {live} {flags}',
     title_pos = 'left',
-    { win = 'input', height = 1, border = 'bottom' },
+    { win = 'input', height = 1, border = 'none' },
     {
       box = 'horizontal',
       { win = 'list', border = 'none' },
-      { win = 'preview', title = '{preview}', width = 0.4, border = 'left' },
+      {
+        win = 'preview',
+        title = '{preview}',
+        width = 0.4,
+        border = 'left',
+        wo = {
+          winhighlight = 'NormalFloat:NormalFloat,FloatBorder:WinSeparator,FloatTitle:FloatTitle',
+        },
+      },
     },
   },
 }
@@ -25,9 +36,12 @@ local list_layout = {
     width = 0,
     height = 8,
     border = 'top',
+    wo = {
+      winhighlight = 'NormalFloat:NormalFloat,FloatBorder:WinSeparator,FloatTitle:FloatTitle',
+    },
     title = ' {title} {live} {flags}',
     title_pos = 'left',
-    { win = 'input', height = 1, border = 'bottom' },
+    { win = 'input', height = 1, border = 'none' },
     { win = 'list', height = 0, border = 'none' },
   },
 }
@@ -72,6 +86,7 @@ return {
         size = 1024 * 300, -- 300kB
       },
       picker = {
+        prompt = ' ',
         sources = {
           select = {
             layout = list_layout,
