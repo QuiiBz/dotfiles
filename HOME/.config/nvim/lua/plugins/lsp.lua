@@ -1,5 +1,6 @@
 local servers = {
   -- Languages
+  'tsgo',
   'lua_ls',
   'stylua',
   'rust_analyzer',
@@ -21,17 +22,6 @@ local servers = {
   'terraformls',
 }
 
--- Experimental tsgo support, fallback to vtsls
-local use_tsgo = true
-local ts_lsp
-if use_tsgo then
-  ts_lsp = 'tsgo'
-else
-  ts_lsp = 'vtsls'
-end
-
-table.insert(servers, ts_lsp)
-
 return {
   {
     'neovim/nvim-lspconfig',
@@ -52,7 +42,7 @@ return {
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_set_option_value('omnifunc', 'v:lua.vim.lsp.omnifunc', { buf = bufnr })
 
-        if client.name == ts_lsp or client.name == 'lua_ls' then
+        if client.name == 'tsgo' or client.name == 'lua_ls' then
           client.server_capabilities.documentFormattingProvider = false
         elseif client.name == 'biome' or client.name == 'eslint' then
           client.server_capabilities.documentFormattingProvider = true
@@ -136,8 +126,8 @@ return {
           }
         end
 
-        -- Increase max memory for tsserver
-        if server == ts_lsp then
+        -- Increase max memory for tsgo
+        if server == 'tsgo' then
           config.settings = {
             typescript = {
               tsserver = {
