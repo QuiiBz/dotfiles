@@ -42,7 +42,7 @@ return {
           tab_size = 10,
           close_command = function(bufnr)
             if bufnr == vim.api.nvim_get_current_buf() then
-              vim.cmd('BufferLineCyclePrev')
+              vim.cmd('BufferLineCycleNext')
             end
             vim.cmd('bdelete ' .. bufnr)
           end,

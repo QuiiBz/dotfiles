@@ -56,11 +56,25 @@ vim.cmd('nnoremap <silent> <Tab> :BufferLineCycleNext<CR>')
 vim.cmd('nnoremap <silent> <S-Tab> :BufferLineCyclePrev<CR>')
 vim.cmd('nnoremap <silent> <leader>< :BufferLineMovePrev<CR>')
 vim.cmd('nnoremap <silent> <leader>> :BufferLineMoveNext<CR>')
+-- Close buffer and move to the next one, but if it's the last one, move to the previous one
 vim.keymap.set('n', '<leader>c', function()
   local bufnr = vim.api.nvim_get_current_buf()
-  vim.cmd('BufferLineCyclePrev')
+  local move_prev = false
+  local ok, bufferline = pcall(require, 'bufferline')
+  if ok and type(bufferline.get_elements) == 'function' then
+    local elements = bufferline.get_elements().elements or {}
+    local last = elements[#elements]
+    move_prev = last and last.id == bufnr or false
+  end
+
+  if move_prev then
+    vim.cmd('BufferLineCyclePrev')
+  else
+    vim.cmd('BufferLineCycleNext')
+  end
   vim.cmd('bdelete ' .. bufnr)
 end, { silent = true })
+-- Close all buffers except the current one
 vim.cmd('nnoremap <silent> <leader>C :BufferLineCloseOthers<CR>')
 -- Open diagnostics in floating window
 vim.cmd('nnoremap <silent> <leader>d :lua vim.diagnostic.open_float()<CR>')
