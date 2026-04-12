@@ -93,7 +93,15 @@ return {
     config = function()
       require('grug-far').setup({
         debounceMs = 100,
-        enabledEngines = { 'rg' },
+        enabledEngines = { 'ripgrep' },
+        engines = {
+          ripgrep = {
+            defaults = {
+              filesFilter = '!.env*',
+              flags = '--smart-case --hidden --fixed-strings',
+            },
+          },
+        },
         showCompactInputs = true,
         showStatusIcon = false,
         showEngineInfo = false,
@@ -105,6 +113,7 @@ return {
           showNumberLabel = false,
         },
       })
+      vim.api.nvim_set_hl(0, 'GrugFarResultsMatch', { link = 'Search' })
     end,
   },
   {
@@ -131,7 +140,10 @@ return {
   },
   {
     'laytan/cloak.nvim',
-    event = { 'BufReadPre *.env' },
+    event = { 'BufReadPre .env*', 'BufNewFile .env*' },
+    keys = {
+      { '<leader>k', '<cmd>CloakToggle<cr>', mode = { 'n', 'v' } },
+    },
     config = function()
       require('cloak').setup()
     end,
