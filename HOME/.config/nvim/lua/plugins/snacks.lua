@@ -71,6 +71,61 @@ return {
         end,
       },
     },
+    config = function(_, opts)
+      require('snacks').setup(opts)
+
+      local function attach_image(buf)
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+        local src = buf_name:match('^minifiles://%d+/(.+)$')
+        if src then
+          if not Snacks.image.supports_file(src) then
+            return
+          end
+
+          -- mini.files uses a 1-line placeholder for binary files; seed more
+          -- lines so its preview window keeps enough height for image rendering.
+          local lines = {}
+          for _ = 1, math.max(10, vim.o.lines - vim.o.cmdheight - 4) do
+            lines[#lines + 1] = ''
+          end
+          vim.bo[buf].modifiable = true
+          vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+          vim.bo[buf].modifiable = false
+          vim.bo[buf].modified = false
+
+          Snacks.image.buf.attach(buf, { src = src })
+          return
+        end
+
+        Snacks.image.buf.attach(buf)
+      end
+
+      -- Fix images in buffers disappearing after switching away and back
+      vim.api.nvim_create_autocmd('BufWinEnter', {
+        group = vim.api.nvim_create_augroup('snacks-image-reattach', { clear = true }),
+        pattern = '*.' .. table.concat(Snacks.image.config.formats, ',*.'),
+        callback = function(event)
+          attach_image(event.buf)
+        end,
+      })
+
+      -- Add image preview in mini.files
+      vim.api.nvim_create_autocmd('User', {
+        group = 'snacks-image-reattach',
+        pattern = 'MiniFilesBufferUpdate',
+        callback = function(event)
+          local buf = event.data and event.data.buf_id
+          if not buf then
+            return
+          end
+          vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(buf) then
+              attach_image(buf)
+            end
+          end)
+        end,
+      })
+    end,
     opts = {
       lazygit = {
         enabled = true,
@@ -85,6 +140,7 @@ return {
         notify = false,
         size = 1024 * 300, -- 300kB
       },
+      image = {},
       picker = {
         prompt = ' ',
         sources = {
