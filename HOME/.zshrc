@@ -89,6 +89,8 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd _update_tmux_aws_profile
 add-zsh-hook precmd _set_cursor_bar
 
+typeset -U fpath
+[[ -d /opt/homebrew/share/zsh/site-functions ]] && fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 autoload -U promptinit; promptinit
 prompt pure
 
