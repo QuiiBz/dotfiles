@@ -167,4 +167,9 @@ return {
     ft = { 'qf' },
     opts = {},
   },
+  {
+    'QuiiBz/date-formatter.nvim',
+    -- dir = '~/dev/date-formatter.nvim',
+    opts = { auto = true },
+  },
 }
