@@ -2,6 +2,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     lazy = false,
+    priority = 900,
     build = ':TSUpdate',
     config = function()
       vim.api.nvim_create_autocmd('FileType', {
