@@ -93,12 +93,12 @@ return {
     config = function()
       require('grug-far').setup({
         debounceMs = 100,
+        maxSearchMatches = 1000,
         enabledEngines = { 'ripgrep' },
         engines = {
           ripgrep = {
             defaults = {
-              filesFilter = '!.env*',
-              flags = '--smart-case --hidden --fixed-strings',
+              flags = '--smart-case --hidden --fixed-strings --glob !.git',
             },
           },
         },

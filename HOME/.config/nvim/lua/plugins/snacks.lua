@@ -148,6 +148,7 @@ return {
             layout = list_layout,
           },
         },
+        limit_live = 1000,
         matcher = {
           fuzzy = true,
           smartcase = true,
