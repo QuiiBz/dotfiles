@@ -1,6 +1,7 @@
 [user]
 	name = Tom Lienard
 	email = tom.lienrd@gmail.com
+	signingkey = ~/.ssh/id_ed25519.pub
 [init]
 	defaultBranch = main
 [alias]
@@ -67,3 +68,9 @@
   context = 2
 [difftool "nvim_difftool"]
   cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true
