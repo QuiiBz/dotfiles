@@ -181,6 +181,11 @@ automatically-unhide-macos-hidden-apps = true
     if.app-id = 'com.raycast.macos'
     run = ['layout floating']
 
+# 1Password will always be floating
+[[on-window-detected]]
+    if.app-id = 'com.1password.1password'
+    run = ['layout floating']
+
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
