@@ -32,6 +32,32 @@ return {
           grug_far = true,
         },
       })
+
+      local function set_delta_gitsigns_highlights()
+        local highlights = {
+          GitSignsAddPreview = { bg = '#313943' },
+          GitSignsDeletePreview = { bg = '#383143' },
+          GitSignsDeleteVirtLn = { bg = '#383143' },
+          GitSignsVirtLnum = { fg = '#ed8796', bg = '#383143', bold = true },
+          GitSignsAddInline = { bg = '#455450', bold = true },
+          GitSignsDeleteInline = { bg = '#563f51', bold = true },
+          GitSignsChangeInline = { bg = '#455450', bold = true },
+          GitSignsAddLnInline = { link = 'GitSignsAddInline' },
+          GitSignsDeleteLnInline = { link = 'GitSignsDeleteInline' },
+          GitSignsChangeLnInline = { link = 'GitSignsChangeInline' },
+          GitSignsDeleteVirtLnInLine = { link = 'GitSignsDeleteInline' },
+        }
+
+        for group, opts in pairs(highlights) do
+          vim.api.nvim_set_hl(0, group, opts)
+        end
+      end
+
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        group = vim.api.nvim_create_augroup('delta-gitsigns-highlights', { clear = true }),
+        pattern = 'catppuccin*',
+        callback = set_delta_gitsigns_highlights,
+      })
       vim.cmd.colorscheme('catppuccin-nvim')
     end,
   },
