@@ -143,11 +143,12 @@ return {
     end,
   },
   {
-    'tversteeg/registers.nvim',
+    'https://codeberg.org/fosk/registers.nvim',
     keys = {
       { '"', mode = { 'n', 'v' } },
     },
     config = function()
+      ---@diagnostic disable-next-line: missing-fields
       require('registers').setup({
         -- + system clipboard
         -- " last yank / delete
