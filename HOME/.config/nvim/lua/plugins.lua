@@ -182,6 +182,7 @@ return {
     config = function()
       require('scrollview').setup({
         current_only = true,
+        mode = 'simple',
         signs_on_startup = { 'diagnostics', 'folds', 'search' },
       })
       require('scrollview.contrib.gitsigns').setup()
