@@ -92,6 +92,32 @@ vim.cmd('nnoremap q: <Nop>')
 -- Escale terminal mode with Esc
 vim.cmd('tnoremap <C-q> <C-\\><C-n>')
 
+-- Keep the cursor where the comment operation started
+local comment_start_cursor = nil
+local function clamp_col(line, col)
+  return math.min(col, #vim.fn.getline(line))
+end
+_G.__comment_keep_cursor_position = function()
+  local line_start = vim.fn.line("'[")
+  local line_end = vim.fn.line("']")
+  local ref_position = comment_start_cursor or { line_start, 0 }
+  local cursor_line = math.min(math.max(ref_position[1], line_start), line_end)
+  require('vim._comment').toggle_lines(line_start, line_end, ref_position)
+  vim.api.nvim_win_set_cursor(0, { cursor_line, clamp_col(cursor_line, ref_position[2]) })
+end
+local function comment_operator()
+  comment_start_cursor = vim.api.nvim_win_get_cursor(0)
+  vim.o.operatorfunc = 'v:lua.__comment_keep_cursor_position'
+  return 'g@'
+end
+vim.keymap.set({ 'n', 'x' }, 'gc', comment_operator, { expr = true, desc = 'Toggle comment' })
+vim.keymap.set('n', 'gcc', function()
+  return comment_operator() .. '_'
+end, { expr = true, desc = 'Toggle comment line' })
+
+-- Keep the cursor where the visual selection ended after yanking
+vim.keymap.set('x', 'y', 'ygv<Esc>', { noremap = true, silent = true })
+
 -- Highlight yanked text
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
