@@ -10,6 +10,19 @@
                             {
                                 "from": {
                                     "key_code": "left_option",
+                                    "modifiers": { "mandatory": ["left_control"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_option",
+                                        "modifiers": ["left_control"]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "left_option",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
