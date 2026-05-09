@@ -1,4 +1,4 @@
-model = "gpt-5.3-codex"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 notify = ["bash", "-lc", "afplay /System/Library/Sounds/Submarine.aiff"] # Ping, Glass
 check_for_update_on_startup = false
@@ -27,7 +27,9 @@ writable_roots = ["/Users/tom/dev"]
 [tui]
 theme = "catppuccin-macchiato"
 show_tooltips = false
-status_line = ["context-remaining", "current-dir", "used-tokens", "total-input-tokens", "total-output-tokens"]
+status_line = ["context-remaining", "used-tokens", "total-input-tokens", "total-output-tokens", "run-state", "fast-mode"]
+status_line_use_colors = false
 
-[notice.model_migrations]
-"gpt-5.3-codex" = "gpt-5.4"
+[notice]
+fast_default_opt_out = true
+
