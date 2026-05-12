@@ -78,6 +78,10 @@ end, { silent = true })
 vim.cmd('nnoremap <silent> <leader>C :BufferLineCloseOthers<CR>')
 -- Open diagnostics in floating window
 vim.cmd('nnoremap <silent> <leader>d :lua vim.diagnostic.open_float()<CR>')
+-- Copy current relative file path to the system clipboard
+vim.keymap.set('n', '<leader>y', function()
+  vim.fn.setreg('+', vim.fn.expand('%'))
+end, { silent = true, desc = 'Copy relative file path' })
 -- Copilot super tab
 vim.keymap.set('i', '<Tab>', function()
   local copilot = require('copilot.suggestion')
@@ -89,7 +93,7 @@ vim.keymap.set('i', '<Tab>', function()
 end)
 -- Disable q: because I accidentally hit it
 vim.cmd('nnoremap q: <Nop>')
--- Escale terminal mode with Esc
+-- Escale terminal mode with Ctrl+q
 vim.cmd('tnoremap <C-q> <C-\\><C-n>')
 
 -- Keep the cursor where the comment operation started
