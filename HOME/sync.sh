@@ -30,12 +30,14 @@ run "Cleaning up homebrew" brew cleanup
 
 # Third-party package managers
 run "Updating proto" proto upgrade
+run "Updating proto tools" proto install --update-lockfile --config-mode all
+run "Cleaning up proto" proto clean --yes
 run "Updating global pnpm packages" pnpm update -g
+run "Cleaning pnpm cache" pnpm store prune
 
 # Tools
 run "Updating tldr pages" tldr --update
 run "Building bat cache" bat cache --build
-run "Cleaning pnpm cache" pnpm store prune
 
 # Neovim
 run "Updating Neovim" sudo bob update
