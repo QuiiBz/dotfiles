@@ -34,6 +34,7 @@ run "Updating proto tools" proto install --update-lockfile --config-mode all
 run "Cleaning up proto" proto clean --yes
 run "Updating global pnpm packages" pnpm update -g
 run "Cleaning pnpm cache" pnpm store prune
+run "Cleaning cargo cache" sudo cargo clean-all --yes
 
 # Tools
 run "Updating tldr pages" tldr --update
