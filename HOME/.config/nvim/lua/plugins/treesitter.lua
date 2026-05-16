@@ -5,6 +5,9 @@ return {
     priority = 900,
     build = ':TSUpdate',
     config = function()
+      -- Use markdown parser for mdx filetypes
+      vim.treesitter.language.register('markdown', 'mdx')
+
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
           local treesitter = require('nvim-treesitter')
