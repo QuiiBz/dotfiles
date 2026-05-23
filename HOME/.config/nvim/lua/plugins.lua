@@ -104,13 +104,6 @@ return {
   },
   {
     'folke/persistence.nvim',
-    config = function()
-      if vim.fn.argc() > 0 then
-        return
-      end
-      require('persistence').setup()
-      require('persistence').load()
-    end,
   },
   {
     'MagicDuck/grug-far.nvim',
