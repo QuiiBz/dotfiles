@@ -33,8 +33,9 @@ return {
         },
       })
 
-      local function set_delta_gitsigns_highlights()
+      local function set_catppuccin_highlights()
         local highlights = {
+          MsgSeparator = { link = 'WinSeparator' },
           GitSignsAddPreview = { bg = '#313943' },
           GitSignsDeletePreview = { bg = '#383143' },
           GitSignsDeleteVirtLn = { bg = '#383143' },
@@ -54,9 +55,9 @@ return {
       end
 
       vim.api.nvim_create_autocmd('ColorScheme', {
-        group = vim.api.nvim_create_augroup('delta-gitsigns-highlights', { clear = true }),
+        group = vim.api.nvim_create_augroup('set-catppuccin-highlights', { clear = true }),
         pattern = 'catppuccin*',
-        callback = set_delta_gitsigns_highlights,
+        callback = set_catppuccin_highlights,
       })
       vim.cmd.colorscheme('catppuccin-nvim')
     end,
@@ -148,8 +149,23 @@ return {
       { '"', mode = { 'n', 'v' } },
     },
     config = function()
+      local registers = require('registers')
+      local normal_registers = registers.show_window({ mode = 'motion' })
+      local visual_registers = registers.show_window({ mode = 'motion' })
+
+      -- In UI2's pager, pressing " focuses the registers floating window and closes the pager
+      -- since it's not longer focused. Don't use the registers floating window in that case
+      local function show_registers_unless_ui2_pager(callback)
+        return function()
+          if vim.bo.filetype == 'pager' then
+            return '"'
+          end
+          return callback()
+        end
+      end
+
       ---@diagnostic disable-next-line: missing-fields
-      require('registers').setup({
+      registers.setup({
         -- + system clipboard
         -- " last yank / delete
         -- 0 last yank
@@ -158,6 +174,10 @@ return {
         show = '+"0123456789abcdefghijklmnopqrstuvwxyz',
         show_empty = false,
         show_register_types = false,
+        bind_keys = {
+          normal = show_registers_unless_ui2_pager(normal_registers),
+          visual = show_registers_unless_ui2_pager(visual_registers),
+        },
         window = {
           border = 'rounded',
           transparency = 0,

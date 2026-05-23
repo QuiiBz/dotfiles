@@ -9,6 +9,10 @@ vim.opt.signcolumn = 'yes:1'
 -- vim.o.ls = 0
 -- Hide command height
 vim.o.ch = 0
+-- Suppress routine edit reports like "3 fewer lines" and "3 lines yanked".
+vim.o.report = 9999
+-- Set separator to a single line for UI2 pager
+vim.opt.fillchars:append({ msgsep = '─' })
 -- Set rounded borders
 vim.o.winborder = 'rounded'
 -- Indentation
@@ -126,7 +130,7 @@ vim.keymap.set('x', 'y', 'ygv<Esc>', { noremap = true, silent = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank({ higroup = 'Visual' })
+    vim.hl.hl_op({ higroup = 'Visual' })
   end,
 })
 
