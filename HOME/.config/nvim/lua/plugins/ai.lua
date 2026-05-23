@@ -31,6 +31,25 @@ return {
   },
   {
     'folke/sidekick.nvim',
+    init = function()
+      -- Restore attached sessions on session restore
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'PersistenceLoadPost',
+        group = vim.api.nvim_create_augroup('sidekick-persistence', { clear = true }),
+        callback = function()
+          vim.schedule(function()
+            local Session = require('sidekick.cli.session')
+            local State = require('sidekick.cli.state')
+            local cwd = Session.cwd()
+            for _, session in ipairs(Session.sessions()) do
+              if session.started and session.cwd == cwd and not session:is_attached() then
+                State.attach(State.get_state(session), { show = true, focus = false })
+              end
+            end
+          end)
+        end,
+      })
+    end,
     config = function()
       require('sidekick').setup({
         cli = {

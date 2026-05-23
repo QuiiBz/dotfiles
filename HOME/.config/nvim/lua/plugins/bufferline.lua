@@ -22,6 +22,7 @@ return {
               warning_diagnostic_selected = { bg = selected_bg },
               info_diagnostic_selected = { bg = selected_bg },
               hint_diagnostic_selected = { bg = selected_bg },
+              duplicate_selected = { bg = selected_bg },
               modified = { fg = accent_fg },
               modified_selected = { fg = accent_fg, bg = selected_bg },
               close_button_selected = { bg = selected_bg },
