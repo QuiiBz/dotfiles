@@ -5,10 +5,8 @@ vim.opt.number = true
 vim.opt.numberwidth = 1
 -- Show extra column but max 1 https://www.reddit.com/r/neovim/comments/neaeej/only_just_discovered_set_signcolumnnumber_i_like/
 vim.opt.signcolumn = 'yes:1'
--- Hide status bar
--- vim.o.ls = 0
 -- Hide command height
-vim.o.ch = 0
+vim.o.cmdheight = 0
 -- Suppress routine edit reports like "3 fewer lines" and "3 lines yanked".
 vim.o.report = 9999
 -- Set separator to a single line for UI2 pager
@@ -27,15 +25,18 @@ vim.opt.scrolloff = 10
 vim.opt.ignorecase = true
 -- Do not ignore case in search if there is a capital letter
 vim.opt.smartcase = true
+-- Show substitues in split
+vim.opt.inccommand = 'split'
 vim.opt.undofile = true
 vim.opt.swapfile = false
+vim.opt.backup = false
 -- Just makes sense when spliting windows
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 -- Enable background cursor line
 vim.opt.cursorline = true
 -- Only save useful info in sessions
-vim.o.sessionoptions = 'buffers,curdir,folds,globals,winpos,winsize'
+vim.o.sessionoptions = 'buffers,curdir,folds,globals,winpos,winsize,help'
 -- Scroll line by line
 vim.o.mousescroll = 'ver:1'
 -- :term should use zsh
@@ -55,6 +56,14 @@ vim.cmd('nnoremap <silent> <C-Up> :resize -2<CR>')
 vim.cmd('nnoremap <silent> <C-Down> :resize +2<CR>')
 vim.cmd('nnoremap <silent> <C-Left> :vertical resize -2<CR>')
 vim.cmd('nnoremap <silent> <C-Right> :vertical resize +2<CR>')
+-- Keep visual selection when indenting
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('v', '>', '>gv')
+-- Move selected lines up and down
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+-- Paste without overwriting the default register
+vim.keymap.set('x', 'p', [["_dP]])
 -- Bufferline
 vim.cmd('nnoremap <silent> <Tab> :BufferLineCycleNext<CR>')
 vim.cmd('nnoremap <silent> <S-Tab> :BufferLineCyclePrev<CR>')
@@ -85,6 +94,7 @@ vim.cmd('nnoremap <silent> <leader>d :lua vim.diagnostic.open_float()<CR>')
 -- Copy current relative file path to the system clipboard
 vim.keymap.set('n', '<leader>y', function()
   vim.fn.setreg('+', vim.fn.expand('%'))
+  vim.notify('Copied file path to system clipboard: ' .. vim.fn.expand('%'))
 end, { silent = true, desc = 'Copy relative file path' })
 -- Copilot super tab
 vim.keymap.set('i', '<Tab>', function()
@@ -200,4 +210,5 @@ require('vim._core.ui2').enable({
 })
 
 -- Enable builtin :Undotree
+vim.keymap.set('n', '<leader>u', ':Undotree<CR>')
 vim.cmd('packadd nvim.undotree')
