@@ -50,10 +50,12 @@ export EDITOR="nvim"
 
 # PNPM
 export PNPM_HOME="/Users/tom/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
+for dir in "$PNPM_HOME" "$PNPM_HOME/bin"; do
+  case ":$PATH:" in
+    *":$dir:"*) ;;
+    *) export PATH="$dir:$PATH" ;;
+  esac
+done
 
 # Check if 'kubectl' is a command in $PATH
 if [ $commands[kubectl] ]; then
