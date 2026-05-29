@@ -25,8 +25,6 @@ vim.opt.scrolloff = 10
 vim.opt.ignorecase = true
 -- Do not ignore case in search if there is a capital letter
 vim.opt.smartcase = true
--- Show substitues in split
-vim.opt.inccommand = 'split'
 vim.opt.undofile = true
 vim.opt.swapfile = false
 vim.opt.backup = false
