@@ -17,6 +17,9 @@ alias tf="terraform"
 alias ts="tailscale"
 alias home="~/home.sh"
 alias sync="~/sync.sh"
+alias npm="sfw npm"
+alias pnpm="sfw pnpm"
+alias bun="sfw bun"
 
 # Paths
 export PATH="/Users/tom/Library/Python/3.10/bin:$PATH"
