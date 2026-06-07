@@ -168,7 +168,7 @@ require('vim._core.ui2').enable({
       empty = 'msg',
       bufwrite = 'msg',
       confirm = 'pager',
-      emsg = 'pager',
+      emsg = 'msg',
       echo = 'msg',
       echomsg = 'msg',
       echoerr = 'pager',
