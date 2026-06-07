@@ -34,7 +34,7 @@ status_line_use_colors = false
 fast_default_opt_out = true
 
 [marketplaces.openai-bundled]
-last_updated = "2026-06-06T17:06:07Z"
+last_updated = "2026-06-07T01:38:29Z"
 source_type = "local"
 source = "/Users/tom/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
@@ -61,7 +61,7 @@ enabled = true
 [desktop]
 appearanceLightCodeThemeId = "catppuccin"
 appearanceDarkCodeThemeId = "catppuccin"
-followUpQueueMode = "steer"
+followUpQueueMode = "queue"
 preventSleepWhileRunning = true
 keepRemoteControlAwakeWhilePluggedIn = true
 git-branch-prefix = "tom/"
@@ -76,6 +76,10 @@ reviewDelivery = "detached"
 conversationDetailMode = "STEPS_COMMANDS"
 ambient-suggestions-enabled = false
 default-service-tier = "priority"
+localeOverride = "en-US"
+show-context-window-usage = true
+codeFontSize = 14
+sansFontSize = 14
 
 [desktop.appearanceLightChromeTheme]
 accent = "#8839ef"
@@ -109,23 +113,7 @@ diffAdded = "#a6e3a1"
 diffRemoved = "#f38ba8"
 skill = "#cba6f7"
 
-[mcp_servers.node_repl]
-args = []
-command = "/Applications/Codex.app/Contents/Resources/node_repl"
-startup_timeout_sec = 120
-enabled = false
+[desktop.open-in-target-preferences]
+global = "fileManager"
 
-[mcp_servers.node_repl.env]
-NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-NODE_REPL_NODE_MODULE_DIRS = ""
-NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/node"
-NODE_REPL_TRUSTED_CODE_PATHS = "/Users/tom/.codex"
-CODEX_HOME = "/Users/tom/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "2de792ebdf729e85542c94275f6654821dddce546d9c7374c915f2297529e313"
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
-NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
-NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
-BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.602.40724"
-CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
 
