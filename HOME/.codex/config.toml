@@ -30,6 +30,9 @@ show_tooltips = false
 status_line = ["context-remaining", "used-tokens", "total-input-tokens", "total-output-tokens", "run-state", "fast-mode"]
 status_line_use_colors = false
 
+[tui.keymap.chat]
+interrupt_turn = "ctrl-shift-c"
+
 [notice]
 fast_default_opt_out = true
 
