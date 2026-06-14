@@ -106,14 +106,14 @@ return {
         expr = true,
       },
       {
-        '<leader>aa',
+        '<leader>a',
         function()
           require('sidekick.cli').toggle()
         end,
         mode = { 'n' },
       },
       {
-        '<leader>aa',
+        '<leader>a',
         function()
           require('sidekick.cli').send({ selection = true })
         end,
