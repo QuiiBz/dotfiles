@@ -168,6 +168,80 @@ lower() {
   printf '%s' "$*" | tr '[:upper:]' '[:lower:]' | tee >(pbcopy)
 }
 
+_wt_worktree_dir() {
+  git worktree list --porcelain |
+    awk -v branch="refs/heads/$1" '
+      $1 == "worktree" { path = substr($0, 10) }
+      $1 == "branch" && $2 == branch {
+        print path
+        exit
+      }
+    '
+}
+
+# Wrapper for `git worktree` to simplify creating, switching, and removing worktrees
+# - wt add <branch> creates a new worktree for the given branch (or creates the branch if it doesn't exists) and switches to it
+# - wt checkout <branch> switches to the worktree for the given branch
+# - wt remove <branch> removes the worktree for the given branch
+# - wt ... executes git worktree with the given args
+wt() {
+  local command="$1"
+  local branch="$2"
+  local worktree_dir
+
+  case "$command" in
+    add)
+      [[ -z "$branch" ]] && {
+        echo "Usage: wt add <branch>" >&2
+        return 1
+      }
+
+      worktree_dir="$(mktemp -d /tmp/worktree.XXXXXX)" || return 1
+
+      if git show-ref --verify --quiet "refs/heads/$branch"; then
+        git worktree add "$worktree_dir" "$branch"
+      else
+        git worktree add -b "$branch" "$worktree_dir"
+      fi
+
+      if (( $? == 0 )); then
+        cd "$worktree_dir"
+      else
+        rmdir "$worktree_dir" 2>/dev/null
+        return 1
+      fi
+      ;;
+
+    checkout | remove)
+      [[ -z "$branch" ]] && {
+        if [[ "$command" == "remove" ]]; then
+          echo "Usage: wt remove <branch> [--force]" >&2
+        else
+          echo "Usage: wt checkout <branch>" >&2
+        fi
+        return 1
+      }
+
+      worktree_dir="$(_wt_worktree_dir "$branch")"
+
+      [[ -z "$worktree_dir" ]] && {
+        echo "No worktree found for branch: $branch" >&2
+        return 1
+      }
+
+      if [[ "$command" == "remove" ]]; then
+        git worktree remove "${@:3}" "$worktree_dir"
+      else
+        cd "$worktree_dir"
+      fi
+      ;;
+
+    *)
+      git worktree "$@"
+      ;;
+  esac
+}
+
 autoload -Uz compinit
 compinit -C
 
