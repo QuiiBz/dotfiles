@@ -1,7 +1,7 @@
 bun = "latest"
 deno = "latest"
 go = "latest"
-node = "latest"
+node = "stable"
 npm = "latest"
 pnpm = "latest"
 rust = "latest"
