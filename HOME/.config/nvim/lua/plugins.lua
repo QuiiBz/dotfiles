@@ -202,11 +202,33 @@ return {
     end,
   },
   {
+    'Mirsmog/real-icons.nvim',
+    build = ':RealIconsInstallPack material',
+    opts = {
+      pack = 'jetbrains',
+      packs = {
+        jetbrains = {
+          type = 'vscode',
+          path = vim.fn.stdpath('config') .. '/assets/real-icons/jetbrains-2023-dark',
+          manifest = 'theme.json',
+          license = 'MIT',
+        },
+      },
+      integrations = {
+        bufferline = true,
+        mini_files = true,
+        snacks_picker = true,
+      },
+    },
+  },
+  {
     'QuiiBz/pretty-quickfix.nvim',
     -- dir = '~/dev/pretty-quickfix.nvim',
-    dependencies = { 'nvim-web-devicons' },
+    dependencies = { 'Mirsmog/real-icons.nvim', 'nvim-web-devicons' },
     ft = { 'qf' },
-    opts = {},
+    opts = {
+      icon_provider = 'real-icons',
+    },
   },
   {
     'QuiiBz/date-formatter.nvim',

@@ -5,9 +5,10 @@ return {
     after = 'catppuccin',
     config = function()
       local bufferline = require('bufferline')
+      local real_icons_opts = require('real-icons.integrations.bufferline').opts()
       local selected_bg = '#34364B'
       local accent_fg = '#c6a0f6'
-      bufferline.setup({
+      bufferline.setup(vim.tbl_deep_extend('force', real_icons_opts, {
         highlights = require('catppuccin.special.bufferline').get_theme({
           styles = { 'bold' },
           custom = {
@@ -48,7 +49,7 @@ return {
             vim.cmd('bdelete ' .. bufnr)
           end,
         },
-      })
+      }))
     end,
   },
 }

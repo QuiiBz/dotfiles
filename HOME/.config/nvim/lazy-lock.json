@@ -21,7 +21,8 @@
   "nvim-ts-autotag": { "branch": "main", "commit": "88c1453db4ba7dd24131086fe51fdf74e587d275" },
   "nvim-web-devicons": { "branch": "master", "commit": "dfbfaa967a6f7ec50789bead7ef87e336c1fa63c" },
   "persistence.nvim": { "branch": "main", "commit": "b20b2a7887bd39c1a356980b45e03250f3dce49c" },
-  "pretty-quickfix.nvim": { "branch": "main", "commit": "58a4e308ca766d34d5f398c4c40d1d60aa0149e7" },
+  "pretty-quickfix.nvim": { "branch": "main", "commit": "28a193762f4220772182442266ec91f8bc54f6ab" },
+  "real-icons.nvim": { "branch": "main", "commit": "8c491b7823be2f65e10094ee8881709331cecf3c" },
   "registers.nvim": { "branch": "main", "commit": "c217f8f369e0886776cda6c94eab839b30a8940d" },
   "sidekick.nvim": { "branch": "main", "commit": "208e1c5b8170c01fd1d07df0139322a76479b235" },
   "snacks.nvim": { "branch": "main", "commit": "882c996cf28183f4d63640de0b4c02ec886d01f2" }

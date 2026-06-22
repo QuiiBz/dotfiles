@@ -1,0 +1,624 @@
+{
+  "iconDefinitions": {
+    "folder": {
+      "iconPath": "./icons/folder.png"
+    },
+    "folder_root": {
+      "iconPath": "./icons/folder_root.png"
+    },
+    "folder_vendor": {
+      "iconPath": "./icons/folder_vendor.png"
+    },
+    "folder_test": {
+      "iconPath": "./icons/folder_test.png"
+    },
+    "folder_controller": {
+      "iconPath": "./icons/folder_controller.png"
+    },
+    "folder_mailers": {
+      "iconPath": "./icons/folder_mailers.png"
+    },
+    "folder_helper": {
+      "iconPath": "./icons/folder_helper.png"
+    },
+    "folder_migrate": {
+      "iconPath": "./icons/folder_migrate.png"
+    },
+    "folder_github": {
+      "iconPath": "./icons/folder_github.png"
+    },
+    "file_handlebars": {
+      "iconPath": "./icons/file_handlebars.png"
+    },
+    "file_text": {
+      "iconPath": "./icons/file_text.png"
+    },
+    "file_kotlin": {
+      "iconPath": "./icons/file_kotlin.png"
+    },
+    "file_kotlinscript": {
+      "iconPath": "./icons/file_kotlinscript.png"
+    },
+    "file_ignored": {
+      "iconPath": "./icons/file_ignored.png"
+    },
+    "file_css": {
+      "iconPath": "./icons/file_css.png"
+    },
+    "file_erb": {
+      "iconPath": "./icons/file_erb.png"
+    },
+    "file_scss": {
+      "iconPath": "./icons/file_scss.png"
+    },
+    "file_json": {
+      "iconPath": "./icons/file_json.png"
+    },
+    "file_html": {
+      "iconPath": "./icons/file_html.png"
+    },
+    "file_tsx": {
+      "iconPath": "./icons/file_tsx.png"
+    },
+    "file_ruby": {
+      "iconPath": "./icons/file_ruby.png"
+    },
+    "file_rake": {
+      "iconPath": "./icons/file_rake.png"
+    },
+    "file_gemfile": {
+      "iconPath": "./icons/file_gemfile.png"
+    },
+    "file_less": {
+      "iconPath": "./icons/file_less.png"
+    },
+    "file_javascript": {
+      "iconPath": "./icons/file_javascript.png"
+    },
+    "file_typescript": {
+      "iconPath": "./icons/file_typescript.png"
+    },
+    "file_csv": {
+      "iconPath": "./icons/file_csv.png"
+    },
+    "file_vue": {
+      "iconPath": "./icons/file_vue.png"
+    },
+    "file_editorconfig": {
+      "iconPath": "./icons/file_editorconfig.png"
+    },
+    "file_image": {
+      "iconPath": "./icons/file_image.png"
+    },
+    "file_font": {
+      "iconPath": "./icons/file_font.png"
+    },
+    "file_yaml": {
+      "iconPath": "./icons/file_yaml.png"
+    },
+    "file_java": {
+      "iconPath": "./icons/file_java.png"
+    },
+    "file_xml": {
+      "iconPath": "./icons/file_xml.png"
+    },
+    "file_sql": {
+      "iconPath": "./icons/file_sql.png"
+    },
+    "file_slim": {
+      "iconPath": "./icons/file_slim.png"
+    },
+    "file_sln": {
+      "iconPath": "./icons/file_sln.png"
+    },
+    "file_bun": {
+      "iconPath": "./icons/file_bun.png"
+    },
+    "file_yarn": {
+      "iconPath": "./icons/file_yarn.png"
+    },
+    "file_markdown": {
+      "iconPath": "./icons/file_markdown.png"
+    },
+    "file_gitignore": {
+      "iconPath": "./icons/file_gitignore.png"
+    },
+    "file_gleam": {
+      "iconPath": "./icons/file_gleam.png"
+    },
+    "file_properties": {
+      "iconPath": "./icons/file_properties.png"
+    },
+    "file_shell": {
+      "iconPath": "./icons/file_shell.png"
+    },
+    "file_h": {
+      "iconPath": "./icons/file_h.png"
+    },
+    "file_c": {
+      "iconPath": "./icons/file_c.png"
+    },
+    "file_cpp": {
+      "iconPath": "./icons/file_cpp.png"
+    },
+    "file_cu": {
+      "iconPath": "./icons/file_cu.png"
+    },
+    "file_cuh": {
+      "iconPath": "./icons/file_cuh.png"
+    },
+    "file_scala": {
+      "iconPath": "./icons/file_scala.png"
+    },
+    "file_archive": {
+      "iconPath": "./icons/file_archive.png"
+    },
+    "file_toml": {
+      "iconPath": "./icons/file_toml.png"
+    },
+    "file_python": {
+      "iconPath": "./icons/file_python.png"
+    },
+    "file_terraform": {
+      "iconPath": "./icons/file_terraform.png"
+    },
+    "file_go": {
+      "iconPath": "./icons/file_go.png"
+    },
+    "file_gomod": {
+      "iconPath": "./icons/file_gomod.png"
+    },
+    "file_gosum": {
+      "iconPath": "./icons/file_gosum.png"
+    },
+    "file_gowork": {
+      "iconPath": "./icons/file_gowork.png"
+    },
+    "file_http": {
+      "iconPath": "./icons/file_http.png"
+    },
+    "file_dart": {
+      "iconPath": "./icons/file_dart.png"
+    },
+    "file_docker": {
+      "iconPath": "./icons/file_docker.png"
+    },
+    "file_actionscript": {
+      "iconPath": "./icons/file_actionscript.png"
+    },
+    "file_php": {
+      "iconPath": "./icons/file_php.png"
+    },
+    "file_makefile": {
+      "iconPath": "./icons/file_makefile.png"
+    },
+    "file_config": {
+      "iconPath": "./icons/file_config.png"
+    },
+    "file_any": {
+      "iconPath": "./icons/file_any.png"
+    },
+    "file_svelte": {
+      "iconPath": "./icons/file_svelte.png"
+    },
+    "file_rust": {
+      "iconPath": "./icons/file_rust.png"
+    },
+    "file_cargo": {
+      "iconPath": "./icons/file_cargo.png"
+    },
+    "file_cargolock": {
+      "iconPath": "./icons/file_cargolock.png"
+    },
+    "file_cmake": {
+      "iconPath": "./icons/file_cmake.png"
+    },
+    "file_pnpm": {
+      "iconPath": "./icons/file_pnpm.png"
+    },
+    "file_tailwind": {
+      "iconPath": "./icons/file_tailwind.png"
+    },
+    "file_vite": {
+      "iconPath": "./icons/file_vite.png"
+    },
+    "file_postcss": {
+      "iconPath": "./icons/file_postcss.png"
+    },
+    "file_angular": {
+      "iconPath": "./icons/file_angular.png"
+    },
+    "file_biomejs": {
+      "iconPath": "./icons/file_biomejs.png"
+    },
+    "file_eslint": {
+      "iconPath": "./icons/file_eslint.png"
+    },
+    "file_prettier": {
+      "iconPath": "./icons/file_prettier.png"
+    },
+    "file_cs": {
+      "iconPath": "./icons/file_cs.png"
+    },
+    "file_cshtml": {
+      "iconPath": "./icons/file_cshtml.png"
+    },
+    "file_csproj": {
+      "iconPath": "./icons/file_csproj.png"
+    },
+    "file_elixir": {
+      "iconPath": "./icons/file_elixir.png"
+    },
+    "file_beam": {
+      "iconPath": "./icons/file_beam.png"
+    },
+    "file_embedded_elixir": {
+      "iconPath": "./icons/file_embedded_elixir.png"
+    },
+    "file_swift": {
+      "iconPath": "./icons/file_swift.png"
+    },
+    "file_clojure": {
+      "iconPath": "./icons/file_clojure.png"
+    },
+    "file_ml": {
+      "iconPath": "./icons/file_ml.png"
+    },
+    "file_mli": {
+      "iconPath": "./icons/file_mli.png"
+    },
+    "file_dune": {
+      "iconPath": "./icons/file_dune.png"
+    },
+    "file_opam": {
+      "iconPath": "./icons/file_opam.png"
+    },
+    "file_protobuf": {
+      "iconPath": "./icons/file_protobuf.png"
+    },
+    "file_hcl": {
+      "iconPath": "./icons/file_hcl.png"
+    },
+    "file_rego": {
+      "iconPath": "./icons/file_rego.png"
+    },
+    "file_application": {
+      "iconPath": "./icons/file_application.png"
+    },
+    "file_jupyter": {
+      "iconPath": "./icons/file_jupyter.png"
+    },
+    "file_mdx": {
+      "iconPath": "./icons/file_mdx.png"
+    },
+    "file_erlang": {
+      "iconPath": "./icons/file_erlang.png"
+    },
+    "file_lua": {
+      "iconPath": "./icons/file_lua.png"
+    },
+    "file_haskell": {
+      "iconPath": "./icons/file_haskell.png"
+    },
+    "file_graphql": {
+      "iconPath": "./icons/file_graphql.png"
+    },
+    "file_buildprops": {
+      "iconPath": "./icons/file_buildprops.png"
+    },
+    "file_test_ts": {
+      "iconPath": "./icons/file_test_ts.png"
+    },
+    "file_test_tsx": {
+      "iconPath": "./icons/file_test_tsx.png"
+    },
+    "file_test_js": {
+      "iconPath": "./icons/file_test_js.png"
+    },
+    "file_test_jsx": {
+      "iconPath": "./icons/file_test_jsx.png"
+    },
+    "file_jsx": {
+      "iconPath": "./icons/file_jsx.png"
+    },
+    "file_db": {
+      "iconPath": "./icons/file_db.png"
+    },
+    "file_lock": {
+      "iconPath": "./icons/file_lock.png"
+    },
+    "file_ino": {
+      "iconPath": "./icons/file_ino.png"
+    },
+    "file_opentofu": {
+      "iconPath": "./icons/file_opentofu.png"
+    },
+    "file_zig": {
+      "iconPath": "./icons/file_zig.png"
+    },
+    "file_c3": {
+      "iconPath": "./icons/file_c3.png"
+    },
+    "file_c3Test": {
+      "iconPath": "./icons/file_c3Test.png"
+    },
+    "file_c3Interface": {
+      "iconPath": "./icons/file_c3Interface.png"
+    },
+    "file_c3Library": {
+      "iconPath": "./icons/file_c3Library.png"
+    },
+    "file_vlang": {
+      "iconPath": "./icons/file_vlang.png"
+    },
+    "file_nodejs": {
+      "iconPath": "./icons/file_nodejs.png"
+    },
+    "file_npm": {
+      "iconPath": "./icons/file_npm.png"
+    },
+    "file_vercel": {
+      "iconPath": "./icons/file_vercel.png"
+    }
+  },
+  "file": "file_text",
+  "folder": "folder",
+  "rootFolder": "folder_root",
+  "folderNames": {
+    ".github": "folder_github",
+    "vendor": "folder_vendor",
+    "controllers": "folder_controller",
+    "mailers": "folder_mailers",
+    "helpers": "folder_helper",
+    "migrate": "folder_migrate",
+    "test": "folder_test",
+    "tests": "folder_test",
+    "spec": "folder_test",
+    "specs": "folder_test",
+    "__test__": "folder_test",
+    "__tests__": "folder_test",
+    "__fixtures__": "folder_test",
+    "__snapshots__": "folder_test"
+  },
+  "fileNames": {
+    "dune": "file_dune",
+    "dune-project": "file_dune",
+    ".gitignore": "file_gitignore",
+    ".gitattributes": "file_gitignore",
+    ".gitmodules": "file_gitignore",
+    ".gitkeep": "file_gitignore",
+    ".git-blame-ignore-revs": "file_gitignore",
+    ".editorconfig": "file_editorconfig",
+    ".yarnrc": "file_yarn",
+    "yarn.lock": "file_yarn",
+    ".bunrc": "file_bun",
+    "bun.lock": "file_bun",
+    "bunfig.toml": "file_bun",
+    "README": "file_markdown",
+    ".dockerignore": "file_ignored",
+    "Dockerfile": "file_docker",
+    "Dockerfile.dev": "file_docker",
+    "Dockerfile.test": "file_docker",
+    "Dockerfile.staging": "file_docker",
+    "Dockerfile.prod": "file_docker",
+    "Dockerfile.production": "file_docker",
+    "Gemfile": "file_gemfile",
+    "Gemfile.lock": "file_gemfile",
+    "Makefile": "file_makefile",
+    ".env": "file_any",
+    ".env.local": "file_any",
+    ".env.test": "file_any",
+    ".env.example": "file_any",
+    ".env.development": "file_any",
+    ".env.production": "file_any",
+    ".env.test.local": "file_any",
+    ".env.development.local": "file_any",
+    ".env.production.local": "file_any",
+    "Cargo.toml": "file_cargo",
+    "rust-toolchain.toml": "file_cargo",
+    "Cargo.lock": "file_cargolock",
+    "CMakeLists.txt": "file_cmake",
+    "CMakeCache.txt": "file_config",
+    "pnpm.lock": "file_pnpm",
+    "pnpm-lock.yaml": "file_pnpm",
+    "pnpm-workspace.yaml": "file_pnpm",
+    "tailwind.config.js": "file_tailwind",
+    "tailwind.config.cjs": "file_tailwind",
+    "tailwind.config.ts": "file_tailwind",
+    "vite.config.js": "file_vite",
+    "vite.config.cjs": "file_vite",
+    "vite.config.ts": "file_vite",
+    "postcss.config.js": "file_postcss",
+    "postcss.config.cjs": "file_postcss",
+    "postcss.config.ts": "file_postcss",
+    "angular.json": "file_angular",
+    "biome.json": "file_biomejs",
+    ".eslintrc": "file_eslint",
+    ".eslintrc.cjs": "file_eslint",
+    ".eslintrc.js": "file_eslint",
+    ".eslintrc.ts": "file_eslint",
+    ".eslintrc.json": "file_eslint",
+    ".eslintrc.yml": "file_eslint",
+    ".eslintrc.yaml": "file_eslint",
+    ".eslintignore": "file_eslint",
+    ".prettierrc": "file_prettier",
+    ".prettierrc.js": "file_prettier",
+    ".prettierrc.ts": "file_prettier",
+    ".prettierrc.cjs": "file_prettier",
+    ".prettierrc.cts": "file_prettier",
+    ".prettierrc.json": "file_prettier",
+    ".prettierrc.json5": "file_prettier",
+    ".prettierrc.mjs": "file_prettier",
+    ".prettierrc.mts": "file_prettier",
+    ".prettierrc.toml": "file_prettier",
+    ".prettierrc.yaml": "file_prettier",
+    ".prettierrc.yml": "file_prettier",
+    "prettier.config.js": "file_prettier",
+    "prettier.config.ts": "file_prettier",
+    "prettier.config.cjs": "file_prettier",
+    "prettier.config.cts": "file_prettier",
+    "prettier.config.mjs": "file_prettier",
+    "prettier.config.mts": "file_prettier",
+    ".prettierignore": "file_prettier",
+    ".nvmrc": "file_nodejs",
+    ".node-version": "file_nodejs",
+    ".npmrc": "file_npm",
+    "go.mod": "file_gomod",
+    "go.sum": "file_gosum",
+    "go.work": "file_gowork",
+    "Directory.Build.props": "file_buildprops",
+    "vercel.json": "file_vercel"
+  },
+  "fileExtensions": {
+    "handlebars": "file_handlebars",
+    "hbs": "file_handlebars",
+    "ml": "file_ml",
+    "mli": "file_mli",
+    "opam": "file_opam",
+    "css": "file_css",
+    "dart": "file_dart",
+    "erb": "file_erb",
+    "scss": "file_scss",
+    "sass": "file_scss",
+    "kt": "file_kotlin",
+    "kts": "file_kotlinscript",
+    "json": "file_json",
+    "jsonc": "file_json",
+    "json5": "file_json",
+    "html": "file_html",
+    "jsx": "file_jsx",
+    "tsx": "file_tsx",
+    "rake": "file_rake",
+    "rb": "file_ruby",
+    "less": "file_less",
+    "js": "file_javascript",
+    "cjs": "file_javascript",
+    "mjs": "file_javascript",
+    "ts": "file_typescript",
+    "cts": "file_typescript",
+    "mts": "file_typescript",
+    "csv": "file_csv",
+    "vue": "file_vue",
+    "png": "file_image",
+    "webp": "file_image",
+    "jpg": "file_image",
+    "jpeg": "file_image",
+    "gif": "file_image",
+    "gleam": "file_gleam",
+    "ico": "file_image",
+    "svg": "file_image",
+    "ttf": "file_font",
+    "woff": "file_font",
+    "otf": "file_font",
+    "eot": "file_font",
+    "yaml": "file_yaml",
+    "yml": "file_yaml",
+    "java": "file_java",
+    "xml": "file_xml",
+    "sql": "file_sql",
+    "md": "file_markdown",
+    "properties": "file_properties",
+    "sh": "file_shell",
+    "zsh": "file_shell",
+    "bash": "file_shell",
+    "bat": "file_shell",
+    "ps1": "file_shell",
+    "h": "file_h",
+    "hh": "file_h",
+    "hpp": "file_h",
+    "hxx": "file_h",
+    "c": "file_c",
+    "cc": "file_cpp",
+    "cpp": "file_cpp",
+    "cxx": "file_cpp",
+    "ccm": "file_cpp",
+    "cxxm": "file_cpp",
+    "cppm": "file_cpp",
+    "c++m": "file_cpp",
+    "ixx": "file_cpp",
+    "cu": "file_cu",
+    "cuh": "file_cuh",
+    "scala": "file_scala",
+    "gz": "file_archive",
+    "zip": "file_archive",
+    "rar": "file_archive",
+    "7z": "file_archive",
+    "tar": "file_archive",
+    "toml": "file_toml",
+    "py": "file_python",
+    "pyi": "file_python",
+    "pyc": "file_python",
+    "tf": "file_terraform",
+    "go": "file_go",
+    "http": "file_http",
+    "rest": "file_http",
+    "as": "file_actionscript",
+    "php": "file_php",
+    "cfg": "file_config",
+    "conf": "file_config",
+    "config": "file_config",
+    "cnf": "file_config",
+    "svelte": "file_svelte",
+    "slim": "file_slim",
+    "sln": "file_sln",
+    "rs": "file_rust",
+    "cs": "file_cs",
+    "cshtml": "file_cshtml",
+    "csproj": "file_csproj",
+    "ex": "file_elixir",
+    "exs": "file_elixir",
+    "eex": "file_embedded_elixir",
+    "heex": "file_embedded_elixir",
+    "leex": "file_embedded_elixir",
+    "beam": "file_beam",
+    "dockerfile": "file_docker",
+    "swift": "file_swift",
+    "cljc": "file_clojure",
+    "cljs": "file_clojure",
+    "clj": "file_clojure",
+    "edn": "file_clojure",
+    "proto": "file_protobuf",
+    "hcl": "file_hcl",
+    "rego": "file_rego",
+    "exe": "file_application",
+    "ipynb": "file_jupyter",
+    "mdx": "file_mdx",
+    "erl": "file_erlang",
+    "lua": "file_lua",
+    "hs": "file_haskell",
+    "graphql": "file_graphql",
+    "gql": "file_graphql",
+    "test.ts": "file_test_ts",
+    "test.tsx": "file_test_tsx",
+    "spec.ts": "file_test_ts",
+    "spec.tsx": "file_test_tsx",
+    "test.js": "file_test_js",
+    "test.jsx": "file_test_jsx",
+    "spec.js": "file_test_js",
+    "spec.jsx": "file_test_jsx",
+    "db": "file_db",
+    "sqlite": "file_db",
+    "sqlite3": "file_db",
+    "db3": "file_db",
+    "accdb": "file_db",
+    "mdb": "file_db",
+    "dbf": "file_db",
+    "ndf": "file_db",
+    "ibd": "file_db",
+    "frm": "file_db",
+    "ora": "file_db",
+    "lock": "file_lock",
+    "ino": "file_ino",
+    "jinja": "file_html",
+    "razor": "file_cshtml",
+    "cmake": "file_cmake",
+    "tofu": "file_opentofu",
+    "zig": "file_zig",
+    "c3": "file_c3",
+    "c3t": "file_c3Test",
+    "c3i": "file_c3Interface",
+    "c3l": "file_c3Library",
+    "v": "file_vlang",
+    "vsh": "file_vlang"
+  }
+}
