@@ -12,6 +12,7 @@ shell-integration-features = ssh-terminfo,ssh-env
 auto-update = download
 mouse-scroll-multiplier = 2
 keybind = global:cmd+alt+ctrl+enter=toggle_quick_terminal
+keybind = alt+backspace=text:\x1b\x7f
 quick-terminal-position = center
 quick-terminal-size=60%,60%
 quick-terminal-screen=mouse
