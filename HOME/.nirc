@@ -1,0 +1,3 @@
+defaultAgent=pnpm
+globalAgent=pnpm
+runAgent=node
