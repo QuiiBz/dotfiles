@@ -1,0 +1,199 @@
+[tools]
+# Core
+bun = "latest"
+deno = "latest"
+go = "latest"
+node = "lts"
+npm = "latest"
+pnpm = "latest"
+rust = "latest"
+# Npm
+"npm:serve" = "latest"
+"npm:sherif" = "latest"
+"npm:turbo" = "latest"
+"npm:vercel" = "latest"
+"npm:sandbox" = "latest"
+# Cargo
+"cargo:cargo-clean-all" = "latest"
+# GitHub
+"github:SocketDev/sfw-free" = { version = "latest", bin = "sfw" }
+
+[bootstrap.packages]
+# Formulae
+"brew:git" = "latest"
+"brew:git-lfs" = "latest"
+"brew:htop" = "latest"
+"brew:curl" = "latest"
+"brew:wget" = "latest"
+"brew:pure" = "latest"
+"brew:tmux" = "latest"
+"brew:zsh-autosuggestions" = "latest"
+"brew:zsh-syntax-highlighting" = "latest"
+"brew:eza" = "latest"
+"brew:bat" = "latest"
+"brew:ripgrep" = "latest"
+"brew:fd" = "latest"
+"brew:lazygit" = "latest"
+"brew:bob" = "latest"
+"brew:fzf" = "latest"
+"brew:awk" = "latest"
+"brew:delta" = "latest"
+"brew:hyperfine" = "latest"
+"brew:zip" = "latest"
+"brew:unzip" = "latest"
+"brew:gzip" = "latest"
+"brew:httpie" = "latest"
+"brew:jq" = "latest"
+"brew:awscli" = "latest"
+"brew:sccache" = "latest"
+"brew:zig" = "latest"
+"brew:tlrc" = "latest"
+"brew:coreutils" = "latest"
+"brew:imagemagick" = "latest"
+"brew:pkg-config" = "latest"
+"brew:kubecolor" = "latest"
+"brew:fastfetch" = "latest"
+"brew:mactop" = "latest"
+"brew:tree-sitter-cli" = "latest"
+"brew:biome" = "latest"
+"brew:prettier" = "latest"
+"brew:ni" = "latest"
+"brew:mise" = "latest"
+"brew:terraform" = "latest"
+"brew:gh" = "latest"
+# Casks
+# "brew-cask:ghostty" = "latest"
+# "brew-cask:raycast" = "latest"
+# "brew-cask:karabiner-elements" = "latest"
+# "brew-cask:rectangle-pro" = "latest"
+# "brew-cask:font-iosevka-term-nerd-font" = "latest"
+# "brew-cask:orbstack" = "latest"
+# "brew-cask:aldente" = "latest"
+# "brew-cask:mos" = "latest"
+# "brew-cask:hiddenbar" = "latest"
+# "brew-cask:betterdisplay" = "latest"
+# "brew-cask:httpie-desktop" = "latest"
+# "brew-cask:obsidian" = "latest"
+# "brew-cask:numi" = "latest"
+# "brew-cask:proxyman" = "latest"
+# "brew-cask:nordvpn" = "latest"
+# "brew-cask:wireshark-app" = "latest"
+# "brew-cask:codex" = "latest"
+# "brew-cask:codex-app" = "latest"
+# "brew-cask:steipete/tap/codexbar" = "latest"
+# "brew-cask:superwhisper" = "latest"
+# "brew-cask:1password" = "latest"
+
+[bootstrap.macos.dock]
+autohide = true
+tilesize = 42
+magnification = true
+show_recents = false
+
+[bootstrap.macos.finder]
+# show_all_files = true
+show_pathbar = true
+show_status_bar = false
+show_extensions_warning = false
+preferred_view_style = "list"
+
+[bootstrap.macos.keyboard]
+initial_key_repeat = 15
+key_repeat = 1
+
+[bootstrap.macos.trackpad]
+tap_to_click = true
+
+[bootstrap.macos.defaults]
+# Show thumbnail preview for 60s when taking screenshots
+"com.apple.screencaptureui" = { "thumbnailExpiration" = 60.0 }
+# Enable "Group windows by application"
+"com.apple.dock" = { "expose-group-apps" = true }
+# Disable "Displays have separate Spaces"
+"com.apple.spaces" = { "spans-displays" = true }
+"NSGlobalDomain" = {
+  # Disable Windows opening animations
+  "NSAutomaticWindowAnimationsEnabled" = false,
+  "InitialKeyRepeat" = 15.0,
+  # Remove many icons in right click menu
+  "NSMenuEnableActionImages" = false,
+  # Allow draging any part of a window with cmd+ctrl
+  "NSWindowShouldDragOnGesture" = true,
+}
+
+[bootstrap.user]
+login_shell = "/bin/zsh"
+
+[bootstrap.hooks.final]
+run = []
+
+[tasks.init]
+description = "Initial setup for a new machine"
+run = [
+  # Misc
+  "mkdir -p ~/.tmux/plugins",
+  "git lfs install",
+  "git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/resurrect || true",
+  "git clone https://github.com/tmux-plugins/tmux-continuum ~/.tmux/plugins/continuum || true",
+  # GitHub
+  "gh auth login",
+  # Neovim
+  "GITHUB_TOKEN=$(gh auth token) sudo bob install nightly",
+  "GITHUB_TOKEN=$(gh auth token) sudo bob use nightly",
+  # Xcode
+  "sudo xcode-select --install || true",
+  "sudo xcodebuild -license accept",
+  "sudo xcodebuild -runFirstLaunch",
+]
+
+[tasks.sync]
+description = "Sync dotfiles and update tools"
+run = [
+  # Dotfiles
+  "cd ~/dev/dotfiles && git pull --rebase",
+  "mise bootstrap --yes",
+  "mise upgrade",
+  "mise prune",
+  # Misc
+  "tldr --update",
+  "bat cache --build",
+  # Brew
+  "brew update",
+  "brew upgrade --yes",
+  "brew cleanup",
+  # Pnpm
+  "pnpm store prune",
+  # Cargo
+  "sudo cargo clean-all --yes",
+  # Neovim
+  "GITHUB_TOKEN=$(gh auth token) sudo bob update",
+  "nvim --headless '+Lazy! sync' +qa",
+]
+
+[dotfiles]
+"~/.dotfiles" = "~/dev/dotfiles"
+"~/.config/mise/config.toml" = "~/dev/dotfiles/mise/config.toml"
+"~/.zshrc" = {}
+"~/.bashrc" = {}
+"~/.gitconfig" = {}
+"~/.tmux.conf" = {}
+"~/.hushlogin" = {}
+"~/.nirc" = {}
+"~/.wezterm.lua" = {}
+"~/home.sh" = {}
+"~/.config" = { mode = "symlink-each" }
+"~/.kube" = { mode = "symlink-each" }
+"~/.codex" = { mode = "symlink-each" }
+
+[settings]
+experimental = true
+color_theme = "catppuccin"
+idiomatic_version_file_enable_tools = ["node", "bun", "deno", "go", "npm", "pnpm", "rust", "terraform"]
+
+[settings.dotfiles]
+root = "~/.dotfiles"
+default_mode = "symlink"
+
+[settings.npm]
+package_manager = "pnpm"
+

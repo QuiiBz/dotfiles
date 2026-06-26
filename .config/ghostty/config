@@ -1,5 +1,5 @@
 theme = catppuccin-macchiato
-font-family = IosevkaTerm Nerd Font
+font-family = IosevkaTerm NF
 font-size = 15
 cursor-style-blink = true
 macos-titlebar-style = hidden

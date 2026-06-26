@@ -1,8 +1,15 @@
 # dotfiles
 
-Repository to save my dotfiles, located in [HOME](https://github.com/QuiiBz/dotfiles/tree/main/HOME).
+Repository to save my dotfiles.
 
-I use [home](https://github.com/cdwilson/home) to manage them using [GNU Stow](https://www.gnu.org/software/stow/):
-  - [Setup](https://github.com/cdwilson/home#setup)
-  - [Usage](https://github.com/cdwilson/home#usage)
+I use [mise](https://mise.jdx.dev/) to manage them:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install mise
+mkdir ~/dev && git clone git@github.com:QuiiBz/dotfiles.git ~/dev/dotfiles
+cd ~/dev/dotfiles/mise
+mise run init
+mise run sync
+```
 
