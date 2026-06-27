@@ -154,7 +154,7 @@ description = "Sync dotfiles and update tools"
 run = [
   # Dotfiles
   "cd ~/dev/dotfiles && git pull --rebase",
-  "mise bootstrap --yes",
+  "mise bootstrap --yes --force-dotfiles",
   "mise upgrade",
   "mise prune",
   # Brew
@@ -176,17 +176,16 @@ run = [
 [dotfiles]
 "~/.dotfiles" = "~/dev/dotfiles"
 "~/.config/mise/config.toml" = "~/dev/dotfiles/mise/config.toml"
-"~/.zshrc" = {}
-"~/.bashrc" = {}
-"~/.gitconfig" = {}
-"~/.tmux.conf" = {}
-"~/.hushlogin" = {}
-"~/.nirc" = {}
-"~/.wezterm.lua" = {}
-"~/home.sh" = {}
-"~/.config" = { mode = "symlink-each" }
-"~/.kube" = { mode = "symlink-each" }
-"~/.codex" = { mode = "symlink-each" }
+"~/.zshrc" = "~/dev/dotfiles/.zshrc"
+"~/.bashrc" = "~/dev/dotfiles/.bashrc"
+"~/.gitconfig" = "~/dev/dotfiles/.gitconfig"
+"~/.tmux.conf" = "~/dev/dotfiles/.tmux.conf"
+"~/.hushlogin" = "~/dev/dotfiles/.hushlogin"
+"~/.nirc" = "~/dev/dotfiles/.nirc"
+"~/.wezterm.lua" = "~/dev/dotfiles/.wezterm.lua"
+"~/.config" = { source= "~/dev/dotfiles/.config", mode = "symlink-each" }
+"~/.kube" = { source= "~/dev/dotfiles/.kube", mode = "symlink-each" }
+"~/.codex" = { source= "~/dev/dotfiles/.codex", mode = "symlink-each" }
 
 [settings]
 experimental = true
