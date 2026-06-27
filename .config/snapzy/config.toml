@@ -6,7 +6,7 @@ language = "en"
 appearance = "system"
 play_sounds = true
 start_at_login = true
-export_location = "~/Desktop/Snapzy"
+export_location = "~/Desktop"
 
 [updates]
 check_automatically = true
