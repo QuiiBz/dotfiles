@@ -81,8 +81,11 @@ rust = "latest"
 # "brew-cask:codex" = "latest"
 # "brew-cask:codex-app" = "latest"
 # "brew-cask:steipete/tap/codexbar" = "latest"
-# "brew-cask:superwhisper" = "latest"
 # "brew-cask:1password" = "latest"
+# "brew-cask:duongductrong/snapzy/snapzy" = "latest"
+
+[bootstrap.brew.taps]
+"duongductrong/snapzy" = "https://github.com/duongductrong/Snapzy"
 
 [bootstrap.macos.dock]
 autohide = true
