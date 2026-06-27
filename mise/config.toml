@@ -154,13 +154,13 @@ run = [
   "mise bootstrap --yes",
   "mise upgrade",
   "mise prune",
-  # Misc
-  "tldr --update",
-  "bat cache --build",
   # Brew
   "brew update",
   "brew upgrade --yes",
   "brew cleanup",
+  # Misc
+  "tldr --update",
+  "bat cache --build",
   # Pnpm
   "pnpm store prune",
   # Cargo
