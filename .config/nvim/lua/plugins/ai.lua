@@ -108,12 +108,26 @@ return {
       {
         '<leader>a',
         function()
-          require('sidekick.cli').toggle()
+          require('sidekick.cli').toggle({ name = 'codex' })
         end,
         mode = { 'n' },
       },
       {
         '<leader>a',
+        function()
+          require('sidekick.cli').send({ name = 'codex', selection = true })
+        end,
+        mode = { 'v' },
+      },
+      {
+        '<leader>s',
+        function()
+          require('sidekick.cli').toggle()
+        end,
+        mode = { 'n' },
+      },
+      {
+        '<leader>s',
         function()
           require('sidekick.cli').send({ selection = true })
         end,
