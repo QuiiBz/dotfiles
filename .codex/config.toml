@@ -8,6 +8,7 @@ sandbox_mode = "workspace-write"
 approval_policy = "never"
 personality = "pragmatic"
 disable_paste_burst = true
+service_tier = "fast"
 
 [features]
 apps = false
