@@ -23,7 +23,7 @@ enabled = false
 
 [sandbox_workspace_write]
 network_access = true
-writable_roots = ["/Users/tom/dev", "/Users/tom/.docker", "/Users/tom/.cargo", "/Users/tom/Library/Caches"]
+writable_roots = ["/Users/tom/dev", "/Users/tom/.docker", "/Users/tom/.cargo", "/Users/tom/Library/Caches", "/Users/tom/go"]
 
 [tui]
 theme = "catppuccin-macchiato"
