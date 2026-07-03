@@ -46,6 +46,11 @@ local list_layout = {
   },
 }
 
+local function is_git_repo()
+  vim.fn.system({ 'git', '-C', vim.fn.getcwd(), 'rev-parse', '--is-inside-work-tree' })
+  return vim.v.shell_error == 0
+end
+
 return {
   {
     'folke/snacks.nvim',
@@ -61,6 +66,17 @@ return {
       {
         '<C-f>',
         function()
+          -- Use git grep as it's significantly faster than ripgrep for large projects,
+          -- with fallback to ripgrep if not in a git repo
+          if is_git_repo() then
+            Snacks.picker.git_grep({
+              untracked = true,
+              cmd_args = { '-F' }, -- disable regex
+              layout = preview_layout,
+            })
+            return
+          end
+
           Snacks.picker.grep({ hidden = true, regex = false, layout = preview_layout })
         end,
       },
