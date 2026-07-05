@@ -136,8 +136,8 @@ run = [
   # Misc
   "mkdir -p ~/.tmux/plugins",
   "git lfs install",
-  "git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/resurrect || true",
-  "git clone https://github.com/tmux-plugins/tmux-continuum ~/.tmux/plugins/continuum || true",
+  "git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/resurrect",
+  "git clone https://github.com/tmux-plugins/tmux-continuum ~/.tmux/plugins/continuum",
   # GitHub
   "gh auth login",
   # Neovim
@@ -156,7 +156,7 @@ run = [
   "cd ~/dev/dotfiles && git pull --rebase",
   "mise bootstrap --yes --force-dotfiles",
   "mise upgrade",
-  "mise prune",
+  "mise prune --yes",
   # Brew
   "brew update",
   "brew upgrade --yes",
@@ -185,6 +185,8 @@ run = [
 "~/.config" = { mode = "symlink-each" }
 "~/.kube" = { mode = "symlink-each" }
 "~/.codex" = { mode = "symlink-each" }
+"/etc/hosts/alpha" = { line = "192.168.0.81 alpha"}
+"/etc/hosts/nas" = { line = "192.168.0.84 nas"}
 
 [settings]
 experimental = true
