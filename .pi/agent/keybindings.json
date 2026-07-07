@@ -1,0 +1,16 @@
+{
+  "app.exit": "ctrl+c",
+  "app.interrupt": [],
+  "app.model.select": "ctrl+x",
+  "app.tree.filter.labeledOnly": "ctrl+shift+l",
+  "tui.input.tab": [],
+  "app.message.followUp": "tab",
+  "tui.select.up": [
+    "up",
+    "ctrl+k"
+  ],
+  "tui.select.down": [
+    "down",
+    "ctrl+j"
+  ]
+}

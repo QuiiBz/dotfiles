@@ -1,0 +1,31 @@
+{
+  "lastChangelogVersion": "0.80.3",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
+  "defaultThinkingLevel": "off",
+  "showHardwareCursor": true,
+  "collapseChangelog": true,
+  "enableInstallTelemetry": false,
+  "quietStartup": true,
+  "hideThinkingBlock": false,
+  "defaultProjectTrust": "always",
+  "doubleEscapeAction": "tree",
+  "theme": "catppuccin-macchiato",
+  "editorPaddingX": 1,
+  "autocompleteMaxVisible": 3,
+  "transport": "websocket",
+  "steeringMode": "one-at-a-time",
+  "compaction": {
+    "enabled": true
+  },
+  "packages": [
+    "git:github.com/otahontas/pi-coding-agent-catppuccin",
+    "npm:pi-web-access",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:pi-review",
+    "npm:pi-code-previews"
+  ],
+  "enabledModels": [
+    "openai-codex/gpt-5.5"
+  ]
+}

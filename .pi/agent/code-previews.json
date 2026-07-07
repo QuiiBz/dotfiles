@@ -1,0 +1,33 @@
+{
+  "shikiTheme": "catppuccin-macchiato",
+  "diffIntensity": "subtle",
+  "wordEmphasis": "all",
+  "toolCallBackground": "off",
+  "toolCallTiming": true,
+  "readCollapsedLines": 10,
+  "readContentPreview": true,
+  "writeContentPreview": true,
+  "writeCollapsedLines": 10,
+  "editDiffPreview": true,
+  "editCollapsedLines": 160,
+  "grepCollapsedLines": 10,
+  "grepResultPreview": true,
+  "findResultPreview": true,
+  "lsResultPreview": true,
+  "pathListCollapsedLines": 10,
+  "readLineNumbers": true,
+  "bashResultPreview": true,
+  "bashWarnings": true,
+  "syntaxHighlighting": true,
+  "secretWarnings": true,
+  "pathIcons": "nerd",
+  "tools": [
+    "bash",
+    "read",
+    "write",
+    "edit",
+    "grep",
+    "find",
+    "ls"
+  ]
+}

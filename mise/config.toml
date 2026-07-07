@@ -14,6 +14,7 @@ rust = "latest"
 "npm:vercel" = "latest"
 "npm:sandbox" = "latest"
 "npm:@antfu/ni" = "latest"
+"npm:@earendil-works/pi-coding-agent" = "latest"
 # Cargo
 "cargo:cargo-clean-all" = "latest"
 # GitHub
@@ -185,6 +186,7 @@ run = [
 "~/.config" = { mode = "symlink-each" }
 "~/.kube" = { mode = "symlink-each" }
 "~/.codex" = { mode = "symlink-each" }
+"~/.pi/agent" = { mode = "symlink-each" }
 "/etc/hosts/alpha" = { line = "192.168.0.81 alpha"}
 "/etc/hosts/nas" = { line = "192.168.0.84 nas"}
 
