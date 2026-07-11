@@ -6,7 +6,7 @@ go = "latest"
 node = "lts"
 npm = "latest"
 pnpm = "latest"
-rust = "latest"
+rust = { version = "latest", components = ["rust-src"] }
 # Npm
 "npm:serve" = "latest"
 "npm:sherif" = "latest"
