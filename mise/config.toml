@@ -14,7 +14,7 @@ rust = "latest"
 "npm:vercel" = "latest"
 "npm:sandbox" = "latest"
 "npm:@antfu/ni" = "latest"
-"npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:@earendil-works/pi-coding-agent" = "0.80.6"
 # Cargo
 "cargo:cargo-clean-all" = "latest"
 # GitHub
@@ -83,10 +83,6 @@ rust = "latest"
 # "brew-cask:codex-app" = "latest"
 # "brew-cask:steipete/tap/codexbar" = "latest"
 # "brew-cask:1password" = "latest"
-# "brew-cask:duongductrong/snapzy/snapzy" = "latest"
-
-[bootstrap.brew.taps]
-"duongductrong/snapzy" = "https://github.com/duongductrong/Snapzy"
 
 [bootstrap.macos.dock]
 autohide = true
@@ -142,8 +138,8 @@ run = [
   # GitHub
   "gh auth login",
   # Neovim
-  "GITHUB_TOKEN=$(gh auth token) sudo bob install nightly",
-  "GITHUB_TOKEN=$(gh auth token) sudo bob use nightly",
+  "sudo bob install nightly",
+  "sudo bob use nightly",
   # Xcode
   "sudo xcode-select --install || true",
   "sudo xcodebuild -license accept",
@@ -170,7 +166,7 @@ run = [
   # Cargo
   "sudo cargo clean-all --yes",
   # Neovim
-  "GITHUB_TOKEN=$(gh auth token) sudo bob update",
+  "sudo env GITHUB_TOKEN=\"$(gh auth token)\" bob update",
   "nvim --headless '+Lazy! sync' +qa",
 ]
 
@@ -191,7 +187,6 @@ run = [
 "/etc/hosts/nas" = { line = "192.168.0.84 nas"}
 
 [settings]
-experimental = true
 color_theme = "catppuccin"
 idiomatic_version_file_enable_tools = ["node", "bun", "deno", "go", "npm", "pnpm", "rust", "terraform"]
 
