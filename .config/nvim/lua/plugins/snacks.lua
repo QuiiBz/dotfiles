@@ -71,6 +71,7 @@ return {
           if is_git_repo() then
             Snacks.picker.git_grep({
               untracked = true,
+              ignorecase = true,
               cmd_args = { '-F' }, -- disable regex
               layout = preview_layout,
             })
