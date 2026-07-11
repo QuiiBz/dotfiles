@@ -1,4 +1,4 @@
-model = "gpt-5.5"
+model = "gpt-5.6-luna"
 model_reasoning_effort = "high"
 notify = ["/Users/tom/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended", "--previous-notify", "[\"bash\",\"-lc\",\"afplay \\/System\\/Library\\/Sounds\\/Submarine.aiff\"]"]
 check_for_update_on_startup = false
@@ -8,7 +8,7 @@ sandbox_mode = "workspace-write"
 approval_policy = "never"
 personality = "pragmatic"
 disable_paste_burst = true
-service_tier = "fast"
+service_tier = "default"
 
 [features]
 apps = false
@@ -28,7 +28,7 @@ writable_roots = ["/Users/tom/dev", "/Users/tom/.docker", "/Users/tom/.cargo", "
 [tui]
 theme = "catppuccin-macchiato"
 show_tooltips = false
-status_line = ["context-remaining", "used-tokens", "total-input-tokens", "total-output-tokens", "run-state", "fast-mode"]
+status_line = ["context-remaining", "used-tokens", "total-input-tokens", "total-output-tokens", "reasoning"]
 status_line_use_colors = false
 
 [tui.keymap.chat]
@@ -38,12 +38,12 @@ interrupt_turn = "ctrl-shift-c"
 fast_default_opt_out = true
 
 [marketplaces.openai-bundled]
-last_updated = "2026-07-10T07:38:16Z"
+last_updated = "2026-07-11T13:43:49Z"
 source_type = "local"
 source = "/Users/tom/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-05-22T08:07:23Z"
+last_updated = "2026-07-10T07:47:47Z"
 source_type = "local"
 source = "/Users/tom/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
@@ -57,13 +57,19 @@ enabled = false
 enabled = false
 
 [plugins."browser@openai-bundled"]
-enabled = true
+enabled = false
 
 [plugins."sites@openai-bundled"]
-enabled = true
+enabled = false
 
 [plugins."visualize@openai-bundled"]
 enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = false
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = false
 
 [mcp_servers.node_repl]
 args = []
@@ -76,13 +82,13 @@ NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_n
 NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/tom/.codex"
 CODEX_HOME = "/Users/tom/.codex"
-NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f,c8b7e809d7cf9e20a57123b2530d476ccec9a01a6230a7b2b924fea7d94d7f4a"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "1491199f46178eb038259aaea144492b8a8ade32bba5d2b4843c94936be551bb,6d25aa7656feac858f3a3bdaea5bcbab0dbfd426c9de8e6931ce90c399ee8e4f"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS through Computer Use."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.707.31428"
+BROWSER_USE_CODEX_APP_VERSION = "26.707.41301"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
 
 [mcp_servers.computer-use]
@@ -114,7 +120,7 @@ show-context-window-usage = true
 codeFontSize = 14
 sansFontSize = 14
 dock-icon-preference = "codex-system"
-hotkey-window-projectless-default-enabled = false
+hotkey-window-projectless-default-enabled = true
 
 [desktop.appearanceLightChromeTheme]
 accent = "#8839ef"
