@@ -7,6 +7,7 @@ node = "lts"
 npm = "latest"
 pnpm = "latest"
 rust = { version = "latest", components = ["rust-src"] }
+terraform = "latest"
 # Npm
 "npm:serve" = "latest"
 "npm:sherif" = "latest"
@@ -60,7 +61,6 @@ rust = { version = "latest", components = ["rust-src"] }
 "brew:biome" = "latest"
 "brew:prettier" = "latest"
 "brew:mise" = "latest"
-"brew:terraform" = "latest"
 "brew:gh" = "latest"
 # Casks
 # "brew-cask:ghostty" = "latest"
