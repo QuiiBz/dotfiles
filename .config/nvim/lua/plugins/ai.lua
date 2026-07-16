@@ -31,8 +31,6 @@ return {
   },
   {
     'folke/sidekick.nvim',
-    url = 'https://github.com/rmarganti/sidekick.nvim.git',
-    branch = 'herdr',
     init = function()
       -- Restore attached sessions on session restore
       vim.api.nvim_create_autocmd('User', {
@@ -57,7 +55,6 @@ return {
         cli = {
           mux = {
             enabled = true,
-            create = 'split',
           },
           win = {
             keys = {
