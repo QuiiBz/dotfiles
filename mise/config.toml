@@ -183,6 +183,7 @@ run = [
 "~/.kube" = { mode = "symlink-each" }
 "~/.codex" = { mode = "symlink-each" }
 "~/.pi/agent" = { mode = "symlink-each" }
+"~/.tmux" = { mode = "symlink-each" }
 "/etc/hosts/alpha" = { line = "192.168.0.81 alpha"}
 "/etc/hosts/nas" = { line = "192.168.0.84 nas"}
 

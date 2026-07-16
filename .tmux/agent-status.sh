@@ -12,22 +12,6 @@ agent_for_command() {
     codex*) echo codex ;;
     claude*) echo claude ;;
     pi|pi-*|pi-coding-agent*) echo pi ;;
-    gemini*) echo gemini ;;
-    cursor|cursor-agent*) echo cursor ;;
-    devin*) echo devin ;;
-    agy|antigravity*) echo agy ;;
-    cline*) echo cline ;;
-    opencode*|open-code*) echo opencode ;;
-    copilot*|github-copilot*|ghcs) echo copilot ;;
-    kimi*) echo kimi ;;
-    kiro*) echo kiro ;;
-    droid*) echo droid ;;
-    amp|amp-*) echo amp ;;
-    grok*) echo grok ;;
-    hermes*) echo hermes ;;
-    kilo*) echo kilo ;;
-    qoder*) echo qodercli ;;
-    maki*) echo maki ;;
     *) return 1 ;;
   esac
 }
@@ -61,18 +45,9 @@ detect_agent_state() {
     claude)
       [[ "$pane_title" =~ ^[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏][[:space:]] ]] && { echo working; return; }
       ;;
-    amp)
-      [[ "$pane_title" == *"Plugin confirmation needed"* ]] && { echo blocked; return; }
-      [[ "$pane_title" =~ ^[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏][[:space:]] ]] && { echo working; return; }
-      ;;
   esac
 
   screen_content="$(tmux capture-pane -p -t "$pane_id" -S -120 2>/dev/null)"
-  if command -v herdr >/dev/null && command -v jq >/dev/null; then
-    state="$(printf '%s' "$screen_content" | herdr agent explain --file /dev/stdin --agent "$agent_name" --json 2>/dev/null | jq -r '.state // empty' 2>/dev/null)"
-    [[ "$state" =~ ^(blocked|working|idle)$ ]] && { echo "$state"; return; }
-  fi
-
   fallback_state "$screen_content"
 }
 
