@@ -15,7 +15,7 @@ terraform = "latest"
 "npm:vercel" = "latest"
 "npm:sandbox" = "latest"
 "npm:@antfu/ni" = "latest"
-"npm:@earendil-works/pi-coding-agent" = "0.80.6"
+"npm:@earendil-works/pi-coding-agent" = "latest"
 # Cargo
 "cargo:cargo-clean-all" = "latest"
 # GitHub
