@@ -48,6 +48,7 @@ export KUBECOLOR_OBJ_FRESH="1h"
 export EDITOR="nvim"
 export NODE_COMPILE_CACHE="/Users/tom/.cache/node/compile-cache"
 export NODE_COMPILE_CACHE_PORTABLE=1
+export CARGO_NET_GIT_FETCH_WITH_CLI=true
 
 # PNPM
 export PNPM_HOME="/Users/tom/Library/pnpm"
