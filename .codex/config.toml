@@ -1,5 +1,7 @@
 model = "gpt-5.6-sol"
 model_reasoning_effort = "high"
+model_verbosity = "low"
+model_reasoning_summary = "concise"
 notify = ["/Users/tom/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended", "--previous-notify", "[\"bash\",\"-lc\",\"afplay \\/System\\/Library\\/Sounds\\/Submarine.aiff\"]"]
 check_for_update_on_startup = false
 web_search = "live"
