@@ -22,10 +22,15 @@ gui:
   authorColors:
     '*': '#b7bdf8'
   sidePanelWidth: 0.2
-  commandLogSize: 4
+  commandLogSize: 2
   showRandomTip: false
   nerdFontsVersion: "3"
   showFileIcons: false
+  sidePanels:
+    - [files, worktrees]
+    - [branches, tags]
+    - [commits]
+    - [stash]
 git:
   log:
     order: default
