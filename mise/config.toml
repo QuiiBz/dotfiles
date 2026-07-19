@@ -62,6 +62,7 @@ terraform = "latest"
 "brew:prettier" = "latest"
 "brew:mise" = "latest"
 "brew:gh" = "latest"
+"brew:pup" = "latest"
 # Casks
 # "brew-cask:ghostty" = "latest"
 # "brew-cask:raycast" = "latest"
@@ -184,7 +185,9 @@ run = [
 "~/.codex" = { mode = "symlink-each" }
 "~/.pi/agent" = { mode = "symlink-each" }
 "~/.tmux" = { mode = "symlink-each" }
-"~/.agents" = { mode = "symlink-each" }
+"~/.agents/.skill-lock.json" = {}
+# Codex doesn't load symlinked SKILL.md files, only their parent directories: https://github.com/openai/codex/issues/11314
+"~/.agents/skills/*" = "~/dev/dotfiles/.agents/skills/*"
 "/etc/hosts/alpha" = { line = "192.168.0.81 alpha"}
 "/etc/hosts/nas" = { line = "192.168.0.84 nas"}
 

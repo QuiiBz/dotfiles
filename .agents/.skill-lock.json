@@ -20,6 +20,33 @@
       "pluginName": "mattpocock-skills",
       "installedAt": "2026-07-19T16:10:45.902Z",
       "updatedAt": "2026-07-19T16:10:45.902Z"
+    },
+    "dd-pup": {
+      "source": "datadog-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/datadog-labs/agent-skills.git",
+      "skillPath": "dd-pup/SKILL.md",
+      "skillFolderHash": "cf90e8429d15d2ed449151245d918fc859e72be8",
+      "installedAt": "2026-07-19T16:27:04.149Z",
+      "updatedAt": "2026-07-19T16:27:04.149Z"
+    },
+    "dd-apm": {
+      "source": "datadog-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "dd-apm/SKILL.md",
+      "computedHash": "70caa614a11bc17e187686984e3202735610e90e0a9915fdbd2833fe36c3678e"
+    },
+    "dd-logs": {
+      "source": "datadog-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "dd-logs/SKILL.md",
+      "computedHash": "3c6cca0a63ddc578cb4e6f198f891442f06144c8b3d82a72ba1a23ec0878819b"
+    },
+    "dd-monitors": {
+      "source": "datadog-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "dd-monitors/SKILL.md",
+      "computedHash": "9af8e93f729790c665d7deeb29a496f0e53684b4e1a4974b129c05a99865e2fa"
     }
   },
   "dismissed": {
