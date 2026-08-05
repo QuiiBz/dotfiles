@@ -189,16 +189,29 @@ return {
     end,
   },
   {
-    'dstein64/nvim-scrollview',
-    event = { 'BufReadPre', 'BufNewFile' },
+    'lewis6991/satellite.nvim',
     after = 'gitsigns.nvim',
     config = function()
-      require('scrollview').setup({
+      require('satellite').setup({
         current_only = true,
-        mode = 'simple',
-        signs_on_startup = { 'diagnostics', 'folds', 'search' },
+        winblend = 0,
+        width = 1,
+        handlers = {
+          cursor = { enable = false },
+          marks = { enable = false },
+          quickfix = { enable = false },
+          diagnostics = {
+            min_severity = vim.diagnostic.severity.WARNING,
+          },
+          gitsigns = {
+            signs = {
+              add = '┃',
+              change = '┃',
+              delete = '▁',
+            },
+          },
+        },
       })
-      require('scrollview.contrib.gitsigns').setup()
     end,
   },
   {
