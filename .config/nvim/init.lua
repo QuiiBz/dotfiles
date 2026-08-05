@@ -44,6 +44,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 require('settings')
+require('statusline')
 
 if vim.fn.argc() == 0 then
   require('persistence').setup()
