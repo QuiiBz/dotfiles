@@ -20,6 +20,7 @@ local servers = {
   -- Other
   'dockerls',
   'terraformls',
+  'copilot',
 }
 
 return {
@@ -87,6 +88,15 @@ return {
           capabilities = capabilities,
         }
 
+        if server == 'copilot' then
+          config.on_attach = vim.lsp.config[server].on_attach
+          config.settings = {
+            telemetry = {
+              telemetryLevel = 'off',
+            },
+          }
+        end
+
         if server == 'tailwindcss' then
           -- Only run the TailwindCSS LSP on these filetypes
           config.filetypes = {
@@ -140,6 +150,8 @@ return {
         vim.lsp.config(server, config)
         vim.lsp.enable(server)
       end
+
+      vim.lsp.inline_completion.enable()
 
       -- Disable LSP logs from ~/.local/state/nvim/lsp.log
       vim.lsp.log.set_level(vim.log.levels.OFF)

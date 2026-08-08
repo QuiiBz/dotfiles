@@ -94,15 +94,6 @@ vim.keymap.set('n', '<leader>y', function()
   vim.fn.setreg('+', vim.fn.expand('%'))
   vim.notify('Copied file path to system clipboard: ' .. vim.fn.expand('%'))
 end, { silent = true, desc = 'Copy relative file path' })
--- Copilot super tab
-vim.keymap.set('i', '<Tab>', function()
-  local copilot = require('copilot.suggestion')
-  if copilot.is_visible() then
-    copilot.accept()
-  else
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
-  end
-end)
 -- Disable q: because I accidentally hit it
 vim.cmd('nnoremap q: <Nop>')
 -- Escale terminal mode with Ctrl+q

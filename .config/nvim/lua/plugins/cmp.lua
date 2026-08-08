@@ -16,6 +16,7 @@ return {
           function() -- sidekick next edit suggestion
             return require('sidekick').nes_jump_or_apply()
           end,
+          vim.lsp.inline_completion.get,
           'fallback',
         },
       },
