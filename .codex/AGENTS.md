@@ -1,7 +1,6 @@
 ## Guidelines
 
-Be extremely concise in your responses. Sacrifice grammar for sake of concision.
-Do not run linters or formatters unless explicitly asked to do so in the user prompt, but run tests to verify your work.
+Be extremely concise in your responses. Always answer in ASD-STE100 Simplified Technical English.
 Do not create commits or push code unless explicitly asked to do so in the user prompt.
 
 ## Coding style
