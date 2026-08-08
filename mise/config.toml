@@ -40,7 +40,7 @@ terraform = "latest"
 "brew:bob" = "latest"
 "brew:fzf" = "latest"
 "brew:awk" = "latest"
-"brew:delta" = "latest"
+"brew:git-delta" = "latest"
 "brew:hyperfine" = "latest"
 "brew:zip" = "latest"
 "brew:unzip" = "latest"
@@ -53,7 +53,7 @@ terraform = "latest"
 "brew:tlrc" = "latest"
 "brew:coreutils" = "latest"
 "brew:imagemagick" = "latest"
-"brew:pkg-config" = "latest"
+"brew:pkgconf" = "latest"
 "brew:kubecolor" = "latest"
 "brew:fastfetch" = "latest"
 "brew:mactop" = "latest"
@@ -92,7 +92,7 @@ magnification = true
 show_recents = false
 
 [bootstrap.macos.finder]
-# show_all_files = true
+show_all_files = true
 show_pathbar = true
 show_status_bar = false
 show_extensions_warning = false
