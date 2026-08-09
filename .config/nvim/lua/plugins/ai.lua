@@ -2,21 +2,57 @@ return {
   {
     'folke/sidekick.nvim',
     init = function()
-      -- Restore attached sessions on session restore
+      local function save_sessions()
+        local Session = require('sidekick.cli.session')
+        local cwd = Session.cwd()
+        local sessions = {}
+
+        for _, attached_session in pairs(Session.attached()) do
+          local session = attached_session.parent or attached_session
+          if session.cwd == cwd then
+            sessions[#sessions + 1] = {
+              backend = session.backend,
+              cwd = session.cwd,
+              id = session.id,
+              mux_session = session.mux_session,
+              started = true,
+              tmux_pane_id = session.tmux_pane_id,
+              tmux_pid = session.tmux_pid,
+              tool = session.tool.name,
+            }
+          end
+        end
+
+        vim.g.SidekickSessions = vim.json.encode(sessions)
+      end
+
+      local function restore_sessions()
+        local success, sessions = pcall(vim.json.decode, vim.g.SidekickSessions or '[]')
+        if not success then
+          return
+        end
+
+        local Session = require('sidekick.cli.session')
+        local State = require('sidekick.cli.state')
+        Session.setup()
+
+        for _, session_data in ipairs(sessions) do
+          local session = Session.new(session_data)
+          State.attach(State.get_state(session), { show = true, focus = false })
+        end
+      end
+
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'PersistenceSavePre',
+        group = vim.api.nvim_create_augroup('sidekick-persistence', { clear = true }),
+        callback = save_sessions,
+      })
+
       vim.api.nvim_create_autocmd('User', {
         pattern = 'PersistenceLoadPost',
-        group = vim.api.nvim_create_augroup('sidekick-persistence', { clear = true }),
+        group = 'sidekick-persistence',
         callback = function()
-          vim.schedule(function()
-            local Session = require('sidekick.cli.session')
-            local State = require('sidekick.cli.state')
-            local cwd = Session.cwd()
-            for _, session in ipairs(Session.sessions()) do
-              if session.started and session.cwd == cwd and not session:is_attached() then
-                State.attach(State.get_state(session), { show = true, focus = false })
-              end
-            end
-          end)
+          vim.defer_fn(restore_sessions, 100)
         end,
       })
     end,

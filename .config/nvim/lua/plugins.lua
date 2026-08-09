@@ -175,7 +175,7 @@ return {
   },
   {
     'lewis6991/satellite.nvim',
-    after = 'gitsigns.nvim',
+    event = { 'BufReadPost', 'BufNewFile' },
     config = function()
       require('satellite').setup({
         current_only = true,
@@ -201,6 +201,7 @@ return {
   },
   {
     'Mirsmog/real-icons.nvim',
+    lazy = true,
     build = ':RealIconsInstallPack material',
     opts = {
       pack = 'jetbrains',
@@ -211,11 +212,6 @@ return {
           manifest = 'theme.json',
           license = 'MIT',
         },
-      },
-      integrations = {
-        bufferline = true,
-        mini_files = true,
-        snacks_picker = true,
       },
     },
   },
@@ -231,6 +227,7 @@ return {
   {
     'QuiiBz/date-formatter.nvim',
     -- dir = '~/dev/date-formatter.nvim',
+    event = { 'BufReadPost', 'BufNewFile' },
     opts = { auto = true },
   },
 }

@@ -47,6 +47,6 @@ require('settings')
 require('statusline')
 
 if vim.fn.argc() == 0 then
-  require('persistence').setup()
+  require('persistence').setup({ branch = false })
   require('persistence').load()
 end

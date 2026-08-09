@@ -60,12 +60,14 @@ return {
       {
         '<C-p>',
         function()
+          require('real-icons.integrations.snacks_picker').setup()
           Snacks.picker.files({ hidden = true, layout = preview_layout })
         end,
       },
       {
         '<C-f>',
         function()
+          require('real-icons.integrations.snacks_picker').setup()
           -- Use git grep as it's significantly faster than ripgrep for large projects,
           -- with fallback to ripgrep if not in a git repo
           if is_git_repo() then

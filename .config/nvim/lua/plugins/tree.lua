@@ -25,6 +25,7 @@ return {
       },
     },
     config = function()
+      local mini_files_options = require('real-icons.integrations.mini_files').opts()
       local show_dotfiles = false
       local filter_show = function()
         return true
@@ -38,7 +39,7 @@ return {
         MiniFiles.refresh({ content = { filter = new_filter } })
       end
 
-      require('mini.files').setup({
+      require('mini.files').setup(vim.tbl_deep_extend('force', mini_files_options, {
         mappings = {
           go_in = '<Tab>',
           go_in_plus = '<Enter>',
@@ -52,7 +53,7 @@ return {
           width_focus = 25,
           width_preview = 50,
         },
-      })
+      }))
 
       -- Use '.' to toggle dotfiles visibility (off by default)
       vim.api.nvim_create_autocmd('User', {

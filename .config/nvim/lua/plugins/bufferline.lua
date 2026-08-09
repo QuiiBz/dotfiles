@@ -1,7 +1,7 @@
 return {
   {
     'akinsho/bufferline.nvim',
-    event = { 'BufReadPre', 'BufNewFile' },
+    event = { 'BufReadPost', 'BufNewFile' },
     after = 'catppuccin',
     config = function()
       local bufferline = require('bufferline')

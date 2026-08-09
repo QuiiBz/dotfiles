@@ -26,17 +26,8 @@ local servers = {
 return {
   {
     'neovim/nvim-lspconfig',
-    dependencies = {
-      'saghen/blink.cmp',
-      'mason-org/mason-lspconfig.nvim',
-    },
-    event = { 'BufReadPre', 'BufNewFile' },
+    event = { 'BufReadPre', 'FileType' },
     config = function()
-      require('mason-lspconfig').setup({
-        ensure_installed = servers,
-        automatic_enable = false,
-      })
-
       local augroup = vim.api.nvim_create_augroup('LspFormatting', { clear = true })
 
       local on_attach = function(client, bufnr)
@@ -47,12 +38,6 @@ return {
           client.server_capabilities.documentFormattingProvider = false
         elseif client.name == 'biome' or client.name == 'eslint' then
           client.server_capabilities.documentFormattingProvider = true
-        end
-
-        -- Fix invalid semantic tokens in terraformls causing
-        -- 100% CPU usage in v0.12: https://github.com/neovim/neovim/issues/36257
-        if client.name == 'terraformls' then
-          client.server_capabilities.semanticTokensProvider = nil
         end
 
         if client:supports_method('textDocument/formatting') then
@@ -78,7 +63,7 @@ return {
         vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
       end
 
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.general = { positionEncodings = { 'utf-16' } } -- Make sure we always use UTF-16 for all LSPs
 
       -- Attach LSP servers
@@ -127,7 +112,7 @@ return {
                 globals = { 'vim' }, -- Recognize 'vim' as a global variable
               },
               workspace = {
-                library = vim.api.nvim_get_runtime_file('', true), -- Include Neovim runtime files
+                library = { vim.env.VIMRUNTIME },
               },
               telemetry = {
                 enable = false, -- Disable telemetry
@@ -205,7 +190,11 @@ return {
   },
   {
     'mason-org/mason.nvim',
+    cmd = { 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonUpdate', 'MasonLog' },
     build = ':MasonUpdate',
+    init = function()
+      vim.env.PATH = vim.fs.joinpath(vim.fn.stdpath('data'), 'mason', 'bin') .. ':' .. vim.env.PATH
+    end,
     config = function()
       require('mason').setup({
         ui = {
