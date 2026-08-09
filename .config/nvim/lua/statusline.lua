@@ -52,19 +52,23 @@ function M.right()
   local components = vim.tbl_filter(function(component)
     return component ~= ''
   end, { search_count(), recording_register() })
+  local status = table.concat(components, '   ')
+  local lsp_status = vim.lsp.status()
 
-  if #components == 0 then
-    return ''
+  if lsp_status ~= '' then
+    lsp_status = lsp_status:gsub('%%', '%%%%')
+    local separator = status == '' and '' or '   '
+    status = status .. separator .. '%#Comment#' .. lsp_status .. '%*'
   end
 
-  return ' ' .. table.concat(components, '    ') .. ' '
+  return ' ' .. status .. ' '
 end
 
 vim.o.laststatus = 3
-vim.o.statusline = " %<%{v:lua.require'statusline'.filename()}%=%{v:lua.require'statusline'.right()}"
+vim.o.statusline = " %<%{v:lua.require'statusline'.filename()}%=%{%v:lua.require'statusline'.right()%}"
 
-vim.api.nvim_create_autocmd({ 'RecordingEnter', 'RecordingLeave' }, {
-  group = vim.api.nvim_create_augroup('statusline-recording', { clear = true }),
+vim.api.nvim_create_autocmd({ 'RecordingEnter', 'RecordingLeave', 'LspProgress' }, {
+  group = vim.api.nvim_create_augroup('statusline', { clear = true }),
   callback = function()
     vim.cmd.redrawstatus()
   end,

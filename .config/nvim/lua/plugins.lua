@@ -24,7 +24,6 @@ return {
           },
           nvimtree = true,
           treesitter = true,
-          fidget = true,
           mason = true,
           snacks = {
             enabled = true,
@@ -75,20 +74,6 @@ return {
     event = 'InsertEnter',
     config = function()
       require('nvim-autopairs').setup()
-    end,
-  },
-  {
-    'j-hui/fidget.nvim',
-    tag = 'v1.6.1',
-    event = 'LspAttach',
-    config = function()
-      require('fidget').setup({
-        notification = {
-          window = {
-            winblend = 0,
-          },
-        },
-      })
     end,
   },
   {
