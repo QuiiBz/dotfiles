@@ -84,9 +84,7 @@ terraform = "latest"
 "brew-cask:istat-menus" = "latest"
 "brew-cask:font-iosevka-term-nerd-font" = "latest"
 "brew-cask:orbstack" = "latest"
-"brew-cask:aldente" = "latest"
 "brew-cask:mos" = "latest"
-"brew-cask:hiddenbar" = "latest"
 "brew-cask:betterdisplay" = "latest"
 "brew-cask:httpie-desktop" = "latest"
 "brew-cask:obsidian" = "latest"
@@ -207,7 +205,6 @@ run = [
 "~/.agents/skills/*" = "~/dev/dotfiles/.agents/skills/*"
 "~/Library/Preferences/com.caldis.Mos.plist" = "~/dev/dotfiles/.config/apps/com.caldis.Mos.plist"
 "~/Library/Preferences/pro.betterdisplay.BetterDisplay.plist" = "~/dev/dotfiles/.config/apps/pro.betterdisplay.BetterDisplay.plist"
-"~/Library/Preferences/com.apphousekitchen.aldente-pro.plist" = "~/dev/dotfiles/.config/apps/com.apphousekitchen.aldente-pro.plist"
 "/etc/hosts/alpha" = { line = "192.168.0.81 alpha"}
 "/etc/hosts/nas" = { line = "192.168.0.84 nas"}
 
