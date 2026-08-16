@@ -11,25 +11,6 @@
       "installedAt": "2026-07-19T16:10:45.899Z",
       "updatedAt": "2026-07-19T16:10:45.899Z"
     },
-    "grilling": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/mattpocock/skills.git",
-      "skillPath": "skills/productivity/grilling/SKILL.md",
-      "skillFolderHash": "10b0db61f9b3869243db8a1a0ee84f862139b94e",
-      "pluginName": "mattpocock-skills",
-      "installedAt": "2026-07-19T16:10:45.902Z",
-      "updatedAt": "2026-07-19T16:10:45.902Z"
-    },
-    "dd-pup": {
-      "source": "datadog-labs/agent-skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/datadog-labs/agent-skills.git",
-      "skillPath": "dd-pup/SKILL.md",
-      "skillFolderHash": "cf90e8429d15d2ed449151245d918fc859e72be8",
-      "installedAt": "2026-07-19T16:27:04.149Z",
-      "updatedAt": "2026-07-19T16:27:04.149Z"
-    },
     "dd-apm": {
       "source": "datadog-labs/agent-skills",
       "sourceType": "github",
@@ -47,6 +28,26 @@
       "sourceType": "github",
       "skillPath": "dd-monitors/SKILL.md",
       "computedHash": "9af8e93f729790c665d7deeb29a496f0e53684b4e1a4974b129c05a99865e2fa"
+    },
+    "improve-codebase-architecture": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "skillFolderHash": "db546af0f3419a8bd261a83708d4cb33d2a915cd",
+      "pluginName": "mattpocock-skills",
+      "installedAt": "2026-08-16T06:58:58.484Z",
+      "updatedAt": "2026-08-16T06:58:58.484Z"
+    },
+    "grilling": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/productivity/grilling/SKILL.md",
+      "skillFolderHash": "0d40d978f1a588971a11ea7ae85b208e78102dc3",
+      "pluginName": "mattpocock-skills",
+      "installedAt": "2026-08-16T07:13:45.712Z",
+      "updatedAt": "2026-08-16T07:13:45.712Z"
     }
   },
   "dismissed": {
