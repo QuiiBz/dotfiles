@@ -2,7 +2,7 @@ model = "gpt-5.6-sol"
 model_reasoning_effort = "high"
 model_verbosity = "low"
 model_reasoning_summary = "none"
-notify = ["/Users/tom/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended", "--previous-notify", "[\"bash\",\"-lc\",\"afplay \\/System\\/Library\\/Sounds\\/Submarine.aiff\"]"]
+notify = ["/Users/tom/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended", "--previous-notify", '["bash","-lc","thread_id=$(printf %s \"$1\" | jq -r .\\\"thread-id\\\"); session_file=$(find /Users/tom/.codex/sessions -type f -name \"*-${thread_id}.jsonl\" -print -quit 2>/dev/null); thread_source=$(sed -n 1p \"$session_file\" 2>/dev/null | jq -r .payload.thread_source); [ \"$thread_source\" = subagent ] || afplay /System/Library/Sounds/Submarine.aiff","_"]']
 check_for_update_on_startup = false
 web_search = "live"
 suppress_unstable_features_warning = true
