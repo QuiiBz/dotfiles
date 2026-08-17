@@ -8,6 +8,7 @@ npm = "latest"
 pnpm = "latest"
 rust = { version = "latest", components = ["rust-src"] }
 terraform = "latest"
+buf = "latest"
 # Npm
 "npm:serve" = "latest"
 "npm:sherif" = "latest"

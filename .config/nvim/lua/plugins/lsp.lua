@@ -20,6 +20,7 @@ local servers = {
   -- Other
   'dockerls',
   'terraformls',
+  'buf_ls',
   'copilot',
 }
 
