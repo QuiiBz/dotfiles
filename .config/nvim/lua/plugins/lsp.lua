@@ -1,6 +1,6 @@
 local servers = {
   -- Languages
-  'tsgo',
+  'tsc',
   'lua_ls',
   'stylua',
   'rust_analyzer',
@@ -35,7 +35,7 @@ return {
         -- Enable completion triggered by <c-x><c-o>
         vim.api.nvim_set_option_value('omnifunc', 'v:lua.vim.lsp.omnifunc', { buf = bufnr })
 
-        if client.name == 'tsgo' or client.name == 'lua_ls' then
+        if client.name == 'tsc' or client.name == 'lua_ls' then
           client.server_capabilities.documentFormattingProvider = false
         elseif client.name == 'biome' or client.name == 'eslint' then
           client.server_capabilities.documentFormattingProvider = true
