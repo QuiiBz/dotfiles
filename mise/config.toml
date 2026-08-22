@@ -199,6 +199,7 @@ run = [
 "~/.config" = { mode = "symlink-each" }
 "~/.kube" = { mode = "symlink-each" }
 "~/.codex" = { mode = "symlink-each" }
+"~/.fx" = { mode = "symlink-each" }
 "~/.pi/agent" = { mode = "symlink-each" }
 "~/.tmux" = { mode = "symlink-each" }
 "~/.agents/.skill-lock.json" = {}

@@ -89,6 +89,11 @@ return {
               -- allow live updates when going back to normal mode with ctrl+q
               native_scroll = true,
             },
+            fx = {
+              cmd = { 'fx' },
+              -- allow live updates when going back to normal mode with ctrl+q
+              native_scroll = true,
+            },
           },
         },
       })
