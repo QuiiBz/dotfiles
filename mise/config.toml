@@ -63,7 +63,6 @@ buf = "latest"
 "brew:tree-sitter-cli" = "latest"
 "brew:biome" = "latest"
 "brew:prettier" = "latest"
-"brew:mise" = "latest"
 "brew:gh" = "latest"
 "brew:pup" = "latest"
 "brew:ansible" = "latest"
@@ -148,6 +147,7 @@ run = []
 description = "Initial setup for a new machine"
 run = [
   # Misc
+  "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"",
   "mkdir -p ~/.tmux/plugins",
   "git lfs install",
   "git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/plugins/resurrect",
@@ -168,6 +168,7 @@ description = "Sync dotfiles and update tools"
 run = [
   # Dotfiles
   "cd ~/dev/dotfiles && git pull --rebase",
+  "mise self-update",
   "mise bootstrap --yes --force-dotfiles",
   "mise upgrade",
   "mise prune --yes",
