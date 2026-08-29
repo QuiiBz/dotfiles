@@ -152,6 +152,7 @@ end
 vim.keymap.set('n', '<leader>q', ToggleQuickfix, { noremap = true, silent = true })
 
 -- Testing out ui2
+vim.opt.messagesopt:append({ 'maxheight:50', 'timeout:3000' })
 require('vim._core.ui2').enable({
   msg = {
     targets = {
@@ -182,15 +183,11 @@ require('vim._core.ui2').enable({
       wmsg = 'msg',
       typed_cmd = 'msg',
     },
-    cmd = {
-      height = 0.5,
-    },
     dialog = {
       height = 0.5,
     },
     msg = {
       height = 0.3,
-      timeout = 3000,
     },
     pager = {
       height = 0.5,
