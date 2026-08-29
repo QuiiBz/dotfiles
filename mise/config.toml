@@ -78,7 +78,7 @@ buf = "latest"
 "brew:xcodegen" = "latest"
 # Casks
 "brew-cask:ghostty" = "latest"
-# "brew-cask:raycast" = "latest" # waiting for v2
+"brew-cask:raycast" = "latest"
 "brew-cask:karabiner-elements" = "latest"
 "brew-cask:rectangle-pro" = "latest"
 "brew-cask:istat-menus" = "latest"
