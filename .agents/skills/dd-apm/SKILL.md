@@ -1,30 +1,18 @@
 ---
 name: dd-apm
-description: APM - install, onboard, instrument, enable, set up, configure, traces, services, dependencies, performance analysis. Use for any request involving Datadog APM setup, instrumentation (ddtrace, agent install), or analysis.
+description: Datadog APM - search traces, inspect services and dependencies, and analyze performance.
 alwaysApply: true
 metadata:
   version: "1.1.0"
   author: datadog-labs
   repository: https://github.com/datadog-labs/agent-skills
-  tags: datadog,apm,tracing,performance,distributed-tracing,dd-apm,install,onboarding,instrumentation,agent
+  tags: datadog,apm,tracing,performance,distributed-tracing,dd-apm
   globs: "**/ddtrace*,**/datadog*.yaml,**/*trace*"
 ---
 
 # Datadog APM
 
 Distributed tracing, service maps, and performance analysis.
-
-## Routing — Read This First
-
-Match the user's request to one of the entries below. Each entry has the same shape: **triggers** → which sub-skill to load → the anti-pattern to avoid. If a request seems to fit more than one entry, see "Overlap disambiguation". If nothing matches, see "None of the above" at the end.
-
----
-
-### None of the above
-
-If the request doesn't match any entry above, continue reading the trace-search, service analysis, and metrics content below. If even that doesn't fit, **ask the user to clarify** — do not invent a workflow.
-
----
 
 ## Requirements
 

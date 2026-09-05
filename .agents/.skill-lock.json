@@ -1,6 +1,30 @@
 {
   "version": 3,
   "skills": {
+    "dd-apm": {
+      "source": "datadog-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "dd-apm/SKILL.md",
+      "sourceUrl": "https://github.com/datadog-labs/agent-skills.git",
+      "skillFolderHash": "4a5bfa8db79ddea7c666f2beeeff4e325a7feccd",
+      "updatedAt": "2026-09-05T15:36:42.500Z"
+    },
+    "dd-logs": {
+      "source": "datadog-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "dd-logs/SKILL.md",
+      "sourceUrl": "https://github.com/datadog-labs/agent-skills.git",
+      "skillFolderHash": "f6aea9148d2fea3ba15e56f98888a4763577f14d",
+      "updatedAt": "2026-09-05T15:36:42.511Z"
+    },
+    "dd-monitors": {
+      "source": "datadog-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "dd-monitors/SKILL.md",
+      "sourceUrl": "https://github.com/datadog-labs/agent-skills.git",
+      "skillFolderHash": "113e883977ec9f9335a157b1d16901a00a6ba7b0",
+      "updatedAt": "2026-09-05T15:36:42.519Z"
+    },
     "teach": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -10,44 +34,6 @@
       "pluginName": "mattpocock-skills",
       "installedAt": "2026-07-19T16:10:45.899Z",
       "updatedAt": "2026-07-19T16:10:45.899Z"
-    },
-    "dd-apm": {
-      "source": "datadog-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "dd-apm/SKILL.md",
-      "computedHash": "70caa614a11bc17e187686984e3202735610e90e0a9915fdbd2833fe36c3678e"
-    },
-    "dd-logs": {
-      "source": "datadog-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "dd-logs/SKILL.md",
-      "computedHash": "3c6cca0a63ddc578cb4e6f198f891442f06144c8b3d82a72ba1a23ec0878819b"
-    },
-    "dd-monitors": {
-      "source": "datadog-labs/agent-skills",
-      "sourceType": "github",
-      "skillPath": "dd-monitors/SKILL.md",
-      "computedHash": "9af8e93f729790c665d7deeb29a496f0e53684b4e1a4974b129c05a99865e2fa"
-    },
-    "improve-codebase-architecture": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/mattpocock/skills.git",
-      "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
-      "skillFolderHash": "db546af0f3419a8bd261a83708d4cb33d2a915cd",
-      "pluginName": "mattpocock-skills",
-      "installedAt": "2026-08-16T06:58:58.484Z",
-      "updatedAt": "2026-08-16T06:58:58.484Z"
-    },
-    "grilling": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/mattpocock/skills.git",
-      "skillPath": "skills/productivity/grilling/SKILL.md",
-      "skillFolderHash": "0d40d978f1a588971a11ea7ae85b208e78102dc3",
-      "pluginName": "mattpocock-skills",
-      "installedAt": "2026-08-16T07:13:45.712Z",
-      "updatedAt": "2026-08-16T07:13:45.712Z"
     }
   },
   "dismissed": {
