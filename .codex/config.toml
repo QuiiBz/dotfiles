@@ -1,8 +1,8 @@
-model = "gpt-5.6-sol"
+model = "gpt-6-astra"
 model_reasoning_effort = "high"
 model_verbosity = "low"
 model_reasoning_summary = "none"
-notify = ["/Users/tom/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended", "--previous-notify", '["bash","-lc","thread_id=$(printf %s \"$1\" | jq -r .\\\"thread-id\\\"); session_file=$(find /Users/tom/.codex/sessions -type f -name \"*-${thread_id}.jsonl\" -print -quit 2>/dev/null); thread_source=$(sed -n 1p \"$session_file\" 2>/dev/null | jq -r .payload.thread_source); [ \"$thread_source\" = subagent ] || afplay /System/Library/Sounds/Submarine.aiff","_"]']
+notify = ["/Users/tom/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended", "--previous-notify", "[\"bash\", \"-c\", \"thread_id=$(printf '%s' \\\"$1\\\" | jq -er 'select(.type == \\\"agent-turn-complete\\\") | .\\\"thread-id\\\" | select(type == \\\"string\\\" and length > 0)') || exit 0\\nsession_file=$(find /Users/tom/.codex/sessions -type f -name \\\"*-${thread_id}.jsonl\\\" -print -quit 2>/dev/null)\\n[ -n \\\"$session_file\\\" ] || exit 0\\nsed -n '1p' \\\"$session_file\\\" 2>/dev/null | jq -e '.type == \\\"session_meta\\\" and .payload.thread_source == \\\"user\\\"' >/dev/null 2>&1 || exit 0\\nafplay /System/Library/Sounds/Submarine.aiff\", \"_\"]"]
 check_for_update_on_startup = false
 web_search = "live"
 suppress_unstable_features_warning = true
@@ -10,15 +10,17 @@ sandbox_mode = "workspace-write"
 approval_policy = "never"
 personality = "pragmatic"
 disable_paste_burst = true
-service_tier = "fast"
+service_tier = "priority"
 
 [features]
 apps = false
 prevent_idle_sleep = true
-terminal_resize_reflow = true
 memories = false
 plugins = false
-js_repl = false
+transcript_v2 = true
+
+[features.context_management]
+experimental_mode = true
 
 [feedback]
 enabled = false
@@ -40,43 +42,52 @@ interrupt_turn = "ctrl-shift-c"
 fast_default_opt_out = true
 
 [marketplaces.openai-bundled]
-last_updated = "2026-08-08T12:58:41Z"
+last_updated = "2026-09-05T14:28:41Z"
 source_type = "local"
 source = "/Users/tom/.codex/.tmp/bundled-marketplaces/openai-bundled"
 
 [marketplaces.openai-primary-runtime]
-last_updated = "2026-07-19T14:48:10Z"
 source_type = "local"
 source = "/Users/tom/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
 
 [plugins."documents@openai-primary-runtime"]
-enabled = false
+enabled = true
 
 [plugins."spreadsheets@openai-primary-runtime"]
-enabled = false
+enabled = true
 
 [plugins."presentations@openai-primary-runtime"]
-enabled = false
+enabled = true
 
 [plugins."browser@openai-bundled"]
 enabled = false
 
 [plugins."sites@openai-bundled"]
-enabled = false
+enabled = true
 
 [plugins."visualize@openai-bundled"]
-enabled = false
+enabled = true
 
 [plugins."pdf@openai-primary-runtime"]
-enabled = false
+enabled = true
 
 [plugins."template-creator@openai-primary-runtime"]
-enabled = false
+enabled = true
+
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+[plugins."unified-computer-use@openai-bundled"]
+enabled = true
+
+[plugins."computer-use@openai-bundled"]
+enabled = true
 
 [mcp_servers.node_repl]
 args = []
 command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
 startup_timeout_sec = 120
+enabled = false
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
@@ -92,6 +103,10 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = "Control desktop apps on macOS th
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
 BROWSER_USE_CODEX_APP_VERSION = "26.803.41515"
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex"
+
+[mcp_servers.cua_repl]
+command = "/Applications/ChatGPT.app/Contents/MacOS/ChatGPT"
+enabled = false
 
 [mcp_servers.computer-use]
 command = "./Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient"
@@ -123,6 +138,7 @@ codeFontSize = 14
 sansFontSize = 14
 dock-icon-preference = "codex-system"
 hotkey-window-projectless-default-enabled = true
+enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "persistent", "max"]
 
 [desktop.appearanceLightChromeTheme]
 accent = "#8839ef"
@@ -160,8 +176,8 @@ skill = "#cba6f7"
 global = "fileManager"
 
 [shell_environment_policy.set]
-BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "323bc3e687e17d7e377238d9f4c69111c4d0e6219103b6316d8c52082489533b"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_TRUSTED_CODE_PATHS = "/Users/tom/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
 
 [[skills.config]]
