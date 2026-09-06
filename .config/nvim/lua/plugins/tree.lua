@@ -68,6 +68,15 @@ return {
       vim.api.nvim_create_autocmd('User', {
         pattern = 'MiniFilesExplorerOpen',
         callback = function()
+          if not show_dotfiles then
+            local explorer = MiniFiles.get_explorer_state()
+            -- Show dotfiles if the current focused file is a dotfile
+            if explorer ~= nil then
+              local source_buffer = vim.api.nvim_win_get_buf(explorer.target_window)
+              local source_path = vim.api.nvim_buf_get_name(source_buffer)
+              show_dotfiles = explorer.anchor:find('/%.') ~= nil or source_path:find('/%.') ~= nil
+            end
+          end
           local new_filter = show_dotfiles and filter_show or filter_hide
           MiniFiles.refresh({ content = { filter = new_filter } })
         end,
