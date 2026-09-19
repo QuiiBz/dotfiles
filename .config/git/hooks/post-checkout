@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -uo pipefail
+
+tracked_file_threshold=2000
+tracked_file_count="$(git -c core.fsmonitor=false ls-files --format='x' | wc -l)"
+target_fsmonitor=false
+if (( tracked_file_count > tracked_file_threshold )); then
+  target_fsmonitor=true
+fi
+
+current_fsmonitor="$(git config --local --bool --get core.fsmonitor 2>/dev/null || true)"
+if [[ "$current_fsmonitor" != "$target_fsmonitor" ]]; then
+  git config --local core.fsmonitor "$target_fsmonitor" >/dev/null 2>&1 || true
+fi
+
+repository_hooks="$(git rev-parse --git-common-dir)/hooks"
+repository_hook="$repository_hooks/post-checkout"
+if [[ -x "$repository_hook" ]]; then
+  "$repository_hook" "$@"
+fi

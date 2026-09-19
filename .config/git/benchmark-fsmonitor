@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+set -uo pipefail
+
+repository_root="${1:-${HOME}/dev}"
+search_depth="${2:-4}"
+benchmark_runs="${RUNS:-20}"
+benchmark_warmup="${WARMUP:-5}"
+
+for required_command in git hyperfine jq; do
+  if ! command -v "$required_command" >/dev/null 2>&1; then
+    printf 'Missing command: %s\n' "$required_command" >&2
+    exit 1
+  fi
+done
+
+benchmark_directory="$(mktemp -d "${TMPDIR:-/tmp}/git-fsmonitor-benchmark.XXXXXX")"
+results_file="$benchmark_directory/results.tsv"
+trap 'rm -r "$benchmark_directory"' EXIT
+: > "$results_file"
+
+while IFS= read -r -d '' git_directory; do
+  repository="${git_directory%/.git}"
+  if ! git -C "$repository" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    continue
+  fi
+
+  tracked_file_count="$(git -C "$repository" -c core.fsmonitor=false ls-files --format='x' | wc -l)"
+  tracked_file_count="${tracked_file_count//[[:space:]]/}"
+  if ! git -C "$repository" -c core.fsmonitor=true status --porcelain=v1 >/dev/null 2>&1; then
+    printf 'Skipping %s: FSMonitor query failed\n' "$repository" >&2
+    continue
+  fi
+  if ! git -C "$repository" -c core.fsmonitor=true fsmonitor--daemon status >/dev/null 2>&1; then
+    printf 'Skipping %s: FSMonitor daemon is not running\n' "$repository" >&2
+    continue
+  fi
+
+  benchmark_file="$benchmark_directory/result.json"
+  if ! BENCHMARK_REPOSITORY="$repository" hyperfine \
+    --warmup "$benchmark_warmup" --runs "$benchmark_runs" \
+    --export-json "$benchmark_file" \
+    'git -C "$BENCHMARK_REPOSITORY" -c core.fsmonitor=true status --porcelain=v1 >/dev/null' \
+    'git -C "$BENCHMARK_REPOSITORY" -c core.fsmonitor=false status --porcelain=v1 >/dev/null' \
+    >/dev/null; then
+    printf 'Skipping %s: benchmark failed\n' "$repository" >&2
+    continue
+  fi
+
+  jq -r --arg repository "$repository" --arg files "$tracked_file_count" '
+    [
+      ($files | tonumber),
+      (.results[0].mean * 1000),
+      (.results[1].mean * 1000),
+      (.results[1].mean / .results[0].mean),
+      (if .results[0].mean < .results[1].mean then "on" else "off" end),
+      $repository
+    ] | @tsv
+  ' "$benchmark_file" >> "$results_file"
+done < <(find "$repository_root" -maxdepth "$search_depth" -name .git -prune -print0)
+
+if [[ ! -s "$results_file" ]]; then
+  printf 'No repositories were benchmarked.\n' >&2
+  exit 1
+fi
+
+printf 'files\tfsmonitor_on_ms\tfsmonitor_off_ms\toff_over_on\twinner\trepository\n'
+sort -n -k1,1 "$results_file"
+
+recommended_threshold="$(awk -F '\t' '
+  {
+    files[NR] = $1
+    enabled_time[NR] = $2
+    disabled_time[NR] = $3
+  }
+  END {
+    best_cost = -1
+    best_threshold = 0
+    for (i = 0; i <= NR; i++) {
+      threshold = i == 0 ? 0 : files[i]
+      cost = 0
+      for (j = 1; j <= NR; j++) {
+        fastest_time = enabled_time[j] < disabled_time[j] ? enabled_time[j] : disabled_time[j]
+        selected_time = files[j] > threshold ? enabled_time[j] : disabled_time[j]
+        cost += selected_time / fastest_time - 1
+      }
+      if (best_cost < 0 || cost < best_cost) {
+        best_cost = cost
+        best_threshold = threshold
+      }
+    }
+    print best_threshold
+  }
+' "$results_file")"
+printf '\nrecommended_threshold=%s\n' "$recommended_threshold"

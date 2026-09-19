@@ -9,8 +9,12 @@
 [core]
   editor = vim
   fsmonitor = true
+  hooksPath = ~/.config/git/hooks
   untrackedcache = true
   pager = delta
+[index]
+  skipHash = true
+  version = 4
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
