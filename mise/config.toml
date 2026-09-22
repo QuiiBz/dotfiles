@@ -200,7 +200,8 @@ run = [
 "~/.config" = { mode = "symlink-each" }
 "~/.kube" = { mode = "symlink-each" }
 "~/.codex" = { mode = "symlink-each" }
-"~/.fx" = { mode = "symlink-each" }
+# fx doesn't accept symlinks for its settings file
+"~/.fx/settings.json" = { mode = "copy" }
 "~/.pi/agent" = { mode = "symlink-each" }
 "~/.tmux" = { mode = "symlink-each" }
 "~/.agents/.skill-lock.json" = {}
