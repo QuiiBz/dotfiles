@@ -33,6 +33,13 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 -- Enable background cursor line
 vim.opt.cursorline = true
+-- Use a bar cursor in terminal mode, matching the shell cursor
+vim.opt.guicursor = {
+  'n-v-c-sm:block',
+  'i-ci-ve:ver25',
+  'r-cr-o:hor20',
+  't:ver25-blinkwait500-blinkon500-blinkoff500-TermCursor',
+}
 -- Only save useful info in sessions
 vim.o.sessionoptions = 'buffers,curdir,folds,globals,winpos,winsize,help'
 -- Scroll line by line

@@ -1,6 +1,7 @@
 theme = catppuccin-macchiato
 font-family = IosevkaTerm NF
 font-size = 15
+cursor-style = bar
 cursor-style-blink = true
 macos-titlebar-style = hidden
 window-padding-x = 5,5
