@@ -96,6 +96,7 @@ buf = "latest"
 "brew-cask:codex-app" = "latest"
 "brew-cask:1password" = "latest"
 "brew-cask:shottr" = "latest"
+"brew-cask:handy" = "latest"
 
 [bootstrap.brew.taps]
 "felixkratz/formulae" = "https://github.com/felixkratz/homebrew-formulae.git"
