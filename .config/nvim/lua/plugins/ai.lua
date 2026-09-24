@@ -131,6 +131,20 @@ return {
         mode = { 'v' },
       },
       {
+        '<leader>f',
+        function()
+          require('sidekick.cli').toggle({ name = 'fx' })
+        end,
+        mode = { 'n' },
+      },
+      {
+        '<leader>f',
+        function()
+          require('sidekick.cli').send({ name = 'fx', selection = true })
+        end,
+        mode = { 'v' },
+      },
+      {
         '<leader>s',
         function()
           require('sidekick.cli').toggle()
