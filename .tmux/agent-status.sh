@@ -49,6 +49,7 @@ agent_for_command() {
   case "$command_name" in
     codex*) agent_name=codex ;;
     claude*) agent_name=claude ;;
+    fx*) agent_name=fx ;;
     pi|pi-*|pi-coding-agent*) agent_name=pi ;;
     *) return 1 ;;
   esac
@@ -71,7 +72,9 @@ detect_agent_state() {
   local pane_id="$2"
   local pane_title="$3"
   local screen_content
+  local recent_content
   local state
+  local line
 
   case "$agent_name" in
     codex)
@@ -80,6 +83,23 @@ detect_agent_state() {
       ;;
     claude)
       [[ "$pane_title" =~ ^[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏][[:space:]] ]] && { echo working; return; }
+      ;;
+    fx)
+      screen_content="$(tmux capture-pane -p -t "$pane_id" -S -40 2>/dev/null)"
+      recent_content="$(printf '%s\n' "$screen_content" | awk 'NF { lines[++n]=$0 } END { start=n-11; if (start<1) start=1; for (i=start;i<=n;i++) print lines[i] }')"
+      state=idle
+
+      while IFS= read -r line; do
+        if [[ "$line" =~ ^[[:space:]•]*(Pending[[:space:]]+(approval|trust)|Awaiting[[:space:]]+approval|Waiting[[:space:]]+for[[:space:]]+(approval|authorization|authentication))(:|[[:space:]]|$) ]]; then
+          echo blocked
+          return
+        elif [[ "$line" =~ ^[[:space:]•]*(Running|Thinking|Working|Streaming|Connecting|Retrying)([[:space:]]|\(|$) ]]; then
+          state=working
+        fi
+      done <<< "$recent_content"
+
+      echo "$state"
+      return
       ;;
   esac
 
@@ -127,7 +147,7 @@ display_session_name() {
   local matching_session_count=0
   local matching_session_name=""
 
-  if [[ "$agent_session_name" != codex\ * ]]; then
+  if [[ "$agent_session_name" != codex\ * && "$agent_session_name" != fx\ * ]]; then
     echo "$agent_session_name"
     return
   fi
