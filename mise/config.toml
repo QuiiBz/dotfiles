@@ -201,9 +201,12 @@ run = [
 "~/.config" = { mode = "symlink-each" }
 "~/.kube" = { mode = "symlink-each" }
 "~/.codex" = { mode = "symlink-each" }
+"~/.codex/AGENTS.md" = "~/dev/dotfiles/.agents/AGENTS.md"
 # fx doesn't accept symlinks for its settings file
 "~/.fx/settings.json" = { mode = "copy" }
 "~/.fx/themes/catppuccin-macchiato.json" = { mode = "copy" }
+"~/.fx/AGENTS.md" = "~/dev/dotfiles/.agents/AGENTS.md"
+"~/.claude/CLAUDE.md" = "~/dev/dotfiles/.agents/AGENTS.md"
 "~/.pi/agent" = { mode = "symlink-each" }
 "~/.tmux" = { mode = "symlink-each" }
 "~/.agents/.skill-lock.json" = {}

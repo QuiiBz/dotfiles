@@ -1,10 +1,12 @@
 {
   "model": "openai/gpt-5.6-sol",
-  "effort": "high",
-  "fast_mode": true,
+  "effort": "medium",
+  "fast_mode": false,
   "credential_source": "fx_login",
   "provider": "codex",
-  "codex_model": "gpt-5.6-sol",
+  "models": {
+    "codex": "gpt-5.6-sol"
+  },
   "statusLine": {
     "context": true,
     "session": false,
@@ -23,5 +25,6 @@
   "yolo_acknowledged": true,
   "slash_menu_categories": false,
   "theme": "catppuccin-macchiato",
-  "collapse_tool_calls": false
+  "collapse_tool_calls": false,
+  "fast_mode_model_bound": true
 }

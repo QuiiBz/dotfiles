@@ -7,4 +7,4 @@ Do not create commits or push code unless explicitly asked to do so in the user 
 
 Comments should be 1-2 lines maximum and should only be used when the code is not self-explanatory.
 Always use descriptive variable names, unless the variable is a common loop index (e.g., `i`, `j`, `k`), in an iterator, a Go `WaitGroup`...
-
+Your work should be focused to be simple, readable, and maintainable. Once a change is complete, take a step back to review your work, and remove any duplication, stale tests, unused code, and unnecessary comments.
