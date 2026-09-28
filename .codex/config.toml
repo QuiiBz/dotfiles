@@ -14,6 +14,7 @@ service_tier = "priority"
 
 [features]
 prevent_idle_sleep = true
+daemon_auto_start = false
 
 [features.context_management]
 experimental_mode = true
@@ -126,6 +127,7 @@ sansFontSize = 14
 dock-icon-preference = "codex-system"
 hotkey-window-projectless-default-enabled = true
 enabled-reasoning-efforts = ["low", "medium", "high", "xhigh", "ultra", "persistent", "max"]
+avatar-overlay-pet-visible = false
 
 [desktop.appearanceLightChromeTheme]
 accent = "#8839ef"
