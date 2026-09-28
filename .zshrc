@@ -78,10 +78,38 @@ if [ $commands[kubectl] ]; then
   }
 fi
 
-# Update tmux environment with AWS_PROFILE after each command, async
-_update_tmux_aws_profile() {
+# Update the cached tmux context after each command.
+_update_tmux_context() {
   if [ -n "$TMUX" ]; then
-    tmux set-environment -g "PANE_${TMUX_PANE}_AWS_PROFILE" "$AWS_PROFILE" &!
+    local aws_profile="${AWS_PROFILE:-}"
+    local kube_config_paths="${KUBECONFIG:-${HOME}/.kube/config}"
+    local kube_config_path
+    local kube_context=""
+    local config_line
+    local status_context=""
+    local -a kube_config_files
+
+    IFS=':' read -rA kube_config_files <<< "$kube_config_paths"
+    for kube_config_path in "${kube_config_files[@]}"; do
+      [[ -r "$kube_config_path" ]] || continue
+      while IFS= read -r config_line; do
+        [[ "$config_line" == current-context:* ]] || continue
+        kube_context="${config_line#current-context:}"
+        kube_context="${kube_context#"${kube_context%%[![:space:]]*}"}"
+        kube_context="${kube_context%"${kube_context##*[![:space:]]}"}"
+        kube_context="${kube_context#\"}"
+        kube_context="${kube_context%\"}"
+        break 2
+      done < "$kube_config_path"
+    done
+
+    aws_profile="${aws_profile//\#/##}"
+    kube_context="${kube_context//\#/##}"
+    [[ -n "$aws_profile" ]] && status_context="#[fg=#eed49f,bold]   ${aws_profile}"
+    [[ -n "$kube_context" ]] && status_context+="#[fg=#8aadf4,bold]    ${kube_context}"
+    tmux set-environment -g "PANE_${TMUX_PANE}_AWS_PROFILE" "${AWS_PROFILE:-}" \; \
+      set-option -pq -t "$TMUX_PANE" @status_context "$status_context" \; \
+      set-option -pq -t "$TMUX_PANE" @status_context_managed 1 &!
   fi
 }
 
@@ -90,7 +118,7 @@ _set_cursor_bar() {
 }
 
 autoload -Uz add-zsh-hook
-add-zsh-hook precmd _update_tmux_aws_profile
+add-zsh-hook precmd _update_tmux_context
 add-zsh-hook precmd _set_cursor_bar
 
 typeset -U fpath
