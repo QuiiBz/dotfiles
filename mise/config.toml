@@ -12,7 +12,6 @@ buf = "latest"
 # Npm
 "npm:serve" = "latest"
 "npm:sherif" = "latest"
-"npm:turbo" = "latest"
 "npm:vercel" = "latest"
 "npm:sandbox" = "latest"
 "npm:@antfu/ni" = "latest"
@@ -21,6 +20,7 @@ buf = "latest"
 "cargo:cargo-clean-all" = "latest"
 # GitHub
 "github:SocketDev/sfw-free" = { version = "latest", bin = "sfw" }
+"github:vercel/turborepo" = { version = "latest", bin = "turbo" }
 
 [bootstrap.packages]
 # Formulae
