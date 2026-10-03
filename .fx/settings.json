@@ -1,11 +1,11 @@
 {
   "model": "openai/gpt-5.6-sol",
-  "effort": "medium",
-  "fast_mode": false,
+  "effort": "high",
+  "fast_mode": true,
   "credential_source": "fx_login",
   "provider": "codex",
   "models": {
-    "codex": "gpt-5.6-sol"
+    "codex": "gpt-6.1-sol"
   },
   "statusLine": {
     "context": true,

@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "0.80.10",
+  "lastChangelogVersion": "1.0.0",
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.5",
-  "defaultThinkingLevel": "off",
+  "defaultModel": "gpt-6.1-sol",
+  "defaultThinkingLevel": "high",
   "showHardwareCursor": true,
   "collapseChangelog": true,
   "enableInstallTelemetry": false,
@@ -25,7 +25,8 @@
     "npm:pi-review",
     "npm:pi-code-previews"
   ],
-  "enabledModels": [
-    "openai-codex/gpt-5.5"
-  ]
+  "tuiMode": "regular",
+  "terminal": {
+    "hyperlinks": true
+  }
 }
