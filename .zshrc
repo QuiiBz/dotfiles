@@ -215,6 +215,7 @@ wt() {
   local command="$1"
   local branch="$2"
   local worktree_dir
+  local main_worktree_dir
 
   case "$command" in
     add)
@@ -223,7 +224,9 @@ wt() {
         return 1
       }
 
-      worktree_dir="$(mktemp -d /tmp/worktree.XXXXXX)" || return 1
+      main_worktree_dir="$(git worktree list --porcelain | awk '/^worktree / { print substr($0, 10); exit }')" || return 1
+      worktree_dir="$HOME/dev/${main_worktree_dir:t}-${branch//\//-}"
+      mkdir "$worktree_dir" || return 1
 
       if git show-ref --verify --quiet "refs/heads/$branch"; then
         git worktree add "$worktree_dir" "$branch"
@@ -257,7 +260,9 @@ wt() {
       }
 
       if [[ "$command" == "remove" ]]; then
-        git worktree remove "${@:3}" "$worktree_dir"
+        main_worktree_dir="$(git worktree list --porcelain | awk '/^worktree / { print substr($0, 10); exit }')"
+        git worktree remove "${@:3}" "$worktree_dir" || return 1
+        [[ -d "$PWD" ]] || cd "$main_worktree_dir"
       else
         cd "$worktree_dir"
       fi
