@@ -8,7 +8,7 @@ gui:
     optionsTextColor:
       - '#8aadf4'
     selectedLineBgColor:
-      - '#363a4f'
+      - '#494d64'
     cherryPickedCommitBgColor:
       - '#494d64'
     cherryPickedCommitFgColor:
@@ -19,8 +19,10 @@ gui:
       - '#cad3f5'
     searchingActiveBorderColor:
       - '#eed49f'
-  authorColors:
-    '*': '#b7bdf8'
+    inactiveViewSelectedLineBgColor:
+      - '#494d64'
+    authorColors:
+      '*': '#b7bdf8'
   sidePanelWidth: 0.2
   commandLogSize: 2
   showRandomTip: false
