@@ -173,6 +173,7 @@ run = [
   "mise bootstrap --yes --force-dotfiles",
   "mise upgrade",
   "mise prune --yes",
+  "mise run pi-build",
   # Brew
   "brew update",
   "brew upgrade --yes",
@@ -188,6 +189,14 @@ run = [
   "sudo env GITHUB_TOKEN=\"$(gh auth token)\" bob update",
   "nvim --headless '+Lazy! sync' +qa",
 ]
+
+[tasks."pi-build"]
+description = "Compile Pi and installed extensions into a Bun executable"
+run = "bun ~/dev/dotfiles/.pi/performance/build.ts"
+
+[tasks."pi-bench"]
+description = "Measure Pi interactive startup against the Node installation"
+run = "python3 ~/dev/dotfiles/.pi/performance/benchmark.py ~/.local/share/mise/shims/pi ~/.local/share/pi-compiled/bin/pi"
 
 [dotfiles]
 "~/.config/mise/config.toml" = "~/dev/dotfiles/mise/config.toml"

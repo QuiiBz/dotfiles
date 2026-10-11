@@ -1,3 +1,4 @@
 .DS_Store
 .config/nvim/plugin/packer_compiled.lua
 home.sh
+.pi/agent/extensions/node_modules/
