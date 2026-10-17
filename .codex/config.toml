@@ -98,8 +98,8 @@ BROWSER_USE_TINYSKY_ENABLED = "1"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
 NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
-BROWSER_USE_CODEX_APP_VERSION = "26.930.31730"
-NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/tom/.codex/plugins/cache/openai-bundled/browser/26.930.31730/scripts/browser-service.mjs"}'
+BROWSER_USE_CODEX_APP_VERSION = "26.1013.40934"
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/tom/.codex/plugins/cache/openai-bundled/browser/26.1013.40934/scripts/browser-service.mjs"}'
 CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
 
 [mcp_servers.cua_repl]
@@ -197,4 +197,7 @@ enabled = false
 [[skills.config]]
 path = "/Users/tom/.codex/skills/.system/skill-installer/SKILL.md"
 enabled = false
+
+[mcp_servers.datadog]
+url = "https://mcp.datadoghq.com/v1/mcp"
 

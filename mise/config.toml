@@ -218,9 +218,6 @@ run = "python3 ~/dev/dotfiles/.pi/performance/benchmark.py ~/.local/share/mise/s
 "~/.claude/CLAUDE.md" = "~/dev/dotfiles/.agents/AGENTS.md"
 "~/.pi/agent" = { mode = "symlink-each" }
 "~/.tmux" = { mode = "symlink-each" }
-"~/.agents/.skill-lock.json" = {}
-# Codex doesn't load symlinked SKILL.md files, only their parent directories: https://github.com/openai/codex/issues/11314
-"~/.agents/skills/*" = "~/dev/dotfiles/.agents/skills/*"
 "~/Library/Preferences/com.caldis.Mos.plist" = "~/dev/dotfiles/.config/apps/com.caldis.Mos.plist"
 "~/Library/Preferences/pro.betterdisplay.BetterDisplay.plist" = "~/dev/dotfiles/.config/apps/pro.betterdisplay.BetterDisplay.plist"
 "/etc/hosts/alpha" = { line = "192.168.0.81 alpha"}
