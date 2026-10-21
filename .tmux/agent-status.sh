@@ -17,6 +17,107 @@ process_tree_loaded=false
 declare -A legacy_contexts=()
 declare -A pane_contents=()
 declare -A process_parents=()
+declare -A pr_request_keys=()
+declare -A pr_request_times=()
+
+branch_sync_status() {
+  local repository_path="$1"
+  local divergence
+  local commits_ahead
+  local commits_behind
+
+  divergence="$(git -C "$repository_path" rev-list --left-right --count 'HEAD...@{upstream}' 2>/dev/null)" || return 0
+  read -r commits_ahead commits_behind <<< "$divergence"
+  if (( commits_ahead > 0 )); then printf ' ↑'; fi
+  if (( commits_behind > 0 )); then printf ' ↓'; fi
+}
+
+refresh_pull_request() {
+  local session_id="$1"
+  local session_path="$2"
+  local session_branch="$3"
+  local remote_name
+  local remote_url
+  local remote_owner
+  local repository_name
+  local pull_request
+  local pull_request_state=""
+  local pull_request_title=""
+  local pull_request_url=""
+  local current_path
+  local current_branch
+
+  cd -- "$session_path" || return
+  remote_name="$(git config --get "branch.${session_branch}.remote" || printf origin)"
+  [[ "$remote_name" != . ]] || remote_name=origin
+  remote_url="$(git remote get-url "$remote_name" 2>/dev/null)" || return
+  remote_owner="${remote_url%/*}"
+  remote_owner="${remote_owner##*[:/]}"
+  [[ "$remote_owner" =~ ^[a-zA-Z0-9_.-]+$ ]] || return
+
+  repository_name="$(gtimeout 15 gh repo view --json nameWithOwner --jq .nameWithOwner 2>/dev/null)" || return
+  pull_request="$(gtimeout 15 gh api --method GET "repos/${repository_name}/pulls" \
+    -f state=all -f "head=${remote_owner}:${session_branch}" -f per_page=100 \
+    -f sort=updated -f direction=desc --jq '
+      (map(select(.state == "open")) + .) | .[0] // empty |
+      [
+        (if .merged_at != null then "merged" elif .state == "open" then "open" else "closed" end),
+        (.title | gsub("[[:cntrl:]]"; " ")),
+        .html_url
+      ] | .[]
+    ' 2>/dev/null)" || return
+
+  current_path="$(tmux display-message -p -t "${session_id}:" '#{pane_current_path}' 2>/dev/null)" || return
+  [[ "$current_path" == "$session_path" ]] || return
+  current_branch="$(git -C "$current_path" symbolic-ref --quiet --short HEAD 2>/dev/null)" || return
+  [[ "$current_branch" == "$session_branch" ]] || return
+
+  if [[ -n "$pull_request" ]]; then
+    pull_request_state="${pull_request%%$'\n'*}"
+    pull_request="${pull_request#*$'\n'}"
+    pull_request_title="${pull_request%%$'\n'*}"
+    pull_request_url="${pull_request#*$'\n'}"
+    case "$pull_request_state" in open|merged|closed) ;; *) return ;; esac
+  fi
+  tmux set-option -t "$session_id" @sidebar_pr_title "$pull_request_title" \
+    \; set-option -t "$session_id" @sidebar_pr_state "$pull_request_state" \
+    \; set-option -t "$session_id" @sidebar_pr_url "$pull_request_url"
+}
+
+open_pull_request() {
+  local target="$1"
+  local session_id
+  local pull_request_url
+
+  [[ "$target" =~ ^pr[0-9]+$ ]] || return
+  session_id="\$${target#pr}"
+  if [[ "$(tmux show-options -gqv @sidebar_demo)" == on && -n "$(tmux show-options -qv -t "$session_id" @sidebar_demo_pr_title)" ]]; then
+    tmux display-message 'DEMO PR: no live GitHub link'
+    return
+  fi
+  pull_request_url="$(tmux show-options -qv -t "$session_id" @sidebar_pr_url)" || return
+  [[ "$pull_request_url" =~ ^https://[^/]+/[^/]+/[^/]+/pull/[0-9]+$ ]] || return
+  open "$pull_request_url"
+}
+
+schedule_pull_request_refresh() {
+  local session_id="$1"
+  local session_path="$2"
+  local session_branch="$3"
+  local request_key="${session_path}${field_separator}${session_branch}"
+
+  if [[ "${pr_request_keys[$session_id]:-}" == "$request_key" ]]; then
+    (( SECONDS - ${pr_request_times[$session_id]:-0} >= 60 )) || return 0
+  else
+    tmux set-option -t "$session_id" @sidebar_pr_title '' \
+      \; set-option -t "$session_id" @sidebar_pr_state '' \
+      \; set-option -t "$session_id" @sidebar_pr_url ''
+  fi
+  pr_request_keys[$session_id]="$request_key"
+  pr_request_times[$session_id]="$SECONDS"
+  [[ -n "$session_branch" ]] || return 0
+  bash "${BASH_SOURCE[0]}" --pr "$session_id" "$session_path" "$session_branch" >/dev/null 2>&1 &
+}
 
 agent_for_command() {
   local command_name="${1##*/}"
@@ -200,7 +301,7 @@ load_snapshot() {
   snapshot="$(tmux show-environment -g \
     \; display-message -p "$environment_marker" \
     \; list-panes -a -F "P${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{pane_id}${field_separator}#{pane_current_command}${field_separator}#{pane_current_path}${field_separator}#{pane_pid}${field_separator}#{pane_title}" \
-    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}" \
+    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{@codex_state}${field_separator}#{pane_current_path}${field_separator}#{@sidebar_branch}${field_separator}#{@sidebar_branch_sync}" \
     \; list-clients -F "C${field_separator}#{session_id}${field_separator}#{client_pid}" \
     \; list-panes -a -f '#{!=:#{@status_context_managed},1}' -F "L${field_separator}#{pane_id}" 2>/dev/null)" || return 1
 
@@ -277,6 +378,15 @@ build_agent_status() {
   local session_state
   local session_priority
   local session_path
+  local previous_codex_state
+  local codex_state
+  local codex_priority
+  local session_current_path
+  local previous_branch
+  local session_branch
+  local previous_branch_sync
+  local session_branch_sync
+  local -a session_status_commands=()
 
   load_snapshot || return 1
   update_legacy_contexts
@@ -285,16 +395,34 @@ build_agent_status() {
   process_parents=()
   rendered_status=""
 
-  while IFS="$field_separator" read -r row_type session_id session_name; do
+  while IFS="$field_separator" read -r row_type session_id session_name previous_codex_state session_current_path previous_branch previous_branch_sync; do
+    [[ -n "$session_id" ]] || continue
     session_state=""
     session_priority=0
     session_path=""
+    codex_state=""
+    codex_priority=0
+    session_branch="$(git -C "$session_current_path" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+    session_branch_sync="$(branch_sync_status "$session_current_path")"
+
+    if [[ "$session_branch" != "$previous_branch" ]]; then
+      session_status_commands+=(set-option -t "$session_id" @sidebar_branch "$session_branch" ';')
+    fi
+    if [[ "$session_branch_sync" != "$previous_branch_sync" ]]; then
+      session_status_commands+=(set-option -t "$session_id" @sidebar_branch_sync "$session_branch_sync" ';')
+    fi
+    schedule_pull_request_refresh "$session_id" "$session_current_path" "$session_branch"
 
     while IFS="$field_separator" read -r row_type pane_session_id _pane_session_name pane_id pane_command pane_path _pane_pid pane_title; do
       [[ "$pane_session_id" == "$session_id" ]] || continue
       agent_for_command "$pane_command" || continue
       detect_agent_state "$agent_name" "$pane_id" "$pane_title"
       state_priority "$detected_state"
+
+      if [[ "$agent_name" == codex ]] && (( agent_priority > codex_priority )); then
+        codex_state="$detected_state"
+        codex_priority="$agent_priority"
+      fi
 
       if (( agent_priority > session_priority )); then
         session_state="$detected_state"
@@ -303,11 +431,20 @@ build_agent_status() {
       fi
     done <<< "$all_pane_rows"
 
+    if [[ "$codex_state" != "$previous_codex_state" ]]; then
+      session_status_commands+=(set-option -t "$session_id" @codex_state "$codex_state" ';')
+    fi
+
     if [[ -n "$session_state" ]]; then
       display_session_name "$session_id" "$session_name" "$session_path"
       render_session "$session_state" "$display_name"
     fi
   done <<< "$all_session_rows"
+
+  if ((${#session_status_commands[@]} > 0)); then
+    unset "session_status_commands[${#session_status_commands[@]}-1]"
+    tmux "${session_status_commands[@]}" 2>/dev/null
+  fi
 }
 
 read_kube_context() {
@@ -421,6 +558,12 @@ watch_status() {
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   case "${1:-}" in
+    --open-pr)
+      open_pull_request "$2"
+      ;;
+    --pr)
+      refresh_pull_request "$2" "$3" "$4"
+      ;;
     --watch)
       watch_status
       ;;
