@@ -21,14 +21,15 @@ if [ "$name_width" -gt 0 ]; then
 fi
 
 session_color="#{?#{==:#{session_id},${current_session_id}},#c6a0f6,#a4adca}"
-codex_color='#{?#{==:#{@codex_state},blocked},#ed8796,#{?#{==:#{@codex_state},working},#eed49f,#a6da95}}'
-codex_label='#{?#{==:#{@codex_state},blocked},● action,#{?#{==:#{@codex_state},working},◐ Working,✓ Idle}}'
+session_weight="#{?#{==:#{session_id},${current_session_id}},bold,nobold}"
+agent_color='#{?#{==:#{@sidebar_agent_state},blocked},#ed8796,#{?#{==:#{@sidebar_agent_state},working},#eed49f,#a6da95}}'
+agent_label='#{?#{==:#{@sidebar_agent_state},blocked},● action,#{?#{==:#{@sidebar_agent_state},working},◐ Working,✓ Idle}}'
 status_text_width=$((status_width - 1))
-codex_status=" "
+agent_status=" "
 if [ "$status_text_width" -gt 0 ]; then
-  codex_status="#[fg=${codex_color}]#{p-${status_text_width};=${status_text_width}:${codex_label}} "
+  agent_status="#[fg=${agent_color}]#{p-${status_text_width};=${status_text_width}:${agent_label}} "
 fi
-session_heading="#{?@codex_state,${session_name_with_status}${codex_status},${session_name}}"
+session_heading="#{?@sidebar_agent_state,${session_name_with_status}${agent_status},${session_name}}"
 demo_active='#{&&:#{==:#{@sidebar_demo},on},#{@sidebar_demo_pr_title}}'
 branch_label="#{?${demo_active},#{@sidebar_demo_branch},#{@sidebar_branch}#{@sidebar_branch_sync}}"
 pr_state="#{?${demo_active},#{@sidebar_demo_pr_state},#{@sidebar_pr_state}}"
@@ -51,9 +52,9 @@ if [ "$pr_title_width" -gt 0 ]; then
   pr_name="${pr_name}#{s/[#]/\0\0/:#{p${pr_title_width};=${pr_title_width}:${pr_title}}}"
 fi
 pr_status="#{?${pr_title},#[nl]#[range=user|pr#{s/[$]//:session_id}]#[nobold]${pr_name},}"
-session_format="#[align=left,fg=${session_color},bold,range=session|#{session_id}]${session_heading}${branch_status}${pr_status}#[norange,default,nl]"
+session_format="#[align=left,fg=${session_color},${session_weight},range=session|#{session_id}]${session_heading}${branch_status}${pr_status}#[norange,default,nl]"
 
-tmux -S "$socket_path" list-sessions -F "$session_format" |
+tmux -S "$socket_path" list-sessions -f '#{!:#{@sidebar_source_session}}' -F "$session_format" |
   awk '
     BEGIN { printf "#[nl]" }
     NR > 1 { printf "#[nl]" }

@@ -19,6 +19,7 @@ declare -A pane_contents=()
 declare -A process_parents=()
 declare -A pr_request_keys=()
 declare -A pr_request_times=()
+declare -A session_sources=()
 
 branch_sync_status() {
   local repository_path="$1"
@@ -39,7 +40,9 @@ refresh_pull_request() {
   local remote_name
   local remote_url
   local remote_owner
+  local repository_metadata
   local repository_name
+  local default_branch
   local pull_request
   local pull_request_state=""
   local pull_request_title=""
@@ -48,26 +51,32 @@ refresh_pull_request() {
   local current_branch
 
   cd -- "$session_path" || return
-  remote_name="$(git config --get "branch.${session_branch}.remote" || printf origin)"
-  [[ "$remote_name" != . ]] || remote_name=origin
-  remote_url="$(git remote get-url "$remote_name" 2>/dev/null)" || return
-  remote_owner="${remote_url%/*}"
-  remote_owner="${remote_owner##*[:/]}"
-  [[ "$remote_owner" =~ ^[a-zA-Z0-9_.-]+$ ]] || return
+  repository_metadata="$(gtimeout 15 gh repo view --json nameWithOwner,defaultBranchRef \
+    --jq '[.nameWithOwner, .defaultBranchRef.name] | @tsv' 2>/dev/null)" || return
+  IFS=$'\t' read -r repository_name default_branch <<< "$repository_metadata"
 
-  repository_name="$(gtimeout 15 gh repo view --json nameWithOwner --jq .nameWithOwner 2>/dev/null)" || return
-  pull_request="$(gtimeout 15 gh api --method GET "repos/${repository_name}/pulls" \
-    -f state=all -f "head=${remote_owner}:${session_branch}" -f per_page=100 \
-    -f sort=updated -f direction=desc --jq '
-      (map(select(.state == "open")) + .) | .[0] // empty |
-      [
-        (if .merged_at != null then "merged" elif .state == "open" then "open" else "closed" end),
-        (.title | gsub("[[:cntrl:]]"; " ")),
-        .html_url
-      ] | .[]
-    ' 2>/dev/null)" || return
+  pull_request=""
+  if [ "$session_branch" != "$default_branch" ]; then
+    remote_name="$(git config --get "branch.${session_branch}.remote" || printf origin)"
+    [[ "$remote_name" != . ]] || remote_name=origin
+    remote_url="$(git remote get-url "$remote_name" 2>/dev/null)" || return
+    remote_owner="${remote_url%/*}"
+    remote_owner="${remote_owner##*[:/]}"
+    [[ "$remote_owner" =~ ^[a-zA-Z0-9_.-]+$ ]] || return
 
-  current_path="$(tmux display-message -p -t "${session_id}:" '#{pane_current_path}' 2>/dev/null)" || return
+    pull_request="$(gtimeout 15 gh api --method GET "repos/${repository_name}/pulls" \
+      -f state=all -f "head=${remote_owner}:${session_branch}" -f per_page=100 \
+      -f sort=updated -f direction=desc --jq '
+        (map(select(.state == "open")) + .) | .[0] // empty |
+        [
+          (if .merged_at != null then "merged" elif .state == "open" then "open" else "closed" end),
+          (.title | gsub("[[:cntrl:]]"; " ")),
+          .html_url
+        ] | .[]
+      ' 2>/dev/null)" || return
+  fi
+
+  current_path="$(tmux display-message -p -t "${session_id}:" '#{session_path}' 2>/dev/null)" || return
   [[ "$current_path" == "$session_path" ]] || return
   current_branch="$(git -C "$current_path" symbolic-ref --quiet --short HEAD 2>/dev/null)" || return
   [[ "$current_branch" == "$session_branch" ]] || return
@@ -230,13 +239,13 @@ load_process_tree() {
   process_tree_loaded=true
 }
 
-display_session_name() {
+resolve_source_session() {
   local agent_session_id="$1"
   local agent_session_name="$2"
   local agent_path="$3"
   local row_type
   local candidate_session_id
-  local candidate_session_name
+  local _candidate_session_name
   local _candidate_pane_id
   local candidate_command
   local candidate_path
@@ -247,22 +256,23 @@ display_session_name() {
   local process_pid
   local parent_pid
   local matching_session_count=0
-  local matching_session_name=""
+  local matching_session_id=""
 
-  display_name="$agent_session_name"
-  if [[ "$agent_session_name" != codex\ * && "$agent_session_name" != fx\ * ]]; then
+  resolved_source_session_id="$agent_session_id"
+  if [[ ${#agent_session_name} -ne 17 || ! "$agent_session_name" =~ ^[^[:space:]]+[[:space:]][[:xdigit:]]+$ ]]; then
     return
   fi
 
-  while IFS="$field_separator" read -r row_type candidate_session_id candidate_session_name _candidate_pane_id candidate_command candidate_path candidate_pane_pid _candidate_title; do
+  while IFS="$field_separator" read -r row_type candidate_session_id _candidate_session_name _candidate_pane_id candidate_command candidate_path candidate_pane_pid _candidate_title; do
     if [[ "$candidate_session_id" != "$agent_session_id" && "$candidate_path" == "$agent_path" && "$candidate_command" == nvim* ]]; then
+      [[ "$matching_session_id" != "$candidate_session_id" ]] || continue
       matching_session_count=$((matching_session_count + 1))
-      matching_session_name="$candidate_session_name"
+      matching_session_id="$candidate_session_id"
     fi
   done <<< "$all_pane_rows"
 
   if (( matching_session_count == 1 )); then
-    display_name="$matching_session_name"
+    resolved_source_session_id="$matching_session_id"
     return
   fi
 
@@ -271,9 +281,9 @@ display_session_name() {
     [[ "$client_session_id" == "$agent_session_id" ]] || continue
     process_pid="$client_pid"
     while [[ "$process_pid" =~ ^[0-9]+$ ]] && (( process_pid > 1 )); do
-      while IFS="$field_separator" read -r row_type candidate_session_id candidate_session_name _candidate_pane_id candidate_command candidate_path candidate_pane_pid _candidate_title; do
+      while IFS="$field_separator" read -r row_type candidate_session_id _candidate_session_name _candidate_pane_id candidate_command candidate_path candidate_pane_pid _candidate_title; do
         if [[ "$candidate_session_id" != "$agent_session_id" && "$candidate_pane_pid" == "$process_pid" ]]; then
-          display_name="$candidate_session_name"
+          resolved_source_session_id="$candidate_session_id"
           return
         fi
       done <<< "$all_pane_rows"
@@ -284,12 +294,22 @@ display_session_name() {
     done
   done <<< "$all_client_rows"
 
-  while IFS="$field_separator" read -r row_type candidate_session_id candidate_session_name _candidate_pane_id candidate_command candidate_path candidate_pane_pid _candidate_title; do
-    if [[ "$candidate_session_id" != "$agent_session_id" && "$candidate_path" == "$agent_path" && "$candidate_command" == nvim* ]]; then
-      display_name="$candidate_session_name"
-      return
-    fi
-  done <<< "$all_pane_rows"
+}
+
+resolve_session_sources() {
+  local row_type
+  local session_id
+  local session_name
+  local _previous_state
+  local session_path
+  local _remaining_fields
+
+  session_sources=()
+  while IFS="$field_separator" read -r row_type session_id session_name _previous_state session_path _remaining_fields; do
+    [[ -n "$session_id" ]] || continue
+    resolve_source_session "$session_id" "$session_name" "$session_path"
+    session_sources[$session_id]="$resolved_source_session_id"
+  done <<< "$all_session_rows"
 }
 
 load_snapshot() {
@@ -301,7 +321,7 @@ load_snapshot() {
   snapshot="$(tmux show-environment -g \
     \; display-message -p "$environment_marker" \
     \; list-panes -a -F "P${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{pane_id}${field_separator}#{pane_current_command}${field_separator}#{pane_current_path}${field_separator}#{pane_pid}${field_separator}#{pane_title}" \
-    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{@codex_state}${field_separator}#{pane_current_path}${field_separator}#{@sidebar_branch}${field_separator}#{@sidebar_branch_sync}" \
+    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{@sidebar_agent_state}${field_separator}#{session_path}${field_separator}#{@sidebar_branch}${field_separator}#{@sidebar_branch_sync}${field_separator}#{@sidebar_source_session}" \
     \; list-clients -F "C${field_separator}#{session_id}${field_separator}#{client_pid}" \
     \; list-panes -a -f '#{!=:#{@status_context_managed},1}' -F "L${field_separator}#{pane_id}" 2>/dev/null)" || return 1
 
@@ -335,7 +355,7 @@ capture_agent_panes() {
   local session_name
   local pane_id
   local pane_command
-  local pane_path
+  local _pane_path
   local _pane_pid
   local pane_title
   local capture_output
@@ -344,7 +364,7 @@ capture_agent_panes() {
   local -a tmux_commands=()
 
   pane_contents=()
-  while IFS="$field_separator" read -r row_type session_id session_name pane_id pane_command pane_path _pane_pid pane_title; do
+  while IFS="$field_separator" read -r row_type session_id session_name pane_id pane_command _pane_path _pane_pid pane_title; do
     agent_for_command "$pane_command" || continue
     tmux_commands+=(display-message -p -t "$pane_id" "${marker_prefix}${pane_id#%}" ';')
     tmux_commands+=(capture-pane -p -t "$pane_id" -S -120 ';')
@@ -372,15 +392,14 @@ build_agent_status() {
   local _pane_session_name
   local pane_id
   local pane_command
-  local pane_path
+  local _pane_path
   local _pane_pid
   local pane_title
   local session_state
   local session_priority
-  local session_path
-  local previous_codex_state
-  local codex_state
-  local codex_priority
+  local previous_agent_state
+  local previous_source_session_id
+  local source_session_id
   local session_current_path
   local previous_branch
   local session_branch
@@ -393,15 +412,18 @@ build_agent_status() {
   capture_agent_panes
   process_tree_loaded=false
   process_parents=()
+  resolve_session_sources
   rendered_status=""
 
-  while IFS="$field_separator" read -r row_type session_id session_name previous_codex_state session_current_path previous_branch previous_branch_sync; do
+  while IFS="$field_separator" read -r row_type session_id session_name previous_agent_state session_current_path previous_branch previous_branch_sync previous_source_session_id; do
     [[ -n "$session_id" ]] || continue
     session_state=""
     session_priority=0
-    session_path=""
-    codex_state=""
-    codex_priority=0
+    source_session_id="${session_sources[$session_id]}"
+    [[ "$source_session_id" != "$session_id" ]] || source_session_id=""
+    if [[ "$source_session_id" != "$previous_source_session_id" ]]; then
+      session_status_commands+=(set-option -t "$session_id" @sidebar_source_session "$source_session_id" ';')
+    fi
     session_branch="$(git -C "$session_current_path" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
     session_branch_sync="$(branch_sync_status "$session_current_path")"
 
@@ -413,31 +435,25 @@ build_agent_status() {
     fi
     schedule_pull_request_refresh "$session_id" "$session_current_path" "$session_branch"
 
-    while IFS="$field_separator" read -r row_type pane_session_id _pane_session_name pane_id pane_command pane_path _pane_pid pane_title; do
-      [[ "$pane_session_id" == "$session_id" ]] || continue
+    while IFS="$field_separator" read -r row_type pane_session_id _pane_session_name pane_id pane_command _pane_path _pane_pid pane_title; do
+      [[ -n "$pane_session_id" ]] || continue
+      [[ "${session_sources[$pane_session_id]:-$pane_session_id}" == "$session_id" ]] || continue
       agent_for_command "$pane_command" || continue
       detect_agent_state "$agent_name" "$pane_id" "$pane_title"
       state_priority "$detected_state"
 
-      if [[ "$agent_name" == codex ]] && (( agent_priority > codex_priority )); then
-        codex_state="$detected_state"
-        codex_priority="$agent_priority"
-      fi
-
       if (( agent_priority > session_priority )); then
         session_state="$detected_state"
         session_priority="$agent_priority"
-        session_path="$pane_path"
       fi
     done <<< "$all_pane_rows"
 
-    if [[ "$codex_state" != "$previous_codex_state" ]]; then
-      session_status_commands+=(set-option -t "$session_id" @codex_state "$codex_state" ';')
+    if [[ "$session_state" != "$previous_agent_state" ]]; then
+      session_status_commands+=(set-option -t "$session_id" @sidebar_agent_state "$session_state" ';')
     fi
 
     if [[ -n "$session_state" ]]; then
-      display_session_name "$session_id" "$session_name" "$session_path"
-      render_session "$session_state" "$display_name"
+      render_session "$session_state" "$session_name"
     fi
   done <<< "$all_session_rows"
 
