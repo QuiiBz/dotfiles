@@ -181,6 +181,14 @@ fzf-history-widget() {
 zle     -N   fzf-history-widget
 bindkey '^R' fzf-history-widget
 
+kctx() {
+  if (( $# == 0 )); then
+    kubectl config current-context
+  else
+    kubectl config use-context "$@"
+  fi
+}
+
 # Quickly switch between AWS profiles
 awsp() {
   if [ -n "$1" ]; then
