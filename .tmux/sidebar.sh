@@ -4,60 +4,85 @@ set -eu
 socket_path="$1"
 current_session_id="$2"
 content_width="${3:-}"
+focused_pane_id="${4:-}"
 
 if [ -z "$content_width" ]; then
-  sidebar_width="$(tmux -S "$socket_path" show-options -v -t "$current_session_id" side-status-width)"
+  sidebar_width="$(tmux -S "$socket_path" show-options -Av -t "$current_session_id" side-status-width)"
   content_width=$((sidebar_width - 1))
 fi
 [ "$content_width" -ge 1 ] || content_width=1
-
-status_width=11
-[ "$status_width" -le "$content_width" ] || status_width="$content_width"
-name_width=$((content_width - status_width))
-session_name="#{s/[#]/\0\0/:#{p${content_width};=${content_width}: #{session_name}}}"
-session_name_with_status=""
-if [ "$name_width" -gt 0 ]; then
-  session_name_with_status="#{s/[#]/\0\0/:#{p${name_width};=${name_width}: #{session_name}}}"
+if [ -z "$focused_pane_id" ]; then
+  focused_pane_id="$(tmux -S "$socket_path" display-message -p -t "${current_session_id}:" '#{pane_id}')"
 fi
+row_indent="  "
+row_indent_width=${#row_indent}
 
-session_color="#{?#{==:#{session_id},${current_session_id}},#c6a0f6,#a4adca}"
-session_weight="#{?#{==:#{session_id},${current_session_id}},bold,nobold}"
+agent_title_format() {
+  status_label="$1"
+  title_width=$((content_width - row_indent_width - 5 - ${#status_label}))
+  pi_title_width=$((title_width + 1))
+  default_title_format=""
+  pi_title_format=""
+  if [ "$title_width" -gt 0 ]; then
+    default_title_format="#{s/[#]/\0\0/:#{=${title_width}:#{@sidebar_agent_title}}}"
+  fi
+  if [ "$pi_title_width" -gt 0 ]; then
+    pi_title_format="#{s/[#]/\0\0/:#{=${pi_title_width}:#{@sidebar_agent_title}}}"
+  fi
+  printf '%s' "#{?#{==:#{@sidebar_agent_icon},π},${pi_title_format},${default_title_format}}"
+}
+
+branch_width=$((content_width - row_indent_width - 11))
+branch_width_without_pr=$((content_width - row_indent_width - 1))
+agent_label='#{?#{==:#{@sidebar_agent_state},blocked},action,#{?#{==:#{@sidebar_agent_state},working},Working,Idle}}'
 agent_color='#{?#{==:#{@sidebar_agent_state},blocked},#ed8796,#{?#{==:#{@sidebar_agent_state},working},#eed49f,#a6da95}}'
-agent_label='#{?#{==:#{@sidebar_agent_state},blocked},● action,#{?#{==:#{@sidebar_agent_state},working},◐ Working,✓ Idle}}'
-status_text_width=$((status_width - 1))
-agent_status=" "
-if [ "$status_text_width" -gt 0 ]; then
-  agent_status="#[fg=${agent_color}]#{p-${status_text_width};=${status_text_width}:${agent_label}} "
+agent_icon_gap='#{?#{==:#{@sidebar_agent_icon},π}, ,  }'
+pr_label='#{?#{==:#{@sidebar_pr_state},open},Open,#{?#{==:#{@sidebar_pr_state},merged},Merged,Closed}}'
+pr_color='#{?#{==:#{@sidebar_pr_state},open},#a6da95,#{?#{==:#{@sidebar_pr_state},merged},#c6a0f6,#ed8796}}'
+pr_icon='#{?#{==:#{@sidebar_pr_state},merged},,#{?#{==:#{@sidebar_pr_state},closed},,}}'
+agent_title="#{?#{==:#{@sidebar_agent_state},blocked},$(agent_title_format action),#{?#{==:#{@sidebar_agent_state},working},$(agent_title_format Working),$(agent_title_format Idle)}}"
+branch_name=""
+branch_name_without_pr=""
+if [ "$branch_width" -gt 0 ]; then
+  branch_name="#{s/[#]/\0\0/:#{p-${branch_width};=${branch_width}:#{@sidebar_branch}#{@sidebar_branch_sync}}}"
 fi
-session_heading="#{?@sidebar_agent_state,${session_name_with_status}${agent_status},${session_name}}"
-demo_active='#{&&:#{==:#{@sidebar_demo},on},#{@sidebar_demo_pr_title}}'
-branch_label="#{?${demo_active},#{@sidebar_demo_branch},#{@sidebar_branch}#{@sidebar_branch_sync}}"
-pr_state="#{?${demo_active},#{@sidebar_demo_pr_state},#{@sidebar_pr_state}}"
-pr_title="#{?${demo_active},#{@sidebar_demo_pr_title},#{@sidebar_pr_title}}"
-branch_name="#{s/[#]/\0\0/:#{p${content_width};=${content_width}:   ${branch_label}}}"
-branch_status="#{?${branch_label},#[nl]#[fg=#5b6078]#[nobold]${branch_name},}"
-pr_color="#{?#{==:${pr_state},open},#a6da95,#{?#{==:${pr_state},merged},#c6a0f6,#ed8796}}"
-pr_icon="#{?#{==:${pr_state},open},,#{?#{==:${pr_state},merged},,}}"
-pr_indent_width=3
-[ "$content_width" -ge 5 ] || pr_indent_width=$((content_width - 1))
-pr_indent="$(printf '%*s' "$pr_indent_width" '')"
-# Leave room for Nerd Font glyphs that extend into the next cell.
-pr_gap_width=2
-pr_available_width=$((content_width - pr_indent_width - 1))
-[ "$pr_gap_width" -le "$pr_available_width" ] || pr_gap_width="$pr_available_width"
-pr_gap="$(printf '%*s' "$pr_gap_width" '')"
-pr_name="${pr_indent}#[fg=${pr_color}]${pr_icon}${pr_gap}#[fg=#CAD3F5]"
-pr_title_width=$((pr_available_width - pr_gap_width))
-if [ "$pr_title_width" -gt 0 ]; then
-  pr_name="${pr_name}#{s/[#]/\0\0/:#{p${pr_title_width};=${pr_title_width}:${pr_title}}}"
+if [ "$branch_width_without_pr" -gt 0 ]; then
+  branch_name_without_pr="#{s/[#]/\0\0/:#{p-${branch_width_without_pr};=${branch_width_without_pr}:#{@sidebar_branch}#{@sidebar_branch_sync}}}"
 fi
-pr_status="#{?${pr_title},#[nl]#[range=user|pr#{s/[$]//:session_id}]#[nobold]${pr_name},}"
-session_format="#[align=left,fg=${session_color},${session_weight},range=session|#{session_id}]${session_heading}${branch_status}${pr_status}#[norange,default,nl]"
+session_name="#{s/[#]/\0\0/:#{p${content_width};=${content_width}: #{session_name}}}"
+session_rows="$(tmux -S "$socket_path" list-sessions -O index -f '#{!:#{@sidebar_source_session}}' -F '#{session_id} #{@sidebar_agent_panes}')"
+set --
+while read -r session_id pane_ids; do
+  [ -n "$session_id" ] || continue
+  session_color="#a4adca"
+  session_weight=nobold
+  if [ "$session_id" = "$current_session_id" ]; then
+    session_color="#c6a0f6"
+    session_weight=bold
+  fi
+  session_heading="#[nl]#[align=left,fg=${session_color},${session_weight},range=session|${session_id}]${session_name}#[norange,default,nl]"
+  set -- "$@" display-message -p -t "${session_id}:" "$session_heading" ';'
+  agent_spacing=""
+  for pane_id in $pane_ids; do
+    title_weight=nobold
+    if [ "$pane_id" = "$focused_pane_id" ]; then
+      title_weight=bold
+    fi
+    agent_range="#[range=user|agent${pane_id#%}]"
+    pr_status="#[range=user|prpane${pane_id#%}]#[fg=${pr_color}]${pr_icon}  #{p6:${pr_label}} "
+    branch_status="#{?@sidebar_pr_state,${pr_status}${agent_range}#[fg=#5b6078]${branch_name},#[fg=#5b6078]${branch_name_without_pr}}"
+    agent_line="${agent_spacing}#[align=left,nobold]${agent_range}${row_indent}#[fg=${agent_color}]#{@sidebar_agent_icon}${agent_icon_gap}${agent_label} #[fg=#a4adca,${title_weight}]${agent_title} #[norange,default,nl]"
+    branch_line="#[align=left,nobold]${agent_range}${row_indent}${branch_status} #[norange,default,nl]"
+    set -- "$@" display-message -p -t "$pane_id" "${agent_line}${branch_line}" ';'
+    agent_spacing='#[nl]'
+  done
+done <<EOF
+$session_rows
+EOF
+[ "$#" -gt 0 ] || exit 0
 
-tmux -S "$socket_path" list-sessions -f '#{!:#{@sidebar_source_session}}' -F "$session_format" |
+tmux -S "$socket_path" "$@" |
   awk '
-    BEGIN { printf "#[nl]" }
-    NR > 1 { printf "#[nl]" }
     { printf "%s", $0 }
     END { printf "\n" }
   '

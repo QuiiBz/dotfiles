@@ -6,7 +6,6 @@ shopt -s nocasematch
 PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:${PATH:-}"
 
 field_separator=$'\x1f'
-marker_prefix="__TMUX_AGENT_${$}_PANE__"
 environment_marker="__TMUX_AGENT_${$}_ENV_END__"
 all_environment_rows=""
 all_pane_rows=""
@@ -15,7 +14,6 @@ all_client_rows=""
 legacy_pane_rows=""
 process_tree_loaded=false
 declare -A legacy_contexts=()
-declare -A pane_contents=()
 declare -A process_parents=()
 declare -A pr_request_keys=()
 declare -A pr_request_times=()
@@ -34,9 +32,9 @@ branch_sync_status() {
 }
 
 refresh_pull_request() {
-  local session_id="$1"
-  local session_path="$2"
-  local session_branch="$3"
+  local pane_id="$1"
+  local pane_path="$2"
+  local pane_branch="$3"
   local remote_name
   local remote_url
   local remote_owner
@@ -45,19 +43,18 @@ refresh_pull_request() {
   local default_branch
   local pull_request
   local pull_request_state=""
-  local pull_request_title=""
   local pull_request_url=""
   local current_path
   local current_branch
 
-  cd -- "$session_path" || return
+  cd -- "$pane_path" || return
   repository_metadata="$(gtimeout 15 gh repo view --json nameWithOwner,defaultBranchRef \
     --jq '[.nameWithOwner, .defaultBranchRef.name] | @tsv' 2>/dev/null)" || return
   IFS=$'\t' read -r repository_name default_branch <<< "$repository_metadata"
 
   pull_request=""
-  if [ "$session_branch" != "$default_branch" ]; then
-    remote_name="$(git config --get "branch.${session_branch}.remote" || printf origin)"
+  if [ "$pane_branch" != "$default_branch" ]; then
+    remote_name="$(git config --get "branch.${pane_branch}.remote" || printf origin)"
     [[ "$remote_name" != . ]] || remote_name=origin
     remote_url="$(git remote get-url "$remote_name" 2>/dev/null)" || return
     remote_owner="${remote_url%/*}"
@@ -65,123 +62,78 @@ refresh_pull_request() {
     [[ "$remote_owner" =~ ^[a-zA-Z0-9_.-]+$ ]] || return
 
     pull_request="$(gtimeout 15 gh api --method GET "repos/${repository_name}/pulls" \
-      -f state=all -f "head=${remote_owner}:${session_branch}" -f per_page=100 \
+      -f state=all -f "head=${remote_owner}:${pane_branch}" -f per_page=100 \
       -f sort=updated -f direction=desc --jq '
         (map(select(.state == "open")) + .) | .[0] // empty |
         [
           (if .merged_at != null then "merged" elif .state == "open" then "open" else "closed" end),
-          (.title | gsub("[[:cntrl:]]"; " ")),
           .html_url
         ] | .[]
       ' 2>/dev/null)" || return
   fi
 
-  current_path="$(tmux display-message -p -t "${session_id}:" '#{session_path}' 2>/dev/null)" || return
-  [[ "$current_path" == "$session_path" ]] || return
+  current_path="$(tmux display-message -p -t "$pane_id" '#{pane_current_path}' 2>/dev/null)" || return
+  [[ "$current_path" == "$pane_path" ]] || return
   current_branch="$(git -C "$current_path" symbolic-ref --quiet --short HEAD 2>/dev/null)" || return
-  [[ "$current_branch" == "$session_branch" ]] || return
+  [[ "$current_branch" == "$pane_branch" ]] || return
 
   if [[ -n "$pull_request" ]]; then
     pull_request_state="${pull_request%%$'\n'*}"
     pull_request="${pull_request#*$'\n'}"
-    pull_request_title="${pull_request%%$'\n'*}"
-    pull_request_url="${pull_request#*$'\n'}"
+    pull_request_url="$pull_request"
     case "$pull_request_state" in open|merged|closed) ;; *) return ;; esac
   fi
-  tmux set-option -t "$session_id" @sidebar_pr_title "$pull_request_title" \
-    \; set-option -t "$session_id" @sidebar_pr_state "$pull_request_state" \
-    \; set-option -t "$session_id" @sidebar_pr_url "$pull_request_url"
+  tmux set-option -p -t "$pane_id" @sidebar_pr_state "$pull_request_state" \
+    \; set-option -p -t "$pane_id" @sidebar_pr_url "$pull_request_url"
 }
 
 open_pull_request() {
   local target="$1"
-  local session_id
+  local pane_id
   local pull_request_url
 
-  [[ "$target" =~ ^pr[0-9]+$ ]] || return
-  session_id="\$${target#pr}"
-  if [[ "$(tmux show-options -gqv @sidebar_demo)" == on && -n "$(tmux show-options -qv -t "$session_id" @sidebar_demo_pr_title)" ]]; then
-    tmux display-message 'DEMO PR: no live GitHub link'
-    return
-  fi
-  pull_request_url="$(tmux show-options -qv -t "$session_id" @sidebar_pr_url)" || return
+  [[ "$target" =~ ^prpane[0-9]+$ ]] || return
+  pane_id="%${target#prpane}"
+  pull_request_url="$(tmux show-options -pqv -t "$pane_id" @sidebar_pr_url)" || return
   [[ "$pull_request_url" =~ ^https://[^/]+/[^/]+/[^/]+/pull/[0-9]+$ ]] || return
   open "$pull_request_url"
 }
 
 schedule_pull_request_refresh() {
-  local session_id="$1"
-  local session_path="$2"
-  local session_branch="$3"
-  local request_key="${session_path}${field_separator}${session_branch}"
+  local pane_id="$1"
+  local pane_path="$2"
+  local pane_branch="$3"
+  local request_key="${pane_path}${field_separator}${pane_branch}"
 
-  if [[ "${pr_request_keys[$session_id]:-}" == "$request_key" ]]; then
-    (( SECONDS - ${pr_request_times[$session_id]:-0} >= 60 )) || return 0
+  if [[ "${pr_request_keys[$pane_id]:-}" == "$request_key" ]]; then
+    (( SECONDS - ${pr_request_times[$pane_id]:-0} >= 60 )) || return 0
   else
-    tmux set-option -t "$session_id" @sidebar_pr_title '' \
-      \; set-option -t "$session_id" @sidebar_pr_state '' \
-      \; set-option -t "$session_id" @sidebar_pr_url ''
+    tmux set-option -p -t "$pane_id" @sidebar_pr_state '' \
+      \; set-option -p -t "$pane_id" @sidebar_pr_url ''
   fi
-  pr_request_keys[$session_id]="$request_key"
-  pr_request_times[$session_id]="$SECONDS"
-  [[ -n "$session_branch" ]] || return 0
-  bash "${BASH_SOURCE[0]}" --pr "$session_id" "$session_path" "$session_branch" >/dev/null 2>&1 &
+  pr_request_keys[$pane_id]="$request_key"
+  pr_request_times[$pane_id]="$SECONDS"
+  [[ -n "$pane_branch" ]] || return 0
+  bash "${BASH_SOURCE[0]}" --pr "$pane_id" "$pane_path" "$pane_branch" >/dev/null 2>&1 &
 }
 
 agent_for_command() {
   local command_name="${1##*/}"
 
   case "$command_name" in
-    codex*) agent_name=codex ;;
-    claude*) agent_name=claude ;;
-    fx*) agent_name=fx ;;
-    pi|pi-*) agent_name=pi ;;
+    codex*) agent_name=codex; agent_icon="" ;;
+    claude*) agent_name=claude; agent_icon="" ;;
+    fx*) agent_name=fx; agent_icon="" ;;
+    pi|pi-*) agent_name=pi; agent_icon="π" ;;
     *) return 1 ;;
   esac
 }
 
-fallback_state() {
-  local screen_content="$1"
-
-  if [[ "$screen_content" =~ action\ required|permission\ required|waiting\ for\ approval|waiting\ for\ user\ confirmation|requires\ approval|allow\ command\?|press\ enter\ to\ confirm|enter\ to\ submit|do\ you\ want\ to\ proceed\?|run\ this\ command\?|asking\ user|enter\ your\ response ]]; then
-    detected_state=blocked
-  elif [[ "$screen_content" =~ esc\ to\ cancel|esc\ cancel|esc\ to\ interrupt|ctrl\+c\ to\ interrupt|ctrl\+c\ to\ stop|esc\ to\ stop|working\.\.\.|kiro\ is\ working|\[stop\] ]]; then
-    detected_state=working
-  else
-    detected_state=idle
-  fi
-}
-
-detect_fx_state() {
-  local screen_content="$1"
-  local line
-  local -a nonempty_lines=()
-  local start_index
-
-  while IFS= read -r line; do
-    [[ -n "$line" ]] && nonempty_lines+=("$line")
-  done <<< "$screen_content"
-
-  start_index=$((${#nonempty_lines[@]} - 12))
-  (( start_index < 0 )) && start_index=0
-  detected_state=idle
-
-  for ((i = start_index; i < ${#nonempty_lines[@]}; i++)); do
-    line="${nonempty_lines[$i]}"
-    if [[ "$line" =~ ^[[:space:]•]*(Pending[[:space:]]+(approval|trust)|Awaiting[[:space:]]+approval|Waiting[[:space:]]+for[[:space:]]+(approval|authorization|authentication))(:|[[:space:]]|$) ]]; then
-      detected_state=blocked
-      return
-    elif [[ "$line" =~ ^[[:space:]•]*(Running|Thinking|Working|Streaming|Connecting|Retrying)([[:space:]]|\(|$) ]]; then
-      detected_state=working
-    fi
-  done
-}
-
 detect_agent_state() {
   local current_agent_name="$1"
-  local pane_id="$2"
-  local pane_title="$3"
-  local screen_content="${pane_contents[$pane_id]:-}"
+  local pane_title="$2"
+
+  detected_state=idle
 
   case "$current_agent_name" in
     codex)
@@ -191,39 +143,49 @@ detect_agent_state() {
     claude)
       [[ "$pane_title" =~ ^[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏][[:space:]] ]] && { detected_state=working; return; }
       ;;
-    fx)
-      detect_fx_state "$screen_content"
-      return
-      ;;
   esac
-
-  fallback_state "$screen_content"
+  return 0
 }
 
-state_priority() {
-  case "$1" in
-    blocked) agent_priority=3 ;;
-    working) agent_priority=2 ;;
-    idle) agent_priority=1 ;;
-    *) agent_priority=0 ;;
-  esac
-}
-
-render_session() {
+render_agent() {
   local state="$1"
-  local session_name="${2//#/##}"
+  local pane_id="$2"
+  local icon="$3"
+  local icon_gap="  "
   local color
-  local icon
-  local rendered_session
+  local label
 
   case "$state" in
-    blocked) color="#ed8796"; icon="●" ;;
-    working) color="#eed49f"; icon="◐" ;;
-    *) color="#a6da95"; icon="✓" ;;
+    blocked) color="#ed8796"; label=action ;;
+    working) color="#eed49f"; label=Working ;;
+    *) color="#a6da95"; label=Idle ;;
   esac
 
-  printf -v rendered_session '#[fg=%s,bold]   %s %s' "$color" "$icon" "$session_name"
-  rendered_status+="$rendered_session"
+  [[ "$icon" != π ]] || icon_gap=" "
+  printf -v rendered_agent '#[fg=%s,range=user|agent%s]%s%s%-7s#[norange] ' "$color" "${pane_id#%}" "$icon" "$icon_gap" "$label"
+}
+
+clean_agent_title() {
+  cleaned_agent_title="${1//[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏]/}"
+  cleaned_agent_title="${cleaned_agent_title//$'\t'/ }"
+  cleaned_agent_title="${cleaned_agent_title//$'\r'/ }"
+  cleaned_agent_title="${cleaned_agent_title//$'\n'/ }"
+  cleaned_agent_title="${cleaned_agent_title#"${cleaned_agent_title%%[![:space:]]*}"}"
+  cleaned_agent_title="${cleaned_agent_title%"${cleaned_agent_title##*[![:space:]]}"}"
+}
+
+restore_sidebar_width() {
+  local current_width
+  local base_width
+  local previous_width
+  previous_width="$(tmux show-options -gqv @sidebar_auto_width)"
+  [[ "$previous_width" =~ ^[0-9]+$ ]] || return 0
+  current_width="$(tmux show-options -gqv side-status-width)"
+  base_width="$(tmux show-options -gqv @sidebar_base_width)"
+  if [[ "$base_width" =~ ^[0-9]+$ && "$current_width" == "$previous_width" ]]; then
+    tmux set-option -g side-status-width "$base_width"
+  fi
+  tmux set-option -guq @sidebar_base_width \; set-option -guq @sidebar_auto_width
 }
 
 load_process_tree() {
@@ -320,8 +282,8 @@ load_snapshot() {
 
   snapshot="$(tmux show-environment -g \
     \; display-message -p "$environment_marker" \
-    \; list-panes -a -F "P${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{pane_id}${field_separator}#{pane_current_command}${field_separator}#{pane_current_path}${field_separator}#{pane_pid}${field_separator}#{pane_title}" \
-    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{@sidebar_agent_state}${field_separator}#{session_path}${field_separator}#{@sidebar_branch}${field_separator}#{@sidebar_branch_sync}${field_separator}#{@sidebar_source_session}" \
+    \; list-panes -a -F "P${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{pane_id}${field_separator}#{pane_current_command}${field_separator}#{pane_current_path}${field_separator}#{pane_pid}${field_separator}#{pane_title}${field_separator}#{@sidebar_agent_state}${field_separator}#{@sidebar_agent_icon}${field_separator}#{@sidebar_agent_title}${field_separator}#{@sidebar_branch}${field_separator}#{@sidebar_branch_sync}" \
+    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{@sidebar_agents}${field_separator}#{session_path}${field_separator}#{@sidebar_agent_panes}${field_separator}#{@sidebar_source_session}" \
     \; list-clients -F "C${field_separator}#{session_id}${field_separator}#{client_pid}" \
     \; list-panes -a -f '#{!=:#{@status_context_managed},1}' -F "L${field_separator}#{pane_id}" 2>/dev/null)" || return 1
 
@@ -349,41 +311,6 @@ load_snapshot() {
   done <<< "$snapshot"
 }
 
-capture_agent_panes() {
-  local row_type
-  local session_id
-  local session_name
-  local pane_id
-  local pane_command
-  local _pane_path
-  local _pane_pid
-  local pane_title
-  local capture_output
-  local current_pane_id=""
-  local line
-  local -a tmux_commands=()
-
-  pane_contents=()
-  while IFS="$field_separator" read -r row_type session_id session_name pane_id pane_command _pane_path _pane_pid pane_title; do
-    agent_for_command "$pane_command" || continue
-    tmux_commands+=(display-message -p -t "$pane_id" "${marker_prefix}${pane_id#%}" ';')
-    tmux_commands+=(capture-pane -p -t "$pane_id" -S -120 ';')
-  done <<< "$all_pane_rows"
-
-  ((${#tmux_commands[@]} > 0)) || return 0
-  unset "tmux_commands[${#tmux_commands[@]}-1]"
-  capture_output="$(tmux "${tmux_commands[@]}" 2>/dev/null)"
-
-  while IFS= read -r line; do
-    if [[ "$line" == "$marker_prefix"* ]]; then
-      current_pane_id="%${line#"$marker_prefix"}"
-      pane_contents[$current_pane_id]=""
-    elif [[ -n "$current_pane_id" ]]; then
-      pane_contents[$current_pane_id]+="${line}"$'\n'
-    fi
-  done <<< "$capture_output"
-}
-
 build_agent_status() {
   local row_type
   local session_id
@@ -392,68 +319,83 @@ build_agent_status() {
   local _pane_session_name
   local pane_id
   local pane_command
-  local _pane_path
+  local pane_path
   local _pane_pid
   local pane_title
-  local session_state
-  local session_priority
+  local session_agents
+  local session_panes
+  local previous_agents
+  local previous_panes
   local previous_agent_state
+  local previous_agent_icon
+  local previous_agent_title
   local previous_source_session_id
   local source_session_id
   local session_current_path
   local previous_branch
-  local session_branch
+  local pane_branch
   local previous_branch_sync
-  local session_branch_sync
+  local pane_branch_sync
+  local -A rendered_panes=()
   local -a session_status_commands=()
 
   load_snapshot || return 1
   update_legacy_contexts
-  capture_agent_panes
   process_tree_loaded=false
   process_parents=()
   resolve_session_sources
   rendered_status=""
 
-  while IFS="$field_separator" read -r row_type session_id session_name previous_agent_state session_current_path previous_branch previous_branch_sync previous_source_session_id; do
+  while IFS="$field_separator" read -r row_type session_id session_name previous_agents session_current_path previous_panes previous_source_session_id; do
     [[ -n "$session_id" ]] || continue
-    session_state=""
-    session_priority=0
+    session_agents=""
+    session_panes=""
+    rendered_panes=()
     source_session_id="${session_sources[$session_id]}"
     [[ "$source_session_id" != "$session_id" ]] || source_session_id=""
     if [[ "$source_session_id" != "$previous_source_session_id" ]]; then
       session_status_commands+=(set-option -t "$session_id" @sidebar_source_session "$source_session_id" ';')
     fi
-    session_branch="$(git -C "$session_current_path" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
-    session_branch_sync="$(branch_sync_status "$session_current_path")"
-
-    if [[ "$session_branch" != "$previous_branch" ]]; then
-      session_status_commands+=(set-option -t "$session_id" @sidebar_branch "$session_branch" ';')
-    fi
-    if [[ "$session_branch_sync" != "$previous_branch_sync" ]]; then
-      session_status_commands+=(set-option -t "$session_id" @sidebar_branch_sync "$session_branch_sync" ';')
-    fi
-    schedule_pull_request_refresh "$session_id" "$session_current_path" "$session_branch"
-
-    while IFS="$field_separator" read -r row_type pane_session_id _pane_session_name pane_id pane_command _pane_path _pane_pid pane_title; do
+    while IFS="$field_separator" read -r row_type pane_session_id _pane_session_name pane_id pane_command pane_path _pane_pid pane_title previous_agent_state previous_agent_icon previous_agent_title previous_branch previous_branch_sync; do
       [[ -n "$pane_session_id" ]] || continue
       [[ "${session_sources[$pane_session_id]:-$pane_session_id}" == "$session_id" ]] || continue
+      [[ -z "${rendered_panes[$pane_id]:-}" ]] || continue
       agent_for_command "$pane_command" || continue
-      detect_agent_state "$agent_name" "$pane_id" "$pane_title"
-      state_priority "$detected_state"
-
-      if (( agent_priority > session_priority )); then
-        session_state="$detected_state"
-        session_priority="$agent_priority"
+      detect_agent_state "$agent_name" "$pane_title"
+      clean_agent_title "$pane_title"
+      pane_branch="$(git -C "$pane_path" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+      pane_branch_sync="$(branch_sync_status "$pane_path")"
+      if [[ "$detected_state" != "$previous_agent_state" ]]; then
+        session_status_commands+=(set-option -p -t "$pane_id" @sidebar_agent_state "$detected_state" ';')
       fi
+      if [[ "$agent_icon" != "$previous_agent_icon" ]]; then
+        session_status_commands+=(set-option -p -t "$pane_id" @sidebar_agent_icon "$agent_icon" ';')
+      fi
+      if [[ "$cleaned_agent_title" != "$previous_agent_title" ]]; then
+        session_status_commands+=(set-option -p -t "$pane_id" @sidebar_agent_title "$cleaned_agent_title" ';')
+      fi
+      if [[ "$pane_branch" != "$previous_branch" ]]; then
+        session_status_commands+=(set-option -p -t "$pane_id" @sidebar_branch "$pane_branch" ';')
+      fi
+      if [[ "$pane_branch_sync" != "$previous_branch_sync" ]]; then
+        session_status_commands+=(set-option -p -t "$pane_id" @sidebar_branch_sync "$pane_branch_sync" ';')
+      fi
+      schedule_pull_request_refresh "$pane_id" "$pane_path" "$pane_branch"
+      render_agent "$detected_state" "$pane_id" "$agent_icon"
+      session_agents+="$rendered_agent"
+      session_panes+="${session_panes:+ }${pane_id}"
+      rendered_panes[$pane_id]=1
     done <<< "$all_pane_rows"
 
-    if [[ "$session_state" != "$previous_agent_state" ]]; then
-      session_status_commands+=(set-option -t "$session_id" @sidebar_agent_state "$session_state" ';')
+    if [[ "$session_agents" != "$previous_agents" ]]; then
+      session_status_commands+=(set-option -t "$session_id" @sidebar_agents "$session_agents" ';')
+    fi
+    if [[ "$session_panes" != "$previous_panes" ]]; then
+      session_status_commands+=(set-option -t "$session_id" @sidebar_agent_panes "$session_panes" ';')
     fi
 
-    if [[ -n "$session_state" ]]; then
-      render_session "$session_state" "$session_name"
+    if [[ -n "$session_agents" ]]; then
+      rendered_status+="#[norange,fg=#a4adca,bold]   ${session_name//#/##} ${session_agents}"
     fi
   done <<< "$all_session_rows"
 
@@ -461,6 +403,7 @@ build_agent_status() {
     unset "session_status_commands[${#session_status_commands[@]}-1]"
     tmux "${session_status_commands[@]}" 2>/dev/null
   fi
+  restore_sidebar_width
 }
 
 read_kube_context() {
