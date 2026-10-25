@@ -13,22 +13,65 @@ all_session_rows=""
 all_client_rows=""
 legacy_pane_rows=""
 process_tree_loaded=false
+sidebar_width_restored=false
 declare -A legacy_contexts=()
 declare -A process_parents=()
 declare -A pr_request_keys=()
 declare -A pr_request_times=()
+declare -A pr_request_panes=()
 declare -A session_sources=()
+declare -A session_pane_rows=()
+declare -A pane_rows_by_id=()
+declare -A pane_sessions_by_pid=()
+declare -A editor_sessions_by_path=()
+declare -A session_client_pids=()
+declare -A pane_pr_states=()
+declare -A pane_pr_titles=()
+declare -A pane_pr_urls=()
+declare -A repository_sync_revisions=()
+declare -A cached_repository_sync_statuses=()
+
+run_tmux_commands() {
+  local argument
+  local command_bytes=0
+  local batch_bytes=0
+  local LC_ALL=C
+  local -a command_arguments=()
+  local -a batch_arguments=()
+
+  for argument in "$@" ';'; do
+    if [[ "$argument" != ';' ]]; then
+      command_arguments+=("$argument")
+      command_bytes=$((command_bytes + ${#argument} + 1))
+      continue
+    fi
+    ((${#command_arguments[@]} > 0)) || continue
+    if (( batch_bytes + command_bytes + 2 > 12000 && batch_bytes > 0 )); then
+      tmux "${batch_arguments[@]}" || return
+      batch_arguments=()
+      batch_bytes=0
+    fi
+    batch_arguments+=("${command_arguments[@]}" ';')
+    batch_bytes=$((batch_bytes + command_bytes + 2))
+    command_arguments=()
+    command_bytes=0
+  done
+  ((${#batch_arguments[@]} == 0)) || tmux "${batch_arguments[@]}"
+}
 
 branch_sync_status() {
   local repository_path="$1"
+  local head_commit="$2"
+  local upstream_commit="$3"
   local divergence
   local commits_ahead
   local commits_behind
 
-  divergence="$(git -C "$repository_path" rev-list --left-right --count 'HEAD...@{upstream}' 2>/dev/null)" || return 0
+  divergence="$(git -C "$repository_path" rev-list --left-right --count "${head_commit}...${upstream_commit}" 2>/dev/null)" || return 1
   read -r commits_ahead commits_behind <<< "$divergence"
-  if (( commits_ahead > 0 )); then printf ' ↑'; fi
-  if (( commits_behind > 0 )); then printf ' ↓'; fi
+  if (( commits_ahead > 0 || commits_behind > 0 )); then printf ' '; fi
+  if (( commits_ahead > 0 )); then printf '↑'; fi
+  if (( commits_behind > 0 )); then printf '↓'; fi
 }
 
 refresh_pull_request() {
@@ -38,53 +81,83 @@ refresh_pull_request() {
   local remote_name
   local remote_url
   local remote_owner
+  local merge_ref
+  local head_branch
   local repository_metadata
   local repository_name
   local default_branch
   local pull_request
   local pull_request_state=""
+  local pull_request_title=""
   local pull_request_url=""
   local current_path
   local current_branch
+  local pane_rows
+  local -A target_panes=()
+  local -A validated_paths=()
+  local -a pull_request_commands=()
+
+  target_panes[$pane_id]="$pane_path"
+  shift 3
+  while (($# >= 2)); do
+    target_panes[$1]="$2"
+    shift 2
+  done
 
   cd -- "$pane_path" || return
   repository_metadata="$(gtimeout 15 gh repo view --json nameWithOwner,defaultBranchRef \
     --jq '[.nameWithOwner, .defaultBranchRef.name] | @tsv' 2>/dev/null)" || return
   IFS=$'\t' read -r repository_name default_branch <<< "$repository_metadata"
 
-  pull_request=""
-  if [ "$pane_branch" != "$default_branch" ]; then
-    remote_name="$(git config --get "branch.${pane_branch}.remote" || printf origin)"
-    [[ "$remote_name" != . ]] || remote_name=origin
-    remote_url="$(git remote get-url "$remote_name" 2>/dev/null)" || return
-    remote_owner="${remote_url%/*}"
-    remote_owner="${remote_owner##*[:/]}"
-    [[ "$remote_owner" =~ ^[a-zA-Z0-9_.-]+$ ]] || return
+  remote_name="$(git config --get "branch.${pane_branch}.remote" || printf origin)"
+  [[ "$remote_name" != . ]] || remote_name=origin
+  remote_url="$(git ls-remote --get-url "$remote_name" 2>/dev/null)" || return
+  remote_owner="${remote_url%/*}"
+  remote_owner="${remote_owner##*[:/]}"
+  [[ "$remote_owner" =~ ^[a-zA-Z0-9_.-]+$ ]] || return
+  head_branch="$pane_branch"
+  merge_ref="$(git config --get "branch.${pane_branch}.merge" || true)"
+  [[ "$merge_ref" != refs/heads/* ]] || head_branch="${merge_ref#refs/heads/}"
 
+  pull_request=""
+  if [[ "$head_branch" != "$default_branch" || "$remote_owner" != "${repository_name%%/*}" ]]; then
     pull_request="$(gtimeout 15 gh api --method GET "repos/${repository_name}/pulls" \
-      -f state=all -f "head=${remote_owner}:${pane_branch}" -f per_page=100 \
+      -f state=all -f "head=${remote_owner}:${head_branch}" -f per_page=100 \
       -f sort=updated -f direction=desc --jq '
         (map(select(.state == "open")) + .) | .[0] // empty |
         [
           (if .merged_at != null then "merged" elif .state == "open" then "open" else "closed" end),
+          (.title | gsub("[[:cntrl:]]"; " ")),
           .html_url
         ] | .[]
       ' 2>/dev/null)" || return
   fi
 
-  current_path="$(tmux display-message -p -t "$pane_id" '#{pane_current_path}' 2>/dev/null)" || return
-  [[ "$current_path" == "$pane_path" ]] || return
-  current_branch="$(git -C "$current_path" symbolic-ref --quiet --short HEAD 2>/dev/null)" || return
+  current_branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" || return
   [[ "$current_branch" == "$pane_branch" ]] || return
+  validated_paths[$pane_path]=1
 
   if [[ -n "$pull_request" ]]; then
     pull_request_state="${pull_request%%$'\n'*}"
     pull_request="${pull_request#*$'\n'}"
-    pull_request_url="$pull_request"
+    pull_request_title="${pull_request%%$'\n'*}"
+    pull_request_url="${pull_request#*$'\n'}"
     case "$pull_request_state" in open|merged|closed) ;; *) return ;; esac
   fi
-  tmux set-option -p -t "$pane_id" @sidebar_pr_state "$pull_request_state" \
-    \; set-option -p -t "$pane_id" @sidebar_pr_url "$pull_request_url"
+  pane_rows="$(tmux list-panes -a -F "#{pane_id}${field_separator}#{pane_current_path}" 2>/dev/null)" || return
+  while IFS="$field_separator" read -r pane_id current_path; do
+    [[ -n "$pane_id" && -n "${target_panes[$pane_id]:-}" ]] || continue
+    [[ "$current_path" == "${target_panes[$pane_id]}" ]] || continue
+    if [[ ! -v validated_paths[$current_path] ]]; then
+      current_branch="$(git -C "$current_path" symbolic-ref --quiet --short HEAD 2>/dev/null)" || continue
+      [[ "$current_branch" == "$pane_branch" ]] || continue
+      validated_paths[$current_path]=1
+    fi
+    pull_request_commands+=(set-option -p -t "$pane_id" @sidebar_pr_state "$pull_request_state" ';'
+      set-option -p -t "$pane_id" @sidebar_pr_title "$pull_request_title" ';'
+      set-option -p -t "$pane_id" @sidebar_pr_url "$pull_request_url" ';')
+  done <<< "$pane_rows"
+  run_tmux_commands "${pull_request_commands[@]}"
 }
 
 open_pull_request() {
@@ -100,21 +173,121 @@ open_pull_request() {
 }
 
 schedule_pull_request_refresh() {
+  local request_key="$1"
+  local pane_branch="$2"
+  local pane_id
+  local source_pane_id=""
+  local previous_source_pane_id="${pr_request_panes[$request_key]:-}"
+  local request_state=""
+  local request_title=""
+  local request_url=""
+  shift 2
+
+  for pane_id in "$@"; do
+    if [[ "$pane_id" == "$previous_source_pane_id" && "${pr_request_keys[$pane_id]:-}" == "$request_key" ]]; then
+      source_pane_id="$pane_id"
+      break
+    fi
+  done
+  if [[ -z "$source_pane_id" ]]; then
+    for pane_id in "$@"; do
+      [[ "${pr_request_keys[$pane_id]:-}" == "$request_key" ]] || continue
+      source_pane_id="$pane_id"
+      break
+    done
+  fi
+  if [[ -n "$source_pane_id" ]]; then
+    request_state="${pane_pr_states[$source_pane_id]}"
+    request_title="${pane_pr_titles[$source_pane_id]}"
+    request_url="${pane_pr_urls[$source_pane_id]}"
+  fi
+  for pane_id in "$@"; do
+    if [[ "${pane_pr_states[$pane_id]}" != "$request_state" ||
+          "${pane_pr_titles[$pane_id]}" != "$request_title" ||
+          "${pane_pr_urls[$pane_id]}" != "$request_url" ]]; then
+      session_status_commands+=(set-option -p -t "$pane_id" @sidebar_pr_state "$request_state" ';'
+        set-option -p -t "$pane_id" @sidebar_pr_title "$request_title" ';'
+        set-option -p -t "$pane_id" @sidebar_pr_url "$request_url" ';')
+    fi
+    pr_request_keys[$pane_id]="$request_key"
+  done
+  [[ -n "$pane_branch" ]] || return 0
+  if [[ -n "$source_pane_id" && "$source_pane_id" == "$previous_source_pane_id" && -v pr_request_times[$request_key] ]]; then
+    (( SECONDS - ${pr_request_times[$request_key]} >= 60 )) || return 0
+  fi
+  pr_request_panes[$request_key]="${source_pane_id:-$1}"
+  pr_request_times[$request_key]="$SECONDS"
+  pull_request_jobs+=("$request_key")
+}
+
+update_repository_status() {
   local pane_id="$1"
   local pane_path="$2"
-  local pane_branch="$3"
-  local request_key="${pane_path}${field_separator}${pane_branch}"
+  local previous_branch="$3"
+  local previous_branch_sync="$4"
+  local pane_branch
+  local pane_branch_sync
+  local repository_metadata
+  local repository_root
+  local repository_common_path
+  local sync_revisions=""
+  local reuse_sync_status=false
+  local request_key
+  local -a repository_fields=()
 
-  if [[ "${pr_request_keys[$pane_id]:-}" == "$request_key" ]]; then
-    (( SECONDS - ${pr_request_times[$pane_id]:-0} >= 60 )) || return 0
-  else
-    tmux set-option -p -t "$pane_id" @sidebar_pr_state '' \
-      \; set-option -p -t "$pane_id" @sidebar_pr_url ''
+  if [[ ! -v repository_branches[$pane_path] ]]; then
+    if repository_metadata="$(git -C "$pane_path" rev-parse --show-toplevel --path-format=absolute --git-common-dir \
+      --is-shallow-repository HEAD '@{upstream}' --glob='refs/replace/*' \
+      --symbolic-full-name --glob='refs/replace/*' --abbrev-ref HEAD 2>/dev/null)"; then
+      mapfile -t repository_fields <<< "$repository_metadata"
+      # Shallow boundaries and grafts can change ancestry without moving either branch.
+      if [[ "${repository_fields[2]}" == false && ! -s "${repository_fields[1]}/info/grafts" ]]; then
+        reuse_sync_status=true
+      fi
+      sync_revisions="${reuse_sync_status}:${repository_metadata}"
+      pane_branch="${repository_fields[-1]}"
+      [[ "$pane_branch" != HEAD ]] || pane_branch=""
+    else
+      mapfile -t repository_fields <<< "$repository_metadata"
+      pane_branch="$(git -C "$pane_path" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+      if ((${#repository_fields[@]} < 2)); then
+        repository_fields=("$pane_path" "$pane_path")
+        if [[ -n "$pane_branch" ]]; then
+          repository_fields[1]="$(git -C "$pane_path" rev-parse --path-format=absolute --git-common-dir 2>/dev/null || printf '%s' "$pane_path")"
+        else
+          repository_sync_statuses[$pane_path]=""
+        fi
+      fi
+    fi
+    repository_root="${repository_fields[0]:-$pane_path}"
+    repository_common_path="${repository_fields[1]:-$pane_path}"
+    repository_branches[$pane_path]="$pane_branch"
+    repository_roots[$pane_path]="$repository_root"
+    repository_common_paths[$pane_path]="$repository_common_path"
+    if [[ ! -v repository_sync_statuses[$repository_root] ]]; then
+      pane_branch_sync=""
+      if [[ -n "$sync_revisions" ]]; then
+        if [[ "$reuse_sync_status" == true && "${repository_sync_revisions[$repository_root]:-}" == "$sync_revisions" ]]; then
+          pane_branch_sync="${cached_repository_sync_statuses[$repository_root]}"
+        elif pane_branch_sync="$(branch_sync_status "$pane_path" "${repository_fields[3]}" "${repository_fields[4]}")"; then
+          repository_sync_revisions[$repository_root]="$sync_revisions"
+          cached_repository_sync_statuses[$repository_root]="$pane_branch_sync"
+        fi
+      fi
+      repository_sync_statuses[$repository_root]="$pane_branch_sync"
+    fi
   fi
-  pr_request_keys[$pane_id]="$request_key"
-  pr_request_times[$pane_id]="$SECONDS"
-  [[ -n "$pane_branch" ]] || return 0
-  bash "${BASH_SOURCE[0]}" --pr "$pane_id" "$pane_path" "$pane_branch" >/dev/null 2>&1 &
+  pane_branch="${repository_branches[$pane_path]}"
+  pane_branch_sync="${repository_sync_statuses[${repository_roots[$pane_path]}]}"
+  if [[ "$pane_branch" != "$previous_branch" ]]; then
+    session_status_commands+=(set-option -p -t "$pane_id" @sidebar_branch "$pane_branch" ';')
+  fi
+  if [[ "$pane_branch_sync" != "$previous_branch_sync" ]]; then
+    session_status_commands+=(set-option -p -t "$pane_id" @sidebar_branch_sync "$pane_branch_sync" ';')
+  fi
+  request_key="${repository_common_paths[$pane_path]}${field_separator}${pane_branch}"
+  repository_panes[$request_key]+="${repository_panes[$request_key]:+ }${pane_id}"
+  repository_request_branches[$request_key]="$pane_branch"
 }
 
 agent_for_command() {
@@ -205,15 +378,7 @@ resolve_source_session() {
   local agent_session_id="$1"
   local agent_session_name="$2"
   local agent_path="$3"
-  local row_type
   local candidate_session_id
-  local _candidate_session_name
-  local _candidate_pane_id
-  local candidate_command
-  local candidate_path
-  local candidate_pane_pid
-  local _candidate_title
-  local client_session_id
   local client_pid
   local process_pid
   local parent_pid
@@ -225,13 +390,11 @@ resolve_source_session() {
     return
   fi
 
-  while IFS="$field_separator" read -r row_type candidate_session_id _candidate_session_name _candidate_pane_id candidate_command candidate_path candidate_pane_pid _candidate_title; do
-    if [[ "$candidate_session_id" != "$agent_session_id" && "$candidate_path" == "$agent_path" && "$candidate_command" == nvim* ]]; then
-      [[ "$matching_session_id" != "$candidate_session_id" ]] || continue
-      matching_session_count=$((matching_session_count + 1))
-      matching_session_id="$candidate_session_id"
-    fi
-  done <<< "$all_pane_rows"
+  for candidate_session_id in ${editor_sessions_by_path[$agent_path]:-}; do
+    [[ "$candidate_session_id" != "$agent_session_id" ]] || continue
+    matching_session_count=$((matching_session_count + 1))
+    matching_session_id="$candidate_session_id"
+  done
 
   if (( matching_session_count == 1 )); then
     resolved_source_session_id="$matching_session_id"
@@ -239,22 +402,21 @@ resolve_source_session() {
   fi
 
   load_process_tree
-  while IFS="$field_separator" read -r row_type client_session_id client_pid; do
-    [[ "$client_session_id" == "$agent_session_id" ]] || continue
+  for client_pid in ${session_client_pids[$agent_session_id]:-}; do
     process_pid="$client_pid"
     while [[ "$process_pid" =~ ^[0-9]+$ ]] && (( process_pid > 1 )); do
-      while IFS="$field_separator" read -r row_type candidate_session_id _candidate_session_name _candidate_pane_id candidate_command candidate_path candidate_pane_pid _candidate_title; do
-        if [[ "$candidate_session_id" != "$agent_session_id" && "$candidate_pane_pid" == "$process_pid" ]]; then
+      for candidate_session_id in ${pane_sessions_by_pid[$process_pid]:-}; do
+        if [[ "$candidate_session_id" != "$agent_session_id" ]]; then
           resolved_source_session_id="$candidate_session_id"
           return
         fi
-      done <<< "$all_pane_rows"
+      done
 
       parent_pid="${process_parents[$process_pid]:-}"
       [[ -z "$parent_pid" || "$parent_pid" == "$process_pid" ]] && break
       process_pid="$parent_pid"
     done
-  done <<< "$all_client_rows"
+  done
 
 }
 
@@ -279,11 +441,22 @@ load_snapshot() {
   local row_type
   local row
   local reading_environment=true
+  local session_id
+  local pane_id
+  local pane_command
+  local pane_path
+  local pane_pid
+  local pane_pr_state
+  local pane_pr_title
+  local pane_pr_url
+  local remaining_fields
+  local client_pid
+  local -A indexed_editor_sessions=()
 
   snapshot="$(tmux show-environment -g \
     \; display-message -p "$environment_marker" \
-    \; list-panes -a -F "P${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{pane_id}${field_separator}#{pane_current_command}${field_separator}#{pane_current_path}${field_separator}#{pane_pid}${field_separator}#{pane_title}${field_separator}#{@sidebar_agent_state}${field_separator}#{@sidebar_agent_icon}${field_separator}#{@sidebar_agent_title}${field_separator}#{@sidebar_branch}${field_separator}#{@sidebar_branch_sync}" \
-    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{@sidebar_agents}${field_separator}#{session_path}${field_separator}#{@sidebar_agent_panes}${field_separator}#{@sidebar_source_session}" \
+    \; list-panes -a -F "P${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{pane_id}${field_separator}#{pane_current_command}${field_separator}#{pane_current_path}${field_separator}#{pane_pid}${field_separator}#{pane_title}${field_separator}#{@sidebar_agent_state}${field_separator}#{@sidebar_agent_icon}${field_separator}#{@sidebar_agent_title}${field_separator}#{@sidebar_branch}${field_separator}#{@sidebar_branch_sync}${field_separator}#{@sidebar_pr_state}${field_separator}#{@sidebar_pr_title}${field_separator}#{@sidebar_pr_url}" \
+    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{@sidebar_agents}${field_separator}#{session_path}${field_separator}#{@sidebar_agent_panes}${field_separator}#{@sidebar_source_session}${field_separator}#{pane_id}${field_separator}#{@sidebar_agent_groups}" \
     \; list-clients -F "C${field_separator}#{session_id}${field_separator}#{client_pid}" \
     \; list-panes -a -f '#{!=:#{@status_context_managed},1}' -F "L${field_separator}#{pane_id}" 2>/dev/null)" || return 1
 
@@ -292,6 +465,13 @@ load_snapshot() {
   all_session_rows=""
   all_client_rows=""
   legacy_pane_rows=""
+  pane_rows_by_id=()
+  pane_sessions_by_pid=()
+  editor_sessions_by_path=()
+  session_client_pids=()
+  pane_pr_states=()
+  pane_pr_titles=()
+  pane_pr_urls=()
   while IFS= read -r row; do
     if [[ "$row" == "$environment_marker" ]]; then
       reading_environment=false
@@ -303,9 +483,25 @@ load_snapshot() {
 
     row_type="${row%%"$field_separator"*}"
     case "$row_type" in
-      P) all_pane_rows+="${row}"$'\n' ;;
+      P)
+        all_pane_rows+="${row}"$'\n'
+        IFS="$field_separator" read -r row_type session_id remaining_fields pane_id pane_command pane_path pane_pid remaining_fields remaining_fields remaining_fields remaining_fields remaining_fields remaining_fields pane_pr_state pane_pr_title pane_pr_url <<< "$row"
+        pane_rows_by_id[$pane_id]="$row"
+        pane_sessions_by_pid[$pane_pid]+="${pane_sessions_by_pid[$pane_pid]:+ }${session_id}"
+        pane_pr_states[$pane_id]="$pane_pr_state"
+        pane_pr_titles[$pane_id]="$pane_pr_title"
+        pane_pr_urls[$pane_id]="$pane_pr_url"
+        if [[ "$pane_command" == nvim* && ! -v indexed_editor_sessions[${pane_path}${field_separator}${session_id}] ]]; then
+          editor_sessions_by_path[$pane_path]+="${editor_sessions_by_path[$pane_path]:+ }${session_id}"
+          indexed_editor_sessions[${pane_path}${field_separator}${session_id}]=1
+        fi
+        ;;
       S) all_session_rows+="${row}"$'\n' ;;
-      C) all_client_rows+="${row}"$'\n' ;;
+      C)
+        all_client_rows+="${row}"$'\n'
+        IFS="$field_separator" read -r row_type session_id client_pid <<< "$row"
+        session_client_pids[$session_id]+="${session_client_pids[$session_id]:+ }${client_pid}"
+        ;;
       L) legacy_pane_rows+="${row}"$'\n' ;;
     esac
   done <<< "$snapshot"
@@ -324,6 +520,10 @@ build_agent_status() {
   local pane_title
   local session_agents
   local session_panes
+  local session_agent_groups
+  local previous_agent_groups
+  local group_path
+  local group_panes
   local previous_agents
   local previous_panes
   local previous_agent_state
@@ -332,11 +532,26 @@ build_agent_status() {
   local previous_source_session_id
   local source_session_id
   local session_current_path
+  local session_active_pane_id
   local previous_branch
-  local pane_branch
   local previous_branch_sync
-  local pane_branch_sync
+  local remaining_fields
+  local pane_row
+  local request_key
+  local repository_root
+  local -A pane_paths=()
+  local -A repository_branches=()
+  local -A repository_roots=()
+  local -A repository_common_paths=()
+  local -A repository_sync_statuses=()
+  local -A repository_panes=()
+  local -A repository_request_branches=()
+  local -a request_panes=()
+  local -a pull_request_jobs=()
+  local -a request_arguments=()
   local -A rendered_panes=()
+  local -A directory_panes=()
+  local -a group_paths=()
   local -a session_status_commands=()
 
   load_snapshot || return 1
@@ -344,27 +559,37 @@ build_agent_status() {
   process_tree_loaded=false
   process_parents=()
   resolve_session_sources
+  session_pane_rows=()
+  while IFS= read -r pane_row; do
+    [[ -n "$pane_row" ]] || continue
+    pane_session_id="${pane_row#*"$field_separator"}"
+    pane_session_id="${pane_session_id%%"$field_separator"*}"
+    source_session_id="${session_sources[$pane_session_id]:-$pane_session_id}"
+    session_pane_rows[$source_session_id]+="$pane_row"$'\n'
+  done <<< "$all_pane_rows"
   rendered_status=""
 
-  while IFS="$field_separator" read -r row_type session_id session_name previous_agents session_current_path previous_panes previous_source_session_id; do
+  while IFS="$field_separator" read -r row_type session_id session_name previous_agents session_current_path previous_panes previous_source_session_id session_active_pane_id previous_agent_groups; do
     [[ -n "$session_id" ]] || continue
     session_agents=""
     session_panes=""
+    session_agent_groups=""
     rendered_panes=()
+    directory_panes=()
+    group_paths=()
     source_session_id="${session_sources[$session_id]}"
     [[ "$source_session_id" != "$session_id" ]] || source_session_id=""
     if [[ "$source_session_id" != "$previous_source_session_id" ]]; then
       session_status_commands+=(set-option -t "$session_id" @sidebar_source_session "$source_session_id" ';')
     fi
-    while IFS="$field_separator" read -r row_type pane_session_id _pane_session_name pane_id pane_command pane_path _pane_pid pane_title previous_agent_state previous_agent_icon previous_agent_title previous_branch previous_branch_sync; do
+    while IFS="$field_separator" read -r row_type pane_session_id _pane_session_name pane_id pane_command pane_path _pane_pid pane_title previous_agent_state previous_agent_icon previous_agent_title previous_branch previous_branch_sync remaining_fields; do
       [[ -n "$pane_session_id" ]] || continue
       [[ "${session_sources[$pane_session_id]:-$pane_session_id}" == "$session_id" ]] || continue
       [[ -z "${rendered_panes[$pane_id]:-}" ]] || continue
       agent_for_command "$pane_command" || continue
+      pane_paths[$pane_id]="$pane_path"
       detect_agent_state "$agent_name" "$pane_title"
       clean_agent_title "$pane_title"
-      pane_branch="$(git -C "$pane_path" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
-      pane_branch_sync="$(branch_sync_status "$pane_path")"
       if [[ "$detected_state" != "$previous_agent_state" ]]; then
         session_status_commands+=(set-option -p -t "$pane_id" @sidebar_agent_state "$detected_state" ';')
       fi
@@ -374,18 +599,28 @@ build_agent_status() {
       if [[ "$cleaned_agent_title" != "$previous_agent_title" ]]; then
         session_status_commands+=(set-option -p -t "$pane_id" @sidebar_agent_title "$cleaned_agent_title" ';')
       fi
-      if [[ "$pane_branch" != "$previous_branch" ]]; then
-        session_status_commands+=(set-option -p -t "$pane_id" @sidebar_branch "$pane_branch" ';')
-      fi
-      if [[ "$pane_branch_sync" != "$previous_branch_sync" ]]; then
-        session_status_commands+=(set-option -p -t "$pane_id" @sidebar_branch_sync "$pane_branch_sync" ';')
-      fi
-      schedule_pull_request_refresh "$pane_id" "$pane_path" "$pane_branch"
+      update_repository_status "$pane_id" "$pane_path" "$previous_branch" "$previous_branch_sync"
       render_agent "$detected_state" "$pane_id" "$agent_icon"
       session_agents+="$rendered_agent"
       session_panes+="${session_panes:+ }${pane_id}"
+      group_panes="${directory_panes[$pane_path]:-}"
+      [[ -n "$group_panes" ]] || group_paths+=("$pane_path")
+      directory_panes[$pane_path]="${group_panes:+${group_panes},}${pane_id}"
       rendered_panes[$pane_id]=1
-    done <<< "$all_pane_rows"
+    done <<< "${session_pane_rows[$session_id]:-}"
+
+    for group_path in "${group_paths[@]}"; do
+      session_agent_groups+="${session_agent_groups:+ }${directory_panes[$group_path]}"
+    done
+
+    if [[ -z "$session_panes" && -z "$source_session_id" ]]; then
+      pane_row="${pane_rows_by_id[$session_active_pane_id]:-}"
+      if [[ -n "$pane_row" ]]; then
+        IFS="$field_separator" read -r row_type pane_session_id _pane_session_name pane_id pane_command pane_path _pane_pid pane_title previous_agent_state previous_agent_icon previous_agent_title previous_branch previous_branch_sync remaining_fields <<< "$pane_row"
+        pane_paths[$pane_id]="$pane_path"
+        update_repository_status "$pane_id" "$pane_path" "$previous_branch" "$previous_branch_sync"
+      fi
+    fi
 
     if [[ "$session_agents" != "$previous_agents" ]]; then
       session_status_commands+=(set-option -t "$session_id" @sidebar_agents "$session_agents" ';')
@@ -393,17 +628,53 @@ build_agent_status() {
     if [[ "$session_panes" != "$previous_panes" ]]; then
       session_status_commands+=(set-option -t "$session_id" @sidebar_agent_panes "$session_panes" ';')
     fi
+    if [[ "$session_agent_groups" != "$previous_agent_groups" ]]; then
+      session_status_commands+=(set-option -t "$session_id" @sidebar_agent_groups "$session_agent_groups" ';')
+    fi
 
     if [[ -n "$session_agents" ]]; then
       rendered_status+="#[norange,fg=#a4adca,bold]   ${session_name//#/##} ${session_agents}"
     fi
   done <<< "$all_session_rows"
 
+  for request_key in "${!repository_panes[@]}"; do
+    read -r -a request_panes <<< "${repository_panes[$request_key]}"
+    schedule_pull_request_refresh "$request_key" "${repository_request_branches[$request_key]}" "${request_panes[@]}"
+  done
+  for repository_root in "${!repository_sync_revisions[@]}"; do
+    if [[ ! -v repository_sync_statuses[$repository_root] ]]; then
+      unset 'repository_sync_revisions[$repository_root]' 'cached_repository_sync_statuses[$repository_root]'
+    fi
+  done
+  for pane_id in "${!pr_request_keys[@]}"; do
+    [[ -v pane_paths[$pane_id] ]] || unset 'pr_request_keys[$pane_id]'
+  done
+  for request_key in "${!pr_request_times[@]}"; do
+    if [[ ! -v repository_panes[$request_key] ]]; then
+      unset 'pr_request_times[$request_key]' 'pr_request_panes[$request_key]'
+    fi
+  done
   if ((${#session_status_commands[@]} > 0)); then
-    unset "session_status_commands[${#session_status_commands[@]}-1]"
-    tmux "${session_status_commands[@]}" 2>/dev/null
+    if ! run_tmux_commands "${session_status_commands[@]}" 2>/dev/null; then
+      pr_request_keys=()
+      pr_request_times=()
+      pr_request_panes=()
+      return 1
+    fi
   fi
-  restore_sidebar_width
+  if [[ "$sidebar_width_restored" == false ]]; then
+    restore_sidebar_width
+    sidebar_width_restored=true
+  fi
+  for request_key in "${pull_request_jobs[@]}"; do
+    read -r -a request_panes <<< "${repository_panes[$request_key]}"
+    pane_id="${request_panes[0]}"
+    request_arguments=(--pr "$pane_id" "${pane_paths[$pane_id]}" "${repository_request_branches[$request_key]}")
+    for pane_id in "${request_panes[@]:1}"; do
+      request_arguments+=("$pane_id" "${pane_paths[$pane_id]}")
+    done
+    bash "${BASH_SOURCE[0]}" "${request_arguments[@]}" >/dev/null 2>&1 &
+  done
 }
 
 read_kube_context() {
@@ -468,7 +739,7 @@ update_legacy_contexts() {
 
   ((${#tmux_commands[@]} > 0)) || return 0
   unset "tmux_commands[${#tmux_commands[@]}-1]"
-  tmux "${tmux_commands[@]}" 2>/dev/null
+  run_tmux_commands "${tmux_commands[@]}" 2>/dev/null
 }
 
 watch_status() {
@@ -500,7 +771,12 @@ watch_status() {
   exec 9<> "$timer_pipe"
   rm -f "$timer_pipe"
 
-  while build_agent_status; do
+  while :; do
+    if ! build_agent_status; then
+      tmux has-session 2>/dev/null || break
+      read -r -t 1 -u 9 _ || true
+      continue
+    fi
     if [[ "$rendered_status" != "$last_rendered_status" ]]; then
       tmux set-option -gq @agent_status "$rendered_status"
       last_rendered_status="$rendered_status"
@@ -521,7 +797,7 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
       open_pull_request "$2"
       ;;
     --pr)
-      refresh_pull_request "$2" "$3" "$4"
+      refresh_pull_request "${@:2}"
       ;;
     --watch)
       watch_status
