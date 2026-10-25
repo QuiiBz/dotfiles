@@ -17,6 +17,7 @@ fi
 row_indent="  "
 row_indent_width=${#row_indent}
 declare -A pane_widths=()
+declare -A pane_targets=()
 declare -a render_commands=()
 render_command_bytes=0
 rendered_rows=""
@@ -75,13 +76,16 @@ fi
 session_name="#{s/[#]/\0\0/:#{p${content_width};=${content_width}: #{session_name}}}"
 snapshot="$(tmux -S "$socket_path" \
   list-sessions -O index -f '#{!:#{@sidebar_source_session}}' -F '#{session_id}|#{@sidebar_agent_panes}|#{@sidebar_agent_groups}|#{pane_id}' \
-  ';' list-panes -a -F 'P#{pane_id}|#{@sidebar_pr_state}|#{w:#{s/[#]/\0\0/:#{@sidebar_branch}#{@sidebar_branch_sync}}}|#{w:#{s/[#]/\0\0/:#{@sidebar_pr_title}}}')"
+  ';' list-panes -a -F 'P#{pane_id}|#{@sidebar_source_pane}|#{@sidebar_pr_state}|#{w:#{s/[#]/\0\0/:#{@sidebar_branch}#{@sidebar_branch_sync}}}|#{w:#{s/[#]/\0\0/:#{@sidebar_pr_title}}}')"
 session_rows=""
 while IFS= read -r snapshot_row; do
   case "$snapshot_row" in
     P*)
       pane_row="${snapshot_row#P}"
-      pane_widths[${pane_row%%|*}]="${pane_row#*|}"
+      pane_id="${pane_row%%|*}"
+      pane_row="${pane_row#*|}"
+      pane_targets[$pane_id]="${pane_row%%|*}"
+      pane_widths[$pane_id]="${pane_row#*|}"
       ;;
     *) session_rows+="$snapshot_row"$'\n' ;;
   esac
@@ -111,19 +115,21 @@ while IFS='|' read -r session_id pane_ids pane_groups active_pane_id; do
       [[ -v pane_widths[$pane_id] ]] || continue
       [ -n "$repository_pane_id" ] || repository_pane_id="$pane_id"
       title_weight=nobold
-      if [ "$pane_id" = "$focused_pane_id" ]; then
+      target_pane_id="${pane_targets[$pane_id]:-$pane_id}"
+      if [ "$target_pane_id" = "$focused_pane_id" ]; then
         title_weight=bold
         repository_pane_id="$pane_id"
       fi
       if [ "$repository_only" = false ]; then
-        agent_range="#[range=user|agent${pane_id#%}]"
+        agent_range="#[range=user|agent${target_pane_id#%}]"
         agent_line="${group_spacing}#[align=left,nobold]${agent_range}${row_indent}#[fg=${agent_color}]#{@sidebar_agent_icon}${agent_icon_gap}${agent_label} #[fg=#a4adca,${title_weight}]${agent_title} #[norange,default,nl]"
         queue_render_command "$pane_id" "$agent_line"
         group_spacing=""
       fi
     done
     [ -n "$repository_pane_id" ] || continue
-    agent_range="#[range=user|agent${repository_pane_id#%}]"
+    target_pane_id="${pane_targets[$repository_pane_id]:-$repository_pane_id}"
+    agent_range="#[range=user|agent${target_pane_id#%}]"
     IFS='|' read -r pr_state branch_text_width pr_title_text_width <<< "${pane_widths[$repository_pane_id]}"
     branch_status="#[fg=#5b6078]${branch_name_without_pr}"
     if [ -n "$pr_state" ]; then

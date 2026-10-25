@@ -20,10 +20,12 @@ declare -A pr_request_keys=()
 declare -A pr_request_times=()
 declare -A pr_request_panes=()
 declare -A session_sources=()
+declare -A session_source_panes=()
 declare -A session_pane_rows=()
 declare -A pane_rows_by_id=()
-declare -A pane_sessions_by_pid=()
-declare -A editor_sessions_by_path=()
+declare -A pane_ids_by_pid=()
+declare -A pane_session_ids=()
+declare -A editor_panes_by_path=()
 declare -A session_client_pids=()
 declare -A pane_pr_states=()
 declare -A pane_pr_titles=()
@@ -378,26 +380,17 @@ resolve_source_session() {
   local agent_session_id="$1"
   local agent_session_name="$2"
   local agent_path="$3"
+  local candidate_pane_id
   local candidate_session_id
   local client_pid
   local process_pid
   local parent_pid
-  local matching_session_count=0
-  local matching_session_id=""
+  local matching_pane_count=0
+  local matching_pane_id=""
 
   resolved_source_session_id="$agent_session_id"
+  resolved_source_pane_id=""
   if [[ ${#agent_session_name} -ne 17 || ! "$agent_session_name" =~ ^[^[:space:]]+[[:space:]][[:xdigit:]]+$ ]]; then
-    return
-  fi
-
-  for candidate_session_id in ${editor_sessions_by_path[$agent_path]:-}; do
-    [[ "$candidate_session_id" != "$agent_session_id" ]] || continue
-    matching_session_count=$((matching_session_count + 1))
-    matching_session_id="$candidate_session_id"
-  done
-
-  if (( matching_session_count == 1 )); then
-    resolved_source_session_id="$matching_session_id"
     return
   fi
 
@@ -405,9 +398,11 @@ resolve_source_session() {
   for client_pid in ${session_client_pids[$agent_session_id]:-}; do
     process_pid="$client_pid"
     while [[ "$process_pid" =~ ^[0-9]+$ ]] && (( process_pid > 1 )); do
-      for candidate_session_id in ${pane_sessions_by_pid[$process_pid]:-}; do
+      for candidate_pane_id in ${pane_ids_by_pid[$process_pid]:-}; do
+        candidate_session_id="${pane_session_ids[$candidate_pane_id]}"
         if [[ "$candidate_session_id" != "$agent_session_id" ]]; then
           resolved_source_session_id="$candidate_session_id"
+          resolved_source_pane_id="$candidate_pane_id"
           return
         fi
       done
@@ -418,6 +413,15 @@ resolve_source_session() {
     done
   done
 
+  for candidate_pane_id in ${editor_panes_by_path[$agent_path]:-}; do
+    [[ "${pane_session_ids[$candidate_pane_id]}" != "$agent_session_id" ]] || continue
+    matching_pane_count=$((matching_pane_count + 1))
+    matching_pane_id="$candidate_pane_id"
+  done
+  if (( matching_pane_count == 1 )); then
+    resolved_source_session_id="${pane_session_ids[$matching_pane_id]}"
+    resolved_source_pane_id="$matching_pane_id"
+  fi
 }
 
 resolve_session_sources() {
@@ -429,10 +433,12 @@ resolve_session_sources() {
   local _remaining_fields
 
   session_sources=()
+  session_source_panes=()
   while IFS="$field_separator" read -r row_type session_id session_name _previous_state session_path _remaining_fields; do
     [[ -n "$session_id" ]] || continue
     resolve_source_session "$session_id" "$session_name" "$session_path"
     session_sources[$session_id]="$resolved_source_session_id"
+    session_source_panes[$session_id]="$resolved_source_pane_id"
   done <<< "$all_session_rows"
 }
 
@@ -451,12 +457,11 @@ load_snapshot() {
   local pane_pr_url
   local remaining_fields
   local client_pid
-  local -A indexed_editor_sessions=()
 
   snapshot="$(tmux show-environment -g \
     \; display-message -p "$environment_marker" \
     \; list-panes -a -F "P${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{pane_id}${field_separator}#{pane_current_command}${field_separator}#{pane_current_path}${field_separator}#{pane_pid}${field_separator}#{pane_title}${field_separator}#{@sidebar_agent_state}${field_separator}#{@sidebar_agent_icon}${field_separator}#{@sidebar_agent_title}${field_separator}#{@sidebar_branch}${field_separator}#{@sidebar_branch_sync}${field_separator}#{@sidebar_pr_state}${field_separator}#{@sidebar_pr_title}${field_separator}#{@sidebar_pr_url}" \
-    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{@sidebar_agents}${field_separator}#{session_path}${field_separator}#{@sidebar_agent_panes}${field_separator}#{@sidebar_source_session}${field_separator}#{pane_id}${field_separator}#{@sidebar_agent_groups}" \
+    \; list-sessions -F "S${field_separator}#{session_id}${field_separator}#{session_name}${field_separator}#{@sidebar_agents}${field_separator}#{session_path}${field_separator}#{@sidebar_agent_panes}${field_separator}#{@sidebar_source_session}${field_separator}#{pane_id}${field_separator}#{@sidebar_agent_groups}${field_separator}#{@sidebar_source_pane}" \
     \; list-clients -F "C${field_separator}#{session_id}${field_separator}#{client_pid}" \
     \; list-panes -a -f '#{!=:#{@status_context_managed},1}' -F "L${field_separator}#{pane_id}" 2>/dev/null)" || return 1
 
@@ -466,8 +471,9 @@ load_snapshot() {
   all_client_rows=""
   legacy_pane_rows=""
   pane_rows_by_id=()
-  pane_sessions_by_pid=()
-  editor_sessions_by_path=()
+  pane_ids_by_pid=()
+  pane_session_ids=()
+  editor_panes_by_path=()
   session_client_pids=()
   pane_pr_states=()
   pane_pr_titles=()
@@ -487,13 +493,13 @@ load_snapshot() {
         all_pane_rows+="${row}"$'\n'
         IFS="$field_separator" read -r row_type session_id remaining_fields pane_id pane_command pane_path pane_pid remaining_fields remaining_fields remaining_fields remaining_fields remaining_fields remaining_fields pane_pr_state pane_pr_title pane_pr_url <<< "$row"
         pane_rows_by_id[$pane_id]="$row"
-        pane_sessions_by_pid[$pane_pid]+="${pane_sessions_by_pid[$pane_pid]:+ }${session_id}"
+        pane_ids_by_pid[$pane_pid]+="${pane_ids_by_pid[$pane_pid]:+ }${pane_id}"
+        pane_session_ids[$pane_id]="$session_id"
         pane_pr_states[$pane_id]="$pane_pr_state"
         pane_pr_titles[$pane_id]="$pane_pr_title"
         pane_pr_urls[$pane_id]="$pane_pr_url"
-        if [[ "$pane_command" == nvim* && ! -v indexed_editor_sessions[${pane_path}${field_separator}${session_id}] ]]; then
-          editor_sessions_by_path[$pane_path]+="${editor_sessions_by_path[$pane_path]:+ }${session_id}"
-          indexed_editor_sessions[${pane_path}${field_separator}${session_id}]=1
+        if [[ "$pane_command" == nvim* ]]; then
+          editor_panes_by_path[$pane_path]+="${editor_panes_by_path[$pane_path]:+ }${pane_id}"
         fi
         ;;
       S) all_session_rows+="${row}"$'\n' ;;
@@ -530,6 +536,7 @@ build_agent_status() {
   local previous_agent_icon
   local previous_agent_title
   local previous_source_session_id
+  local previous_source_pane_id
   local source_session_id
   local session_current_path
   local session_active_pane_id
@@ -569,7 +576,7 @@ build_agent_status() {
   done <<< "$all_pane_rows"
   rendered_status=""
 
-  while IFS="$field_separator" read -r row_type session_id session_name previous_agents session_current_path previous_panes previous_source_session_id session_active_pane_id previous_agent_groups; do
+  while IFS="$field_separator" read -r row_type session_id session_name previous_agents session_current_path previous_panes previous_source_session_id session_active_pane_id previous_agent_groups previous_source_pane_id; do
     [[ -n "$session_id" ]] || continue
     session_agents=""
     session_panes=""
@@ -581,6 +588,9 @@ build_agent_status() {
     [[ "$source_session_id" != "$session_id" ]] || source_session_id=""
     if [[ "$source_session_id" != "$previous_source_session_id" ]]; then
       session_status_commands+=(set-option -t "$session_id" @sidebar_source_session "$source_session_id" ';')
+    fi
+    if [[ "${session_source_panes[$session_id]}" != "$previous_source_pane_id" ]]; then
+      session_status_commands+=(set-option -t "$session_id" @sidebar_source_pane "${session_source_panes[$session_id]}" ';')
     fi
     while IFS="$field_separator" read -r row_type pane_session_id _pane_session_name pane_id pane_command pane_path _pane_pid pane_title previous_agent_state previous_agent_icon previous_agent_title previous_branch previous_branch_sync remaining_fields; do
       [[ -n "$pane_session_id" ]] || continue
@@ -600,7 +610,7 @@ build_agent_status() {
         session_status_commands+=(set-option -p -t "$pane_id" @sidebar_agent_title "$cleaned_agent_title" ';')
       fi
       update_repository_status "$pane_id" "$pane_path" "$previous_branch" "$previous_branch_sync"
-      render_agent "$detected_state" "$pane_id" "$agent_icon"
+      render_agent "$detected_state" "${session_source_panes[$pane_session_id]:-$pane_id}" "$agent_icon"
       session_agents+="$rendered_agent"
       session_panes+="${session_panes:+ }${pane_id}"
       group_panes="${directory_panes[$pane_path]:-}"
