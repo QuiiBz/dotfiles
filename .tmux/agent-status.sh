@@ -527,6 +527,7 @@ build_agent_status() {
   local session_agents
   local session_panes
   local session_agent_groups
+  local session_unread
   local previous_agent_groups
   local group_path
   local group_panes
@@ -581,6 +582,7 @@ build_agent_status() {
     session_agents=""
     session_panes=""
     session_agent_groups=""
+    session_unread=false
     rendered_panes=()
     directory_panes=()
     group_paths=()
@@ -599,6 +601,9 @@ build_agent_status() {
       agent_for_command "$pane_command" || continue
       pane_paths[$pane_id]="$pane_path"
       detect_agent_state "$agent_name" "$pane_title"
+      if [[ "$previous_agent_state" == working && "$detected_state" == idle ]]; then
+        session_unread=true
+      fi
       clean_agent_title "$pane_title"
       if [[ "$detected_state" != "$previous_agent_state" ]]; then
         session_status_commands+=(set-option -p -t "$pane_id" @sidebar_agent_state "$detected_state" ';')
@@ -640,6 +645,11 @@ build_agent_status() {
     fi
     if [[ "$session_agent_groups" != "$previous_agent_groups" ]]; then
       session_status_commands+=(set-option -t "$session_id" @sidebar_agent_groups "$session_agent_groups" ';')
+    fi
+    if [[ "$session_unread" == true ]]; then
+      session_status_commands+=(if-shell -F -t "$session_id" '#{session_attached}'
+        "set-option -t '$session_id' @sidebar_unread 0"
+        "set-option -t '$session_id' @sidebar_unread 1" ';')
     fi
 
     if [[ -n "$session_agents" ]]; then

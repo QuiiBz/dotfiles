@@ -74,6 +74,16 @@ if [ "$branch_width_without_pr" -gt 0 ]; then
   branch_name_without_pr="#{s/[#]/\0\0/:#{p-${branch_width_without_pr};=${branch_width_without_pr}:#{@sidebar_branch}#{@sidebar_branch_sync}}}"
 fi
 session_name="#{s/[#]/\0\0/:#{p${content_width};=${content_width}: #{session_name}}}"
+unread_badge=" ⊙ "
+if [ "$content_width" -le "${#unread_badge}" ]; then
+  unread_badge="⊙"
+fi
+unread_title_width=$((content_width - ${#unread_badge}))
+unread_session_name=""
+if [ "$unread_title_width" -gt 0 ]; then
+  unread_session_name="#{s/[#]/\0\0/:#{p${unread_title_width};=${unread_title_width}: #{session_name}}}"
+fi
+session_name="#{?#{==:#{@sidebar_unread},1},${unread_session_name}#[fg=#eed49f]#[bold]${unread_badge},${session_name}}"
 snapshot="$(tmux -S "$socket_path" \
   list-sessions -O index -f '#{!:#{@sidebar_source_session}}' -F '#{session_id}|#{@sidebar_agent_panes}|#{@sidebar_agent_groups}|#{pane_id}' \
   ';' list-panes -a -F 'P#{pane_id}|#{@sidebar_source_pane}|#{@sidebar_pr_state}|#{w:#{s/[#]/\0\0/:#{@sidebar_branch}#{@sidebar_branch_sync}}}|#{w:#{s/[#]/\0\0/:#{@sidebar_pr_title}}}')"
