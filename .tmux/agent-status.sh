@@ -16,6 +16,7 @@ process_tree_loaded=false
 sidebar_width_restored=false
 declare -A legacy_contexts=()
 declare -A process_parents=()
+declare -A process_commands=()
 declare -A pr_request_keys=()
 declare -A pr_request_times=()
 declare -A pr_request_panes=()
@@ -292,6 +293,26 @@ update_repository_status() {
   repository_request_branches[$request_key]="$pane_branch"
 }
 
+is_versioned_claude_process() {
+  local command_name="$1"
+  local pane_process_id="${2:-}"
+  local process_pid
+  local parent_pid
+
+  [[ "$command_name" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-+].*)?$ && "$pane_process_id" =~ ^[0-9]+$ ]] || return 1
+  load_process_tree
+  for process_pid in "${!process_commands[@]}"; do
+    [[ "${process_commands[$process_pid]}" == */claude/versions/"$command_name" ]] || continue
+    while [[ "$process_pid" =~ ^[0-9]+$ ]] && (( process_pid > 1 )); do
+      [[ "$process_pid" == "$pane_process_id" ]] && return 0
+      parent_pid="${process_parents[$process_pid]:-}"
+      [[ -n "$parent_pid" && "$parent_pid" != "$process_pid" ]] || break
+      process_pid="$parent_pid"
+    done
+  done
+  return 1
+}
+
 agent_for_command() {
   local command_name="${1##*/}"
 
@@ -300,7 +321,11 @@ agent_for_command() {
     claude*) agent_name=claude; agent_icon="" ;;
     fx*) agent_name=fx; agent_icon="" ;;
     pi|pi-*) agent_name=pi; agent_icon="π" ;;
-    *) return 1 ;;
+    *)
+      is_versioned_claude_process "$command_name" "${2:-}" || return 1
+      agent_name=claude
+      agent_icon=""
+      ;;
   esac
 }
 
@@ -346,6 +371,10 @@ clean_agent_title() {
   cleaned_agent_title="${cleaned_agent_title//$'\r'/ }"
   cleaned_agent_title="${cleaned_agent_title//$'\n'/ }"
   cleaned_agent_title="${cleaned_agent_title#"${cleaned_agent_title%%[![:space:]]*}"}"
+  if [[ "${2:-}" == codex && "$cleaned_agent_title" == '● '* ]]; then
+    cleaned_agent_title="${cleaned_agent_title#●}"
+    cleaned_agent_title="${cleaned_agent_title#"${cleaned_agent_title%%[![:space:]]*}"}"
+  fi
   cleaned_agent_title="${cleaned_agent_title%"${cleaned_agent_title##*[![:space:]]}"}"
 }
 
@@ -366,12 +395,15 @@ restore_sidebar_width() {
 load_process_tree() {
   local process_pid
   local parent_pid
+  local process_command
   local process_rows
 
   [[ "$process_tree_loaded" == true ]] && return
-  process_rows="$(ps -axo pid=,ppid= 2>/dev/null || true)"
-  while read -r process_pid parent_pid; do
-    [[ -n "$process_pid" ]] && process_parents[$process_pid]="$parent_pid"
+  process_rows="$(ps -axo pid=,ppid=,comm= 2>/dev/null || true)"
+  while read -r process_pid parent_pid process_command; do
+    [[ -n "$process_pid" ]] || continue
+    process_parents[$process_pid]="$parent_pid"
+    process_commands[$process_pid]="$process_command"
   done <<< "$process_rows"
   process_tree_loaded=true
 }
@@ -566,6 +598,7 @@ build_agent_status() {
   update_legacy_contexts
   process_tree_loaded=false
   process_parents=()
+  process_commands=()
   resolve_session_sources
   session_pane_rows=()
   while IFS= read -r pane_row; do
@@ -598,13 +631,13 @@ build_agent_status() {
       [[ -n "$pane_session_id" ]] || continue
       [[ "${session_sources[$pane_session_id]:-$pane_session_id}" == "$session_id" ]] || continue
       [[ -z "${rendered_panes[$pane_id]:-}" ]] || continue
-      agent_for_command "$pane_command" || continue
+      agent_for_command "$pane_command" "$_pane_pid" || continue
       pane_paths[$pane_id]="$pane_path"
       detect_agent_state "$agent_name" "$pane_title"
       if [[ "$previous_agent_state" == working && "$detected_state" == idle ]]; then
         session_unread=true
       fi
-      clean_agent_title "$pane_title"
+      clean_agent_title "$pane_title" "$agent_name"
       if [[ "$detected_state" != "$previous_agent_state" ]]; then
         session_status_commands+=(set-option -p -t "$pane_id" @sidebar_agent_state "$detected_state" ';')
       fi
@@ -762,6 +795,12 @@ update_legacy_contexts() {
   run_tmux_commands "${tmux_commands[@]}" 2>/dev/null
 }
 
+clear_watcher_pid() {
+  if [[ "$(tmux show-option -gqv @agent-status-watcher-pid 2>/dev/null)" == "$$" ]]; then
+    tmux set-option -guq @agent-status-watcher-pid 2>/dev/null || true
+  fi
+}
+
 watch_status() {
   local existing_watcher_pid
   local refresh_interval
@@ -784,14 +823,14 @@ watch_status() {
 
   tmux set-option -gq @agent-status-watcher-pid "$$"
   trap 'exec "${BASH_SOURCE[0]}" --watch' HUP
-  trap 'tmux set-option -guq @agent-status-watcher-pid 2>/dev/null || true' EXIT
+  trap clear_watcher_pid EXIT
 
   timer_pipe="/tmp/tmux-agent-status-${$}.pipe"
   mkfifo "$timer_pipe"
   exec 9<> "$timer_pipe"
   rm -f "$timer_pipe"
 
-  while :; do
+  while [[ "$(tmux show-option -gqv @agent-status-watcher-pid 2>/dev/null)" == "$$" ]]; do
     if ! build_agent_status; then
       tmux has-session 2>/dev/null || break
       read -r -t 1 -u 9 _ || true
