@@ -35,12 +35,17 @@ local function search_count()
     return ''
   end
 
-  local success, result = pcall(vim.fn.searchcount, { maxcount = 999, timeout = 500 })
+  local success, result = pcall(vim.fn.searchcount, { recompute = 0 })
   if not success or next(result) == nil then
     return ''
   end
 
-  return string.format('%d/%d', result.current, math.min(result.total, result.maxcount))
+  if result.incomplete == 1 then
+    return '?/?'
+  end
+
+  local total = result.incomplete == 2 and ('>' .. result.maxcount) or tostring(result.total)
+  return string.format('%d/%s', result.current, total)
 end
 
 local function recording_register()
