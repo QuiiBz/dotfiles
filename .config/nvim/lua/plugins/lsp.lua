@@ -22,6 +22,7 @@ local servers = {
   'terraformls',
   'buf_ls',
   'copilot',
+  'mise',
 }
 
 return {

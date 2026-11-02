@@ -221,13 +221,22 @@ run = "python3 ~/dev/dotfiles/.pi/performance/benchmark.py ~/.local/share/mise/s
 "~/.tmux" = { mode = "symlink-each" }
 "~/Library/Preferences/com.caldis.Mos.plist" = "~/dev/dotfiles/.config/apps/com.caldis.Mos.plist"
 "~/Library/Preferences/pro.betterdisplay.BetterDisplay.plist" = "~/dev/dotfiles/.config/apps/pro.betterdisplay.BetterDisplay.plist"
-"/etc/hosts/alpha" = { line = "192.168.0.81 alpha"}
-"/etc/hosts/beta" = { line = "192.168.0.74 beta"}
-"/etc/hosts/nas" = { line = "192.168.0.84 nas"}
+"/etc/hosts/alpha" = { line = "192.168.0.81 alpha" }
+"/etc/hosts/beta" = { line = "192.168.0.74 beta" }
+"/etc/hosts/nas" = { line = "192.168.0.84 nas" }
 
 [settings]
 color_theme = "catppuccin"
-idiomatic_version_file_enable_tools = ["node", "bun", "deno", "go", "npm", "pnpm", "rust", "terraform"]
+idiomatic_version_file_enable_tools = [
+  "node",
+  "bun",
+  "deno",
+  "go",
+  "npm",
+  "pnpm",
+  "rust",
+  "terraform",
+]
 
 [settings.dotfiles]
 root = "~/dev/dotfiles"
