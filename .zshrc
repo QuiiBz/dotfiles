@@ -108,6 +108,15 @@ _update_tmux_context() {
     kube_context="${kube_context//\#/##}"
     [[ -n "$aws_profile" ]] && status_context="#[fg=#eed49f,bold]   ${aws_profile}"
     [[ -n "$kube_context" ]] && status_context+="#[fg=#8aadf4,bold]    ${kube_context}"
+    local context_target="${TMUX}:${TMUX_PANE}"
+    if [[ "${_tmux_context_target:-}" == "$context_target" &&
+          "${_tmux_context_aws_profile:-}" == "${AWS_PROFILE:-}" &&
+          "${_tmux_context_status:-}" == "$status_context" ]]; then
+      return
+    fi
+    typeset -g _tmux_context_target="$context_target"
+    typeset -g _tmux_context_aws_profile="${AWS_PROFILE:-}"
+    typeset -g _tmux_context_status="$status_context"
     tmux set-environment -g "PANE_${TMUX_PANE}_AWS_PROFILE" "${AWS_PROFILE:-}" \; \
       set-option -pq -t "$TMUX_PANE" @status_context "$status_context" \; \
       set-option -pq -t "$TMUX_PANE" @status_context_managed 1 &!
