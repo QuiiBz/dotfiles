@@ -156,8 +156,8 @@ run = [
   # GitHub
   "gh auth login",
   # Neovim
-  "sudo bob install nightly",
-  "sudo bob use nightly",
+  "bob install nightly",
+  "bob use nightly",
   # Xcode
   "sudo xcode-select --install || true",
   "sudo xcodebuild -license accept",
@@ -186,7 +186,7 @@ run = [
   # Cargo
   "sudo cargo clean-all --yes",
   # Neovim
-  "sudo env GITHUB_TOKEN=\"$(gh auth token)\" bob update",
+  "env GITHUB_TOKEN=\"$(gh auth token)\" bob update nightly",
   "nvim --headless '+Lazy! sync' +qa",
 ]
 

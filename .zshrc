@@ -25,7 +25,7 @@ export GOBIN="$HOME/go/bin"
 export PATH="$GOBIN:$PATH"
 export PATH=/Users/tom/.opencode/bin:$PATH
 export PATH="$PATH:/Users/tom/.lmstudio/bin"
-export PATH="$PATH:/Users/tom/.local/share/bob/nvim-bin"
+export PATH="$HOME/Library/Application Support/bob/nvim-bin:$PATH"
 export PATH="$PATH:/Users/tom/.local/bin"
 export PATH="$HOME/.local/share/pi-compiled/bin:$PATH"
 
