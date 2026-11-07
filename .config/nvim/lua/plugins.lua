@@ -202,7 +202,7 @@ return {
   {
     'Mirsmog/real-icons.nvim',
     lazy = true,
-    build = ':RealIconsInstallPack material',
+    build = ':RealIcons install material',
     opts = {
       pack = 'jetbrains',
       packs = {
