@@ -41,6 +41,7 @@ interrupt_turn = "ctrl-shift-c"
 
 [notice]
 fast_default_opt_out = true
+hide_rate_limit_model_nudge = true
 
 [marketplaces.openai-bundled]
 source_type = "local"
