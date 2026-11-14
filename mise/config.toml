@@ -184,7 +184,7 @@ run = [
   # Pnpm
   "pnpm store prune",
   # Cargo
-  "sudo cargo clean-all --yes",
+  "cargo clean-all --yes --keep-days 7 ~/dev",
   # Neovim
   "env GITHUB_TOKEN=\"$(gh auth token)\" bob update nightly",
   "nvim --headless '+Lazy! sync' +qa",
