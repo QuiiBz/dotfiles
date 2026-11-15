@@ -17,7 +17,10 @@ buf = "latest"
 "npm:@antfu/ni" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
 # Cargo
+cargo-binstall = "latest"
 "cargo:cargo-clean-all" = "latest"
+"cargo:cargo-bloat" = "latest"
+"cargo:cargo-nextest" = "latest"
 # GitHub
 "github:SocketDev/sfw-free" = { version = "latest", bin = "sfw" }
 "github:vercel/turborepo" = { version = "latest", bin = "turbo" }
@@ -37,6 +40,7 @@ buf = "latest"
 "brew:bat" = "latest"
 "brew:ripgrep" = "latest"
 "brew:fd" = "latest"
+"brew:dust" = "latest"
 "brew:lazygit" = "latest"
 "brew:bob" = "latest"
 "brew:fzf" = "latest"
