@@ -1,7 +1,7 @@
 ## Guidelines
 
 Be extremely concise in your responses. Always answer in ASD-STE100 Simplified Technical English.
-Do not create commits or push code unless explicitly asked to do so. When asked to open PRs, always create then in draft without any PR description.
+Do not create commits or push code unless explicitly asked to do so. When asked to open PRs, always create then in draft without any PR description and lowercase title, following the convention of previous commits.
 
 ## Coding style
 
