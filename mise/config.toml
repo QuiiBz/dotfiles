@@ -178,6 +178,7 @@ run = [
   "mise upgrade",
   "mise prune --yes",
   "mise run pi-build",
+  "/usr/bin/osascript -l JavaScript ~/dev/dotfiles/mise/sync-rex-preferences.js ~/dev/dotfiles/.config/apps/com.superlogical.rex.plist",
   # Brew
   "brew update",
   "brew upgrade --yes",
